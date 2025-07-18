@@ -138,7 +138,7 @@ function ActivePageMarker({
 }) {
   let itemHeight = remToPx(2);
   let offset = remToPx(0.25);
-  let activePageIndex = group.links.findIndex((link) => link.href === pathname);
+  let activePageIndex = group.links.findIndex((link) => pathname.startsWith(link.href));
   let top = offset + activePageIndex * itemHeight;
 
   return (
@@ -170,7 +170,7 @@ function NavigationGroup({
   );
 
   let isActiveGroup =
-    group.links.findIndex((link) => link.href === pathname) !== -1;
+    group.links.findIndex((link) => pathname.startsWith(link.href)) !== -1;
 
   return (
     <li className={clsx('relative mt-6', className)}>
@@ -181,11 +181,11 @@ function NavigationGroup({
         {group.title}
       </motion.h2>
       <div className="relative mt-3 pl-2">
-        <AnimatePresence initial={!isInsideMobileNavigation}>
+        {/* <AnimatePresence initial={!isInsideMobileNavigation}> //Sectioon highlight is not used
           {isActiveGroup && (
             <VisibleSectionHighlight group={group} pathname={pathname} />
           )}
-        </AnimatePresence>
+        </AnimatePresence> */}
         <motion.div
           layout
           className="absolute inset-y-0 left-2 w-px bg-zinc-900/10 dark:bg-white/5"
@@ -202,7 +202,7 @@ function NavigationGroup({
                 {link.title}
               </NavLink>
               <AnimatePresence mode="popLayout" initial={false}>
-                {link.href === pathname && sections.length > 0 && (
+                {pathname.startsWith(link.href) && ( // This controls the visibility of the children
                   <motion.ul
                     role="list"
                     initial={{ opacity: 0 }}
@@ -252,8 +252,12 @@ export const navigation: Array<NavGroup> = [
       { title: 'Cookbook', href: '/cookbook',
         children: [
           { title: 'Recipe1', href: '/cookbook/1', id: 'Recipe1' },
+          { title: 'Recipe2', href: '/cookbook/2', id: 'Recipe2' },
+
         ],
       },
+      { title: 'Conversation', href: '/conversations' },
+
     ],
   }
 ];
