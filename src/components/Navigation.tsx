@@ -251,7 +251,7 @@ export const navigation: Array<NavGroup> = [
       { title: 'Contacts', href: '/contacts' },
       { title: 'Cookbook', href: '/cookbook',
         children: [
-          { title: 'childOfCookbook', href: '/cookbook/childOfCookbook', id: 'childOfCookbook' },
+          { title: 'Recipe1', href: '/cookbook/1', id: 'Recipe1' },
         ],
       },
     ],
