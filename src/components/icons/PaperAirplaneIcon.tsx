@@ -15,5 +15,5 @@ export function PaperAirplaneIcon(
         d="M11 19L8 12L17 3L11 19Z"
       />
     </svg>
-  )
+  );
 }

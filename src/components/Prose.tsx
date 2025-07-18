@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import clsx from 'clsx';
 
 export function Prose<T extends React.ElementType = 'div'>({
   as,
@@ -8,7 +8,7 @@ export function Prose<T extends React.ElementType = 'div'>({
   as?: T
   className?: string
 }) {
-  let Component = as ?? 'div'
+  let Component = as ?? 'div';
 
   return (
     <Component
@@ -20,5 +20,5 @@ export function Prose<T extends React.ElementType = 'div'>({
       )}
       {...props}
     />
-  )
+  );
 }

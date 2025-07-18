@@ -1,9 +1,9 @@
-import clsx from 'clsx'
+import clsx from 'clsx';
 
 const variantStyles = {
   small: '',
   medium: 'rounded-lg px-1.5 ring-1 ring-inset',
-}
+};
 
 const colorStyles = {
   emerald: {
@@ -31,14 +31,14 @@ const colorStyles = {
     medium:
       'ring-zinc-200 bg-zinc-50 text-zinc-500 dark:ring-zinc-500/20 dark:bg-zinc-400/10 dark:text-zinc-400',
   },
-}
+};
 
 const valueColorMap = {
   GET: 'emerald',
   POST: 'sky',
   PUT: 'amber',
   DELETE: 'rose',
-} as Record<string, keyof typeof colorStyles>
+} as Record<string, keyof typeof colorStyles>;
 
 export function Tag({
   children,
@@ -59,5 +59,5 @@ export function Tag({
     >
       {children}
     </span>
-  )
+  );
 }

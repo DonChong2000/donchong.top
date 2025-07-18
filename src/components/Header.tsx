@@ -1,17 +1,17 @@
-import { forwardRef } from 'react'
-import Link from 'next/link'
-import clsx from 'clsx'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { forwardRef } from 'react';
+import Link from 'next/link';
+import clsx from 'clsx';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
-import { Button } from '@/components/Button'
-import { Logo } from '@/components/Logo'
+import { Button } from '@/components/Button';
+import { Logo } from '@/components/Logo';
 import {
   MobileNavigation,
   useIsInsideMobileNavigation,
-} from '@/components/MobileNavigation'
-import { useMobileNavigationStore } from '@/components/MobileNavigation'
-import { MobileSearch, Search } from '@/components/Search'
-import { ThemeToggle } from '@/components/ThemeToggle'
+} from '@/components/MobileNavigation';
+import { useMobileNavigationStore } from '@/components/MobileNavigation';
+import { MobileSearch, Search } from '@/components/Search';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 function TopLevelNavItem({
   href,
@@ -29,19 +29,19 @@ function TopLevelNavItem({
         {children}
       </Link>
     </li>
-  )
+  );
 }
 
 export const Header = forwardRef<
   React.ElementRef<'div'>,
   React.ComponentPropsWithoutRef<typeof motion.div>
 >(function Header({ className, ...props }, ref) {
-  let { isOpen: mobileNavIsOpen } = useMobileNavigationStore()
-  let isInsideMobileNavigation = useIsInsideMobileNavigation()
+  let { isOpen: mobileNavIsOpen } = useMobileNavigationStore();
+  let isInsideMobileNavigation = useIsInsideMobileNavigation();
 
-  let { scrollY } = useScroll()
-  let bgOpacityLight = useTransform(scrollY, [0, 72], [0.5, 0.9])
-  let bgOpacityDark = useTransform(scrollY, [0, 72], [0.2, 0.8])
+  let { scrollY } = useScroll();
+  let bgOpacityLight = useTransform(scrollY, [0, 72], [0.5, 0.9]);
+  let bgOpacityDark = useTransform(scrollY, [0, 72], [0.2, 0.8]);
 
   return (
     <motion.div
@@ -95,5 +95,5 @@ export const Header = forwardRef<
         </div>
       </div>
     </motion.div>
-  )
-})
+  );
+});

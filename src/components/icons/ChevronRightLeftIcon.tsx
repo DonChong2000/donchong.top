@@ -15,5 +15,5 @@ export function ChevronRightLeftIcon(
         d="m7.5 7.5-3 2.5 3 2.5M12.5 7.5l3 2.5-3 2.5"
       />
     </svg>
-  )
+  );
 }

@@ -1,28 +1,34 @@
-'use client'
+'use client';
 
-import { useRef } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import clsx from 'clsx'
-import { AnimatePresence, motion, useIsPresent } from 'framer-motion'
+import { useRef } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
+import { AnimatePresence, motion, useIsPresent } from 'framer-motion';
 
-import { Button } from '@/components/Button'
-import { useIsInsideMobileNavigation } from '@/components/MobileNavigation'
-import { useSectionStore } from '@/components/SectionProvider'
-import { Tag } from '@/components/Tag'
-import { remToPx } from '@/lib/remToPx'
+import { Button } from '@/components/Button';
+import { useIsInsideMobileNavigation } from '@/components/MobileNavigation';
+import { useSectionStore } from '@/components/SectionProvider';
+import { Tag } from '@/components/Tag';
+import { remToPx } from '@/lib/remToPx';
 
 interface NavGroup {
-  title: string
-  links: Array<{
-    title: string
-    href: string
-  }>
+  title: string,
+  links: {
+    title: string,
+    href: string,
+    children?: {
+      title: string,
+      href: string,
+      id: string,
+    }[],
+  }[]
 }
 
+
 function useInitialValue<T>(value: T, condition = true) {
-  let initialValue = useRef(value).current
-  return condition ? initialValue : value
+  let initialValue = useRef(value).current;
+  return condition ? initialValue : value;
 }
 
 function TopLevelNavItem({
@@ -41,7 +47,7 @@ function TopLevelNavItem({
         {children}
       </Link>
     </li>
-  )
+  );
 }
 
 function NavLink({
@@ -76,7 +82,7 @@ function NavLink({
         </Tag>
       )}
     </Link>
-  )
+  );
 }
 
 function VisibleSectionHighlight({
@@ -92,22 +98,24 @@ function VisibleSectionHighlight({
       useSectionStore((s) => s.visibleSections),
     ],
     useIsInsideMobileNavigation(),
-  )
+  );
 
-  let isPresent = useIsPresent()
+  let isPresent = useIsPresent();
+
+  // Todo: modify this to dynamic route pages
   let firstVisibleSectionIndex = Math.max(
     0,
     [{ id: '_top' }, ...sections].findIndex(
       (section) => section.id === visibleSections[0],
     ),
-  )
-  let itemHeight = remToPx(2)
+  );
+  let itemHeight = remToPx(2);
   let height = isPresent
     ? Math.max(1, visibleSections.length) * itemHeight
-    : itemHeight
+    : itemHeight;
   let top =
     group.links.findIndex((link) => link.href === pathname) * itemHeight +
-    firstVisibleSectionIndex * itemHeight
+    firstVisibleSectionIndex * itemHeight;
 
   return (
     <motion.div
@@ -118,7 +126,7 @@ function VisibleSectionHighlight({
       className="absolute inset-x-0 top-0 bg-zinc-800/2.5 will-change-transform dark:bg-white/2.5"
       style={{ borderRadius: 8, height, top }}
     />
-  )
+  );
 }
 
 function ActivePageMarker({
@@ -128,10 +136,10 @@ function ActivePageMarker({
   group: NavGroup
   pathname: string
 }) {
-  let itemHeight = remToPx(2)
-  let offset = remToPx(0.25)
-  let activePageIndex = group.links.findIndex((link) => link.href === pathname)
-  let top = offset + activePageIndex * itemHeight
+  let itemHeight = remToPx(2);
+  let offset = remToPx(0.25);
+  let activePageIndex = group.links.findIndex((link) => link.href === pathname);
+  let top = offset + activePageIndex * itemHeight;
 
   return (
     <motion.div
@@ -142,7 +150,7 @@ function ActivePageMarker({
       exit={{ opacity: 0 }}
       style={{ top }}
     />
-  )
+  );
 }
 
 function NavigationGroup({
@@ -155,14 +163,14 @@ function NavigationGroup({
   // If this is the mobile navigation then we always render the initial
   // state, so that the state does not change during the close animation.
   // The state will still update when we re-open (re-render) the navigation.
-  let isInsideMobileNavigation = useIsInsideMobileNavigation()
+  let isInsideMobileNavigation = useIsInsideMobileNavigation();
   let [pathname, sections] = useInitialValue(
     [usePathname(), useSectionStore((s) => s.sections)],
     isInsideMobileNavigation,
-  )
+  );
 
   let isActiveGroup =
-    group.links.findIndex((link) => link.href === pathname) !== -1
+    group.links.findIndex((link) => link.href === pathname) !== -1;
 
   return (
     <li className={clsx('relative mt-6', className)}>
@@ -207,14 +215,13 @@ function NavigationGroup({
                       transition: { duration: 0.15 },
                     }}
                   >
-                    {sections.map((section) => (
-                      <li key={section.id}>
+                    {link.children?.map((child) => (
+                      <li key={child.id}>
                         <NavLink
-                          href={`${link.href}#${section.id}`}
-                          tag={section.tag}
+                          href={child.href}
                           isAnchorLink
                         >
-                          {section.title}
+                          {child.title}
                         </NavLink>
                       </li>
                     ))}
@@ -226,41 +233,38 @@ function NavigationGroup({
         </ul>
       </div>
     </li>
-  )
+  );
 }
 
 export const navigation: Array<NavGroup> = [
   {
-    title: 'Guides',
+    title: 'Projects',
     links: [
-      { title: 'Introduction', href: '/' },
-      { title: 'Quickstart', href: '/quickstart' },
-      { title: 'SDKs', href: '/sdks' },
-      { title: 'Authentication', href: '/authentication' },
-      { title: 'Pagination', href: '/pagination' },
-      { title: 'Errors', href: '/errors' },
-      { title: 'Webhooks', href: '/webhooks' },
+      { title: 'Personal Site', href: '/personal-site' },
+      { title: 'Receipt Extractor', href: '/receipt-extractor' },
+
     ],
   },
   {
-    title: 'Resources',
+    title: 'Notes',
     links: [
       { title: 'Contacts', href: '/contacts' },
-      { title: 'Conversations', href: '/conversations' },
-      { title: 'Messages', href: '/messages' },
-      { title: 'Groups', href: '/groups' },
-      { title: 'Attachments', href: '/attachments' },
+      { title: 'Cookbook', href: '/cookbook',
+        children: [
+          { title: 'childOfCookbook', href: '/cookbook/childOfCookbook', id: 'childOfCookbook' },
+        ],
+      },
     ],
-  },
-]
+  }
+];
 
 export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {
   return (
     <nav {...props}>
       <ul role="list">
-        <TopLevelNavItem href="/">API</TopLevelNavItem>
+        {/* <TopLevelNavItem href="/">About Me</TopLevelNavItem>
         <TopLevelNavItem href="#">Documentation</TopLevelNavItem>
-        <TopLevelNavItem href="#">Support</TopLevelNavItem>
+        <TopLevelNavItem href="#">Support</TopLevelNavItem> */}
         {navigation.map((group, groupIndex) => (
           <NavigationGroup
             key={group.title}
@@ -275,5 +279,5 @@ export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {
         </li>
       </ul>
     </nav>
-  )
+  );
 }

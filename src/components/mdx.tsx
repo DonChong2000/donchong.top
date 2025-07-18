@@ -1,13 +1,13 @@
-import Link from 'next/link'
-import clsx from 'clsx'
+import Link from 'next/link';
+import clsx from 'clsx';
 
-import { Feedback } from '@/components/Feedback'
-import { Heading } from '@/components/Heading'
-import { Prose } from '@/components/Prose'
+import { Feedback } from '@/components/Feedback';
+import { Heading } from '@/components/Heading';
+import { Prose } from '@/components/Prose';
 
-export const a = Link
-export { Button } from '@/components/Button'
-export { CodeGroup, Code as code, Pre as pre } from '@/components/Code'
+export const a = Link;
+export { Button } from '@/components/Button';
+export { CodeGroup, Code as code, Pre as pre } from '@/components/Code';
 
 export function wrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -17,14 +17,14 @@ export function wrapper({ children }: { children: React.ReactNode }) {
         <Feedback />
       </footer>
     </article>
-  )
+  );
 }
 
 export const h2 = function H2(
   props: Omit<React.ComponentPropsWithoutRef<typeof Heading>, 'level'>,
 ) {
-  return <Heading level={2} {...props} />
-}
+  return <Heading level={2} {...props} />;
+};
 
 function InfoIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -39,7 +39,7 @@ function InfoIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
       />
       <circle cx="8" cy="4" r=".5" fill="none" />
     </svg>
-  )
+  );
 }
 
 export function Note({ children }: { children: React.ReactNode }) {
@@ -50,7 +50,7 @@ export function Note({ children }: { children: React.ReactNode }) {
         {children}
       </div>
     </div>
-  )
+  );
 }
 
 export function Row({ children }: { children: React.ReactNode }) {
@@ -58,7 +58,7 @@ export function Row({ children }: { children: React.ReactNode }) {
     <div className="grid grid-cols-1 items-start gap-x-16 gap-y-10 xl:max-w-none xl:grid-cols-2">
       {children}
     </div>
-  )
+  );
 }
 
 export function Col({
@@ -77,7 +77,7 @@ export function Col({
     >
       {children}
     </div>
-  )
+  );
 }
 
 export function Properties({ children }: { children: React.ReactNode }) {
@@ -90,7 +90,7 @@ export function Properties({ children }: { children: React.ReactNode }) {
         {children}
       </ul>
     </div>
-  )
+  );
 }
 
 export function Property({
@@ -123,5 +123,5 @@ export function Property({
         </dd>
       </dl>
     </li>
-  )
+  );
 }
