@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { AnimatePresence, motion, useIsPresent } from 'framer-motion';
+import { AnimatePresence, motion} from 'framer-motion';
 
 import { Button } from '@/components/Button';
 import { useIsInsideMobileNavigation } from '@/components/MobileNavigation';
@@ -92,29 +92,15 @@ function VisibleSectionHighlight({
   group: NavGroup
   pathname: string
 }) {
-  let [sections, visibleSections] = useInitialValue(
-    [
-      useSectionStore((s) => s.sections),
-      useSectionStore((s) => s.visibleSections),
-    ],
-    useIsInsideMobileNavigation(),
-  );
 
-  let isPresent = useIsPresent();
 
   // Todo: modify this to dynamic route pages
-  let firstVisibleSectionIndex = Math.max(
-    0,
-    [{ id: '_top' }, ...sections].findIndex(
-      (section) => section.id === visibleSections[0],
-    ),
-  );
+  let parent = group.links.find((link) => pathname.startsWith(link.href))
+  let firstVisibleSectionIndex = (parent?.children?.findIndex((link) => pathname.startsWith(link.href)) ?? -1) +1;
   let itemHeight = remToPx(2);
-  let height = isPresent
-    ? Math.max(1, visibleSections.length) * itemHeight
-    : itemHeight;
+  let height = itemHeight;
   let top =
-    group.links.findIndex((link) => link.href === pathname) * itemHeight +
+    group.links.findIndex((link) => pathname.startsWith(link.href)) * itemHeight +
     firstVisibleSectionIndex * itemHeight;
 
   return (
@@ -181,11 +167,11 @@ function NavigationGroup({
         {group.title}
       </motion.h2>
       <div className="relative mt-3 pl-2">
-        {/* <AnimatePresence initial={!isInsideMobileNavigation}> //Sectioon highlight is not used
+        <AnimatePresence initial={!isInsideMobileNavigation}>
           {isActiveGroup && (
             <VisibleSectionHighlight group={group} pathname={pathname} />
           )}
-        </AnimatePresence> */}
+        </AnimatePresence>
         <motion.div
           layout
           className="absolute inset-y-0 left-2 w-px bg-zinc-900/10 dark:bg-white/5"
@@ -240,8 +226,8 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Projects',
     links: [
-      { title: 'Personal Site', href: '/personal-site' },
-      { title: 'Receipt Extractor', href: '/receipt-extractor' },
+      { title: 'Personal Site', href: '/authentication' },
+      { title: 'Receipt Extractor', href: '/groups' },
 
     ],
   },
