@@ -16,14 +16,14 @@ function ArrowIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 
 const variantStyles = {
   primary:
-    'rounded-full bg-zinc-900 py-1 px-3 text-white hover:bg-zinc-700 dark:bg-emerald-400/10 dark:text-emerald-400 dark:ring-1 dark:ring-inset dark:ring-emerald-400/20 dark:hover:bg-emerald-400/10 dark:hover:text-emerald-300 dark:hover:ring-emerald-300',
+    'rounded-full bg-charcoal-600 py-1 px-3 text-white hover:bg-charcoal-500 dark:bg-timberwolf dark:text-charcoal-800 dark:ring-1 dark:ring-inset dark:ring-timberwolf-400/20 dark:hover:bg-timberwolf-400/10 dark:hover:text-timberwolf-300 dark:hover:ring-charcoal-300',
   secondary:
-    'rounded-full bg-zinc-100 py-1 px-3 text-zinc-900 hover:bg-zinc-200 dark:bg-zinc-800/40 dark:text-zinc-400 dark:ring-1 dark:ring-inset dark:ring-zinc-800 dark:hover:bg-zinc-800 dark:hover:text-zinc-300',
+    'rounded-full bg-timberwolf-100 py-1 px-3 text-timberwolf-900 hover:bg-timberwolf-200 dark:bg-timberwolf-800/40 dark:text-timberwolf-400 dark:ring-1 dark:ring-inset dark:ring-timberwolf-800 dark:hover:bg-timberwolf-800 dark:hover:text-timberwolf-300',
   filled:
-    'rounded-full bg-zinc-900 py-1 px-3 text-white hover:bg-zinc-700 dark:bg-emerald-500 dark:text-white dark:hover:bg-emerald-400',
+    'rounded-full bg-timberwolf-900 py-1 px-3 text-white hover:bg-timberwolf-700 dark:bg-gamboge-500 dark:text-white dark:hover:bg-gamboge-400',
   outline:
-    'rounded-full py-1 px-3 text-zinc-700 ring-1 ring-inset ring-zinc-900/10 hover:bg-zinc-900/2.5 hover:text-zinc-900 dark:text-zinc-400 dark:ring-white/10 dark:hover:bg-white/5 dark:hover:text-white',
-  text: 'text-emerald-500 hover:text-emerald-600 dark:text-emerald-400 dark:hover:text-emerald-500',
+    'rounded-full py-1 px-3 text-timberwolf-700 ring-1 ring-inset ring-timberwolf-900/10 hover:bg-timberwolf-900/2.5 hover:text-timberwolf-900 dark:text-timberwolf-400 dark:ring-white/10 dark:hover:bg-white/5 dark:hover:text-white',
+  text: 'text-gamboge-500 hover:text-gamboge-600 dark:text-gamboge-400 dark:hover:text-gamboge-500',
 };
 
 type ButtonProps = {

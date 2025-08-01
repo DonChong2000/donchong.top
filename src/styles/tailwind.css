@@ -39,6 +39,51 @@
   --container-2xl: 40rem;
   --container-3xl: 50rem;
   --container-5xl: 66rem;
+
+
+  --color-timberwolf: #d6d8d3;
+  --color-timberwolf-100: #f7f7f6;
+  --color-timberwolf-200: #eff0ee;
+  --color-timberwolf-300: #e7e8e5;
+  --color-timberwolf-400: #dfe0dc;
+  --color-timberwolf-500: #d6d8d3;
+  --color-timberwolf-600: #acb0a6;
+  --color-timberwolf-700: #828879;
+  --color-timberwolf-800: #575b51;
+  --color-timberwolf-900: #2b2d28;
+
+  --color-charcoal: #3B4458;
+  --color-charcoal-100: #d4d8e2;
+  --color-charcoal-200: #a8b1c5;
+  --color-charcoal-300: #7d8aa8;
+  --color-charcoal-400: #586684;
+  --color-charcoal-500: #3b4458;
+  --color-charcoal-600: #2f3747;
+  --color-charcoal-700: #232935;
+  --color-charcoal-800: #181b23;
+  --color-charcoal-900: #0c0e12;
+
+  --color-carmine: #9a031e;
+  --color-carmine-100: #febac6;
+  --color-carmine-200: #fc758e;
+  --color-carmine-300: #fb3055;
+  --color-carmine-400: #e0052d;
+  --color-carmine-500: #9a031e;
+  --color-carmine-600: #7c0319;
+  --color-carmine-700: #5d0213;
+  --color-carmine-800: #3e010c;
+  --color-carmine-900: #1f0106;
+
+  --color-gamboge: #ec9a29;
+  --color-gamboge-100: #fbebd4;
+  --color-gamboge-200: #f7d7a9;
+  --color-gamboge-300: #f4c27e;
+  --color-gamboge-400: #f0ae52;
+  --color-gamboge-500: #ec9a29;
+  --color-gamboge-600: #cb7e12;
+  --color-gamboge-700: #985e0d;
+  --color-gamboge-800: #653f09;
+  --color-gamboge-900: #331f04;
 }
 
 @layer base {

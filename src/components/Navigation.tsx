@@ -109,7 +109,7 @@ function VisibleSectionHighlight({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { delay: 0.2 } }}
       exit={{ opacity: 0 }}
-      className="absolute inset-x-0 top-0 bg-zinc-800/2.5 will-change-transform dark:bg-white/2.5"
+      className="absolute inset-x-0 top-0 bg-timberwolf-800/2.5 will-change-transform dark:bg-white/2.5"
       style={{ borderRadius: 8, height, top }}
     />
   );
@@ -130,7 +130,7 @@ function ActivePageMarker({
   return (
     <motion.div
       layout
-      className="absolute left-2 h-6 w-px bg-emerald-500"
+      className="absolute left-2 h-6 w-px bg-charcoal-400"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { delay: 0.2 } }}
       exit={{ opacity: 0 }}
@@ -252,8 +252,8 @@ export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {
   return (
     <nav {...props}>
       <ul role="list">
-        {/* <TopLevelNavItem href="/">About Me</TopLevelNavItem>
-        <TopLevelNavItem href="#">Documentation</TopLevelNavItem>
+        <TopLevelNavItem href="/aboutMe">About Me</TopLevelNavItem>
+        {/* <TopLevelNavItem href="#">Documentation</TopLevelNavItem>
         <TopLevelNavItem href="#">Support</TopLevelNavItem> */}
         {navigation.map((group, groupIndex) => (
           <NavigationGroup

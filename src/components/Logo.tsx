@@ -2,7 +2,7 @@ export function Logo(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
     <svg viewBox="0 0 120 24" aria-hidden="true" {...props}>
 
-      <text x="0" y="18" className="fill-zinc-900 dark:fill-white font-bold font-sans text-lg">
+      <text x="0" y="18" className="fill-charcoal-600 dark:fill-white font-bold font-sans text-lg">
         DonChong
       </text>
       
