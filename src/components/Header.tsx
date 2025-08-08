@@ -84,6 +84,8 @@ export const Header = forwardRef<
             <TopLevelNavItem href="#">Documentation</TopLevelNavItem>
             <TopLevelNavItem href="#">Support</TopLevelNavItem> */}
             <TopLevelNavItem href="/aboutMe">About Me</TopLevelNavItem>
+            {/* <TopLevelNavItem href="/contacts">Contacts</TopLevelNavItem> */}
+
 
           </ul>
         </nav>
@@ -92,9 +94,9 @@ export const Header = forwardRef<
           <MobileSearch />
           <ThemeToggle />
         </div>
-        <div className="hidden min-[416px]:contents">
+        {/* <div className="hidden min-[416px]:contents">
           <Button href="#">Sign in</Button>
-        </div>
+        </div> */}
       </div>
     </motion.div>
   );

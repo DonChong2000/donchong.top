@@ -226,7 +226,7 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Projects',
     links: [
-      { title: 'Personal Site', href: '/authentication' },
+      { title: 'This Site', href: '/thisSite' },
       { title: 'Receipt Extractor', href: '/groups' },
 
     ],
@@ -253,6 +253,7 @@ export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {
     <nav {...props}>
       <ul role="list">
         <TopLevelNavItem href="/aboutMe">About Me</TopLevelNavItem>
+        {/* <TopLevelNavItem href="/contacts">Contacts</TopLevelNavItem> */}
         {/* <TopLevelNavItem href="#">Documentation</TopLevelNavItem>
         <TopLevelNavItem href="#">Support</TopLevelNavItem> */}
         {navigation.map((group, groupIndex) => (
@@ -262,11 +263,11 @@ export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {
             className={groupIndex === 0 ? 'md:mt-0' : ''}
           />
         ))}
-        <li className="sticky bottom-0 z-10 mt-6 min-[416px]:hidden">
+        {/* <li className="sticky bottom-0 z-10 mt-6 min-[416px]:hidden">
           <Button href="#" variant="filled" className="w-full">
             Sign in
           </Button>
-        </li>
+        </li> */}
       </ul>
     </nav>
   );

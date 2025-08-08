@@ -24,7 +24,7 @@ export default {
           '--tw-prose-td-borders': theme('colors.zinc.200'),
 
           '--tw-prose-invert-body': theme('colors.zinc.400'),
-          '--tw-prose-invert-headings': theme('colors.white'),
+          '--tw-prose-invert-headings': theme('colors.timberwolf-200'),
           '--tw-prose-invert-links': theme('colors.gamboge.400'),
           '--tw-prose-invert-links-hover': theme('colors.gamboge.500'),
           '--tw-prose-invert-links-underline': theme(
