@@ -5,12 +5,9 @@ export function TableOfContents() {
   const tableOfContents = useSectionStore((s) => s.sections);
 
   return (
-    <div className="hidden xl:sticky xl:top-[4.75rem] xl:-mr-6 xl:block xl:h-[calc(100vh-4.75rem)] xl:flex-none xl:overflow-y-auto xl:py-16 xl:pr-6">
-      <nav aria-labelledby="on-this-page-title" className="w-56">
-        TEST
-
-        TEST
-        {/* {tableOfContents.length > 0 && (
+    <div className="hidden xl:block xl:w-64 xl:flex-none xl:sticky xl:top-[4.75rem] xl:h-[calc(100vh-4.75rem)] xl:overflow-y-auto xl:py-16 xl:pl-6 xl:border-l xl:border-zinc-900/10 xl:dark:border-white/10">
+      <nav aria-labelledby="on-this-page-title">
+        {tableOfContents.length > 0 && (
           <>
             <h2
               id="on-this-page-title"
@@ -32,7 +29,7 @@ export function TableOfContents() {
               ))}
             </ol>
           </>
-        )} */}
+        )}
       </nav>
     </div>
   );

@@ -37,10 +37,11 @@ export function Layout({
             <Navigation className="hidden lg:mt-10 lg:block" />
           </div>
         </motion.header>
-        <div className="relative flex h-full justify-between">
+        <div className="relative flex h-full">
           <div className="flex flex-col flex-auto px-4 pt-14 sm:px-6 lg:px-8">
-            <main className="flex-auto">{children}</main>
-            <Footer />
+              <main className="flex-auto">{children}</main>
+              <Footer />
+            </div>
           </div>
           <TableOfContents />
         </div>
