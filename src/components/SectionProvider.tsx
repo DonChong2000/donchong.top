@@ -16,6 +16,7 @@ export interface Section {
   title: string
   offsetRem?: number
   tag?: string
+  level?: number
   headingRef?: React.RefObject<HTMLHeadingElement>
 }
 
@@ -27,10 +28,12 @@ interface SectionState {
     id,
     ref,
     offsetRem,
+    level,
   }: {
     id: string
     ref: React.RefObject<HTMLHeadingElement>
     offsetRem: number
+    level: number
   }) => void
 }
 
@@ -44,7 +47,7 @@ function createSectionStore(sections: Array<Section>) {
           ? {}
           : { visibleSections },
       ),
-    registerHeading: ({ id, ref, offsetRem }) =>
+    registerHeading: ({ id, ref, offsetRem, level }) =>
       set((state) => {
         return {
           sections: state.sections.map((section) => {
@@ -53,6 +56,7 @@ function createSectionStore(sections: Array<Section>) {
                 ...section,
                 headingRef: ref,
                 offsetRem,
+                level,
               };
             }
             return section;

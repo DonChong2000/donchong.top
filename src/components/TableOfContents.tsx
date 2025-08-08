@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, AnimatePresence, useIsPresent } from 'framer-motion';
 import { useSectionStore } from '@/components/SectionProvider';
+import clsx from 'clsx';
 import { remToPx } from '@/lib/remToPx';
 import { useIsInsideMobileNavigation } from '@/components/MobileNavigation';
 
@@ -60,7 +61,13 @@ export function TableOfContents() {
                   <h3>
                     <a
                       href={`#${section.id}`}
-                      className="block py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+                      className={clsx(
+                        "block py-1 text-sm transition",
+                        section.level === 3 ? "pl-7" : "pl-4",
+                        section.id === visibleSections[0]
+                          ? "text-[#E49B0F]"
+                          : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white",
+                      )}
                     >
                       {section.title}
                     </a>

@@ -8,6 +8,18 @@ import { useSectionStore } from '@/components/SectionProvider';
 import { Tag } from '@/components/Tag';
 import { remToPx } from '@/lib/remToPx';
 
+function slugify(text: string) {
+  return text
+    .toString()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-');
+}
+
 function AnchorIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
     <svg
@@ -74,7 +86,7 @@ export function Heading<Level extends 2 | 3>({
   anchor = true,
   ...props
 }: React.ComponentPropsWithoutRef<`h${Level}`> & {
-  id: string
+  id?: string
   tag?: string
   label?: string
   level?: Level
@@ -90,22 +102,25 @@ export function Heading<Level extends 2 | 3>({
     amount: 'all',
   });
 
+  const generatedId = props.id || (typeof children === 'string' ? slugify(children) : undefined);
+
   useEffect(() => {
-    if (level === 2) {
-      registerHeading({ id: props.id, ref, offsetRem: tag || label ? 8 : 6 });
+    if (generatedId) {
+      registerHeading({ id: generatedId, ref, offsetRem: tag || label ? 8 : 6, level });
     }
-  });
+  }, [generatedId, ref, tag, label, level, registerHeading]);
 
   return (
     <>
       <Eyebrow tag={tag} label={label} />
       <Component
         ref={ref}
+        id={generatedId}
         className={tag || label ? 'mt-2 scroll-mt-32' : 'scroll-mt-24'}
         {...props}
       >
         {anchor ? (
-          <Anchor id={props.id} inView={inView}>
+          <Anchor id={generatedId || ''} inView={inView}>
             {children}
           </Anchor>
         ) : (
