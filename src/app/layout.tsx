@@ -6,6 +6,7 @@ import { Layout } from '@/components/Layout';
 import { type Section } from '@/components/SectionProvider';
 
 import '@/styles/tailwind.css';
+import path from 'path';
 
 export const metadata: Metadata = {
   title: {
@@ -26,7 +27,23 @@ export default async function RootLayout({
       (await import(`./${filename}`)).sections,
     ]),
   )) as Array<[string, Array<Section>]>;
-  let allSections = Object.fromEntries(allSectionsEntries);
+
+  const cookbookPages = await glob('content/cookbook/*.mdx', {
+    cwd: 'src/app',
+  });
+
+  const cookbookSectionsEntries = (await Promise.all(
+    cookbookPages.map(async (filename) => {
+      const slug = path.basename(filename, path.extname(filename));
+      const sections = (await import(`./${filename}`)).sections;
+      return [`/cookbook/${slug}`, sections];
+    }),
+  )) as Array<[string, Array<Section>]>;
+
+  const allSections = Object.fromEntries([
+    ...allSectionsEntries,
+    ...cookbookSectionsEntries,
+  ]);
 
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
