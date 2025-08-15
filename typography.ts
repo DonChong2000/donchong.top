@@ -137,7 +137,7 @@ export default {
           hr: {
             borderColor: 'var(--tw-prose-hr)',
             borderTopWidth: 1,
-            marginTop: theme('spacing.16'),
+            marginTop: theme('spacing.10'),
             marginBottom: theme('spacing.16'),
             maxWidth: 'none',
             marginLeft: `calc(-1 * ${theme('spacing.4')})`,
@@ -175,25 +175,38 @@ export default {
           h1: {
             color: 'var(--tw-prose-headings)',
             fontWeight: '700',
-            fontSize: theme('fontSize.2xl')[0],
-            ...theme('fontSize.2xl')[1],
+            fontSize: theme('fontSize.3xl')[0],
+            ...theme('fontSize.3xl')[1],
             marginBottom: theme('spacing.2'),
           },
           h2: {
             color: 'var(--tw-prose-headings)',
             fontWeight: '600',
-            fontSize: theme('fontSize.lg')[0],
+            fontSize: theme('fontSize.3xl')[0],
             ...theme('fontSize.lg')[1],
             marginTop: theme('spacing.16'),
             marginBottom: theme('spacing.2'),
           },
           h3: {
             color: 'var(--tw-prose-headings)',
+            fontSize: theme('fontSize.lg')[0],
+            ...theme('fontSize.base')[1],
+            fontWeight: '600',
+            marginTop: theme('spacing.10'),
+            marginBottom: theme('spacing.2'),
+          },
+          h4: {
+            color: 'var(--tw-prose-headings)',
             fontSize: theme('fontSize.base')[0],
             ...theme('fontSize.base')[1],
             fontWeight: '600',
             marginTop: theme('spacing.10'),
             marginBottom: theme('spacing.2'),
+          },
+
+          p: {
+            fontSize: theme('fontSize.base')[0],
+
           },
 
           // Media

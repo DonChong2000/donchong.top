@@ -33,7 +33,7 @@ export function TableOfContents() {
   let top = firstVisibleSectionIndex * itemHeight;
 
   return (
-    <div className="hidden xl:block xl:w-64 xl:flex-none xl:sticky xl:top-[4.75rem] xl:h-[calc(100vh-4.75rem)] xl:overflow-y-auto xl:py-16 xl:pl-6 xl:border-l xl:border-zinc-900/10 xl:dark:border-white/10">
+    <div className="hidden xl:block xl:w-64 xl:flex-none xl:sticky xl:top-[0.75rem] xl:h-[calc(100vh)] xl:overflow-y-auto xl:py-16 xl:pl-6 xl:border-l xl:border-zinc-900/10 xl:dark:border-white/10">
       <nav aria-labelledby="on-this-page-title" className="relative pl-2">
         <AnimatePresence initial={!isInsideMobileNavigation}>
           {sections.length > 0 && (
@@ -42,7 +42,8 @@ export function TableOfContents() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, transition: { delay: 0.2 } }}
               exit={{ opacity: 0 }}
-              className="absolute inset-x-0 top-0 bg-zinc-800/2.5 will-change-transform dark:bg-white/2.5"
+              className="absolute inset-x-0 top-0"
+              // className="absolute inset-x-0 top-0 bg-zinc-800/2.5 will-change-transform dark:bg-white/2.5"
               style={{ borderRadius: 8, height, top }}
             />
           )}
@@ -51,7 +52,7 @@ export function TableOfContents() {
           <>
             <h2
               id="on-this-page-title"
-              className="font-display text-sm font-medium text-slate-900 dark:text-white"
+              className="font-display text-sm font-medium text-charcoal-700 dark:text-white"
             >
               On this page
             </h2>
@@ -62,10 +63,14 @@ export function TableOfContents() {
                     <a
                       href={`#${section.id}`}
                       className={clsx(
-                        "block py-1 text-sm transition",
-                        section.level === 3 ? "pl-7" : "pl-4",
-                        section.id === visibleSections[0]
-                          ? "text-[#E49B0F]"
+                        "block text-sm transition",
+                        section.level === 3 ? "pl-4" : "pl-0",
+                        section.id === visibleSections[0] ||
+                          (section.level === 2 &&
+                            sections.some(
+                              (s) => s.parentId === section.id && s.id === visibleSections[0],
+                            ))
+                          ? "text-gamboge-500"
                           : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white",
                       )}
                     >

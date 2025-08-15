@@ -91,19 +91,28 @@ function rehypeAddMDXExports(getExports) {
   };
 }
 
-function getSections(node) {
+function getSections(node, parentId = null) {
   let sections = [];
+  let currentH2Id = parentId;
 
   for (let child of node.children ?? []) {
     if (child.type === 'element' && (child.tagName === 'h2' || child.tagName === 'h3')) {
-      sections.push(`{
+      const level = parseInt(child.tagName.replace('h', ''));
+      let sectionData = `{
         title: ${JSON.stringify(toString(child))},
         id: ${JSON.stringify(child.properties.id)},
-        level: ${parseInt(child.tagName.replace('h', ''))},
+        level: ${level},
         ...${child.properties.annotation}
-      }`);
+      }`;
+
+      if (level === 2) {
+        currentH2Id = child.properties.id;
+      } else if (level === 3 && currentH2Id) {
+        sectionData = sectionData.replace('}', `, parentId: ${JSON.stringify(currentH2Id)}}`);
+      }
+      sections.push(sectionData);
     } else if (child.children) {
-      sections.push(...getSections(child));
+      sections.push(...getSections(child, currentH2Id));
     }
   }
 

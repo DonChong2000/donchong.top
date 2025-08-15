@@ -228,11 +228,13 @@ export const navigation: Array<NavGroup> = [
     links: [
       { title: 'This Site', href: '/thisSite' },
       { title: 'Receipt Extractor', href: '/groups' },
+      { title: 'And More...', href: '/groups' },
+
 
     ],
   },
   {
-    title: 'Notes',
+    title: 'Others',
     links: [
       { title: 'Contacts', href: '/contacts' },
       { title: 'Cookbook', href: '/cookbook',
@@ -242,7 +244,7 @@ export const navigation: Array<NavGroup> = [
 
         ],
       },
-      { title: 'Conversation', href: '/conversations' },
+      { title: 'GTNH', href: '/GTNH' },
 
     ],
   }
