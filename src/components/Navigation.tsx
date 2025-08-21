@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
@@ -11,6 +11,8 @@ import { useIsInsideMobileNavigation } from '@/components/MobileNavigation';
 import { useSectionStore } from '@/components/SectionProvider';
 import { Tag } from '@/components/Tag';
 import { remToPx } from '@/lib/remToPx';
+import { ChevronDownIcon } from './icons/ChevronDownIcon';
+import { ChevronRightIcon } from './icons/ChevronRightIcon';
 
 interface NavGroup {
   title: string,
@@ -25,6 +27,38 @@ interface NavGroup {
   }[]
 }
 
+
+function usePersistentState<T>(key: string, defaultValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
+  const [state, setState] = useState<T>(defaultValue);
+  const hasMounted = useRef(false);
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    const storedValue = window.localStorage.getItem(key);
+    if (storedValue) {
+      try {
+        setState(JSON.parse(storedValue));
+      } catch (error) {
+        console.error('Error reading from localStorage', error);
+      }
+    }
+  }, [key]);
+
+  // Save to localStorage on state change, but only after the initial load has happened.
+  useEffect(() => {
+    if (hasMounted.current) {
+      try {
+        window.localStorage.setItem(key, JSON.stringify(state));
+      } catch (error) {
+        console.error('Error writing to localStorage', error);
+      }
+    } else {
+      hasMounted.current = true;
+    }
+  }, [key, state]);
+
+  return [state, setState];
+}
 
 function useInitialValue<T>(value: T, condition = true) {
   let initialValue = useRef(value).current;
@@ -88,20 +122,38 @@ function NavLink({
 function VisibleSectionHighlight({
   group,
   pathname,
+  openDropdowns,
 }: {
   group: NavGroup
   pathname: string
+  openDropdowns: { [key: string]: boolean }
 }) {
+  const itemHeight = remToPx(2);
 
+  const activeParentIndex = group.links.findIndex((link) =>
+    pathname.startsWith(link.href),
+  );
+  if (activeParentIndex === -1) {
+    return null;
+  }
 
-  // Todo: modify this to dynamic route pages
-  let parent = group.links.find((link) => pathname.startsWith(link.href))
-  let firstVisibleSectionIndex = (parent?.children?.findIndex((link) => pathname.startsWith(link.href)) ?? -1) +1;
-  let itemHeight = remToPx(2);
-  let height = itemHeight;
-  let top =
-    group.links.findIndex((link) => pathname.startsWith(link.href)) * itemHeight +
-    firstVisibleSectionIndex * itemHeight;
+  const activeParent = group.links[activeParentIndex];
+  const activeChildIndex =
+    activeParent.children?.findIndex((child) =>
+      pathname.startsWith(child.href),
+    ) ?? -1;
+
+  let top = 0;
+  for (let i = 0; i < activeParentIndex; i++) {
+    top += itemHeight;
+    if (openDropdowns[group.links[i].title] && group.links[i].children) {
+      top += group.links[i].children!.length * itemHeight;
+    }
+  }
+
+  if (activeChildIndex !== -1) {
+    top += (activeChildIndex + 1) * itemHeight;
+  }
 
   return (
     <motion.div
@@ -110,7 +162,7 @@ function VisibleSectionHighlight({
       animate={{ opacity: 1, transition: { delay: 0.2 } }}
       exit={{ opacity: 0 }}
       className="absolute inset-x-0 top-0 bg-timberwolf-800/2.5 will-change-transform dark:bg-white/2.5"
-      style={{ borderRadius: 8, height, top }}
+      style={{ borderRadius: 8, height: itemHeight, top }}
     />
   );
 }
@@ -118,14 +170,55 @@ function VisibleSectionHighlight({
 function ActivePageMarker({
   group,
   pathname,
+  openDropdowns,
 }: {
   group: NavGroup
   pathname: string
+  openDropdowns: { [key: string]: boolean }
 }) {
-  let itemHeight = remToPx(2);
-  let offset = remToPx(0.25);
-  let activePageIndex = group.links.findIndex((link) => pathname.startsWith(link.href));
-  let top = offset + activePageIndex * itemHeight;
+  const itemHeight = remToPx(2);
+  const offset = remToPx(0.25);
+  let calculatedTop = -1; // Sentinel value
+
+  let currentHeight = offset;
+
+  for (const link of group.links) {
+    // Case 1: The link itself is the active page.
+    if (link.href === pathname) {
+      calculatedTop = currentHeight;
+      break;
+    }
+
+    // Case 2: The active page is a child of the current link.
+    if (link.children) {
+      const activeChildIndex = link.children.findIndex(
+        (child) => child.href === pathname,
+      );
+      if (activeChildIndex !== -1) {
+        const isDropdownOpen = openDropdowns[link.title] === true;
+        if (isDropdownOpen) {
+          // If open, marker is on the specific child.
+          calculatedTop = currentHeight + (activeChildIndex + 1) * itemHeight;
+        } else {
+          // If closed, marker is on the parent.
+          calculatedTop = currentHeight;
+        }
+        break;
+      }
+    }
+
+    // If we haven't found the active item yet, advance the height counter.
+    currentHeight += itemHeight;
+
+    // And if its dropdown is open, add the height of its children.
+    if (openDropdowns[link.title] && link.children) {
+      currentHeight += link.children.length * itemHeight;
+    }
+  }
+
+  if (calculatedTop === -1) {
+    return null; // Active page not in this group.
+  }
 
   return (
     <motion.div
@@ -134,8 +227,64 @@ function ActivePageMarker({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { delay: 0.2 } }}
       exit={{ opacity: 0 }}
-      style={{ top }}
+      style={{ top: calculatedTop }}
     />
+  );
+}
+
+function ParentLink({
+  link,
+  isOpen,
+  setIsOpen,
+}: {
+  link: NavGroup['links'][number]
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
+}) {
+  const pathname = usePathname();
+
+  return (
+    <motion.li layout="position" className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex w-full items-center justify-between gap-2 py-1 pr-3 text-sm transition pl-4 text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+      >
+        <span className="truncate">{link.title}</span>
+        {isOpen ? (
+          <ChevronDownIcon className="h-4 w-4" />
+        ) : (
+          <ChevronRightIcon className="h-4 w-4" />
+        )}
+      </button>
+      <AnimatePresence mode="popLayout" initial={false}>
+        {isOpen && (
+          <motion.ul
+            role="list"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: 1,
+              transition: { delay: 0.1 },
+            }}
+            exit={{
+              opacity: 0,
+              transition: { duration: 0.15 },
+            }}
+          >
+            {link.children?.map((child) => (
+              <li key={child.id}>
+                <NavLink
+                  href={child.href}
+                  active={child.href === pathname}
+                  isAnchorLink
+                >
+                  {child.title}
+                </NavLink>
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </motion.li>
   );
 }
 
@@ -158,6 +307,17 @@ function NavigationGroup({
   let isActiveGroup =
     group.links.findIndex((link) => pathname.startsWith(link.href)) !== -1;
 
+  const [openDropdowns, setOpenDropdowns] = usePersistentState<{
+    [key: string]: boolean
+  }>(`nav-group-dropdown-state-${group.title}`, {});
+
+  const handleDropdownToggle = (title: string) => {
+    setOpenDropdowns((prev) => ({
+      ...prev,
+      [title]: !prev[title],
+    }));
+  };
+
   return (
     <li className={clsx('relative mt-6', className)}>
       <motion.h2
@@ -169,7 +329,11 @@ function NavigationGroup({
       <div className="relative mt-3 pl-2">
         <AnimatePresence initial={!isInsideMobileNavigation}>
           {isActiveGroup && (
-            <VisibleSectionHighlight group={group} pathname={pathname} />
+            <VisibleSectionHighlight
+              group={group}
+              pathname={pathname}
+              openDropdowns={openDropdowns}
+            />
           )}
         </AnimatePresence>
         <motion.div
@@ -178,44 +342,33 @@ function NavigationGroup({
         />
         <AnimatePresence initial={false}>
           {isActiveGroup && (
-            <ActivePageMarker group={group} pathname={pathname} />
+            <ActivePageMarker
+              group={group}
+              pathname={pathname}
+              openDropdowns={openDropdowns}
+            />
           )}
         </AnimatePresence>
         <ul role="list" className="border-l border-transparent">
-          {group.links.map((link) => (
-            <motion.li key={link.href} layout="position" className="relative">
-              <NavLink href={link.href} active={link.href === pathname}>
-                {link.title}
-              </NavLink>
-              <AnimatePresence mode="popLayout" initial={false}>
-                {pathname.startsWith(link.href) && ( // This controls the visibility of the children
-                  <motion.ul
-                    role="list"
-                    initial={{ opacity: 0 }}
-                    animate={{
-                      opacity: 1,
-                      transition: { delay: 0.1 },
-                    }}
-                    exit={{
-                      opacity: 0,
-                      transition: { duration: 0.15 },
-                    }}
-                  >
-                    {link.children?.map((child) => (
-                      <li key={child.id}>
-                        <NavLink
-                          href={child.href}
-                          isAnchorLink
-                        >
-                          {child.title}
-                        </NavLink>
-                      </li>
-                    ))}
-                  </motion.ul>
-                )}
-              </AnimatePresence>
-            </motion.li>
-          ))}
+          {group.links.map((link) => {
+            if (link.children) {
+              return (
+                <ParentLink
+                  key={link.href}
+                  link={link}
+                  isOpen={openDropdowns[link.title] || false}
+                  setIsOpen={() => handleDropdownToggle(link.title)}
+                />
+              );
+            }
+            return (
+              <motion.li key={link.href} layout="position" className="relative">
+                <NavLink href={link.href} active={link.href === pathname}>
+                  {link.title}
+                </NavLink>
+              </motion.li>
+            );
+          })}
         </ul>
       </div>
     </li>
@@ -227,8 +380,8 @@ export const navigation: Array<NavGroup> = [
     title: 'Projects',
     links: [
       { title: 'This Site', href: '/thisSite' },
-      { title: 'Receipt Extractor', href: '/groups' },
-      { title: 'And More...', href: '/groups' },
+      { title: 'Receipt Extractor', href: '/Receipt_Extractor' },
+      { title: 'And More...', href: '/AndMore' },
 
 
     ],
@@ -236,7 +389,6 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Others',
     links: [
-      { title: 'Contacts', href: '/contacts' },
       { title: 'Cookbook', href: '/cookbook',
         children: [
           { title: 'Recipe1', href: '/cookbook/1', id: 'Recipe1' },
