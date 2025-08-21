@@ -244,6 +244,13 @@ export const navigation: Array<NavGroup> = [
 
         ],
       },
+      { title: 'theCookbook2', href: '/theCookbook2',
+        children: [
+          { title: 'Recipe3', href: '/theCookbook2/1', id: 'Recipe3' },
+          { title: 'Recipe4', href: '/theCookbook2/2', id: 'Recipe4' },
+
+        ],
+      },
       { title: 'GTNH', href: '/GTNH' },
 
     ],
