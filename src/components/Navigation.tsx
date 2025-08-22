@@ -379,9 +379,16 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Projects',
     links: [
-      { title: 'This Site', href: '/thisSite' },
-      { title: 'Receipt Extractor', href: '/Receipt_Extractor' },
-      { title: 'And More...', href: '/AndMore' },
+      { title: 'Overview', href: '/project-overview' },
+      { title: 'This Site', href: '/this-site' },
+      { title: 'Drowning Detection & Rescue System', href: '/drowning-detection-rescue-system' },
+      { title: 'And More...', href: '#',
+        children: [
+          { title: 'Receipt Extractor', href: '/receipt-extractor', id: 'receipt-extractor' },
+          { title: 'Recipe4', href: '/theCookbook2/3', id: 'Recipe5' },
+        ],
+      },
+
 
 
     ],
@@ -396,14 +403,7 @@ export const navigation: Array<NavGroup> = [
 
         ],
       },
-      { title: 'theCookbook2', href: '/theCookbook2',
-        children: [
-          { title: 'Recipe3', href: '/theCookbook2/1', id: 'Recipe3' },
-          { title: 'Recipe4', href: '/theCookbook2/2', id: 'Recipe4' },
-
-        ],
-      },
-      { title: 'GTNH', href: '/GTNH' },
+      { title: 'GTNH', href: '/gtnh' },
 
     ],
   }
