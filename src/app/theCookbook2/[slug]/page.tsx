@@ -27,7 +27,7 @@ async function getPageContent(slug: string) {
     // Dynamically import the MDX file.
     // The path is relative from the `content` directory.
     const { default: Content } = await import(
-      `@/app/content/cookbook/${slug}.mdx`
+      `@/app/content/cookbook2/${slug}.mdx`
     )
     return <Content />
   } catch (error) {

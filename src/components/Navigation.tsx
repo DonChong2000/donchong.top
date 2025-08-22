@@ -129,30 +129,45 @@ function VisibleSectionHighlight({
   openDropdowns: { [key: string]: boolean }
 }) {
   const itemHeight = remToPx(2);
+  let calculatedTop = -1; // Sentinel value
+  let currentHeight = 0;
 
-  const activeParentIndex = group.links.findIndex((link) =>
-    pathname.startsWith(link.href),
-  );
-  if (activeParentIndex === -1) {
-    return null;
-  }
+  for (const link of group.links) {
+    const isParentActive =
+      (link.href !== '#' && pathname.startsWith(link.href)) ||
+      (link.children &&
+        link.children.some((child) => pathname.startsWith(child.href)));
 
-  const activeParent = group.links[activeParentIndex];
-  const activeChildIndex =
-    activeParent.children?.findIndex((child) =>
-      pathname.startsWith(child.href),
-    ) ?? -1;
+    if (isParentActive) {
+      calculatedTop = currentHeight;
 
-  let top = 0;
-  for (let i = 0; i < activeParentIndex; i++) {
-    top += itemHeight;
-    if (openDropdowns[group.links[i].title] && group.links[i].children) {
-      top += group.links[i].children!.length * itemHeight;
+      if (link.children) {
+        const activeChildIndex = link.children.findIndex((child) =>
+          pathname.startsWith(child.href),
+        );
+        if (activeChildIndex !== -1) {
+          const isDropdownOpen = openDropdowns[link.title] === true;
+          if (isDropdownOpen) {
+            // If open, marker is on the specific child.
+            calculatedTop = currentHeight + (activeChildIndex + 1) * itemHeight;
+          }
+          // If closed, marker is on the parent, which is already set.
+        }
+      }
+      break;
+    }
+
+    // If we haven't found the active item yet, advance the height counter.
+    currentHeight += itemHeight;
+
+    // And if its dropdown is open, add the height of its children.
+    if (openDropdowns[link.title] && link.children) {
+      currentHeight += link.children.length * itemHeight;
     }
   }
 
-  if (activeChildIndex !== -1) {
-    top += (activeChildIndex + 1) * itemHeight;
+  if (calculatedTop === -1) {
+    return null; // Active page not in this group.
   }
 
   return (
@@ -162,7 +177,7 @@ function VisibleSectionHighlight({
       animate={{ opacity: 1, transition: { delay: 0.2 } }}
       exit={{ opacity: 0 }}
       className="absolute inset-x-0 top-0 bg-timberwolf-800/2.5 will-change-transform dark:bg-white/2.5"
-      style={{ borderRadius: 8, height: itemHeight, top }}
+      style={{ borderRadius: 8, height: itemHeight, top: calculatedTop }}
     />
   );
 }
@@ -305,7 +320,12 @@ function NavigationGroup({
   );
 
   let isActiveGroup =
-    group.links.findIndex((link) => pathname.startsWith(link.href)) !== -1;
+    group.links.findIndex(
+      (link) =>
+        (link.href !== '#' && pathname.startsWith(link.href)) ||
+        (link.children &&
+          link.children.some((child) => pathname.startsWith(child.href))),
+    ) !== -1;
 
   const [openDropdowns, setOpenDropdowns] = usePersistentState<{
     [key: string]: boolean
@@ -382,13 +402,12 @@ export const navigation: Array<NavGroup> = [
       { title: 'Overview', href: '/project-overview' },
       { title: 'This Site', href: '/this-site' },
       { title: 'Drowning Detection & Rescue System', href: '/drowning-detection-rescue-system' },
-      { title: 'And More...', href: '#',
+      { title: 'And More...', href: '/theCookbook2',
         children: [
-          { title: 'Receipt Extractor', href: '/receipt-extractor', id: 'receipt-extractor' },
-          { title: 'Recipe4', href: '/theCookbook2/3', id: 'Recipe5' },
+          { title: 'Receipt Extractor', href: '/theCookbook2/receipt-extractor', id: 'Receipt Extractor' },
+          { title: 'Recipe4', href: '/theCookbook2/1', id: 'Recipe4' },
         ],
       },
-
 
 
     ],
