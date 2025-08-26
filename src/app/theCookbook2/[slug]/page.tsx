@@ -1,25 +1,25 @@
 
-import { glob } from 'fast-glob'
-import path from 'path'
-import { notFound } from 'next/navigation'
+import { glob } from 'fast-glob';
+import path from 'path';
+import { notFound } from 'next/navigation';
 
-const contentDir = path.join(process.cwd(), 'content', 'cookbook2')
+const contentDir = path.join(process.cwd(), 'content', 'cookbook2');
 
 async function getAttachments() {
-  const files = await glob('*.mdx', { cwd: contentDir })
+  const files = await glob('*.mdx', { cwd: contentDir });
 
   return files.map((file) => {
-    const slug = path.basename(file, path.extname(file))
-    return { slug }
-  })
+    const slug = path.basename(file, path.extname(file));
+    return { slug };
+  });
 }
 
-export const allAttachments = await getAttachments()
+export const allAttachments = await getAttachments();
 
 export async function generateStaticParams() {
   return allAttachments.map((attachment) => ({
     slug: attachment.slug,
-  }))
+  }));
 }
 
 async function getPageContent(slug: string) {
@@ -28,10 +28,10 @@ async function getPageContent(slug: string) {
     // The path is relative from the `content` directory.
     const { default: Content } = await import(
       `@/app/content/cookbook2/${slug}.mdx`
-    )
-    return <Content />
+    );
+    return <Content />;
   } catch (error) {
-    notFound()
+    notFound();
   }
 }
 
@@ -40,7 +40,7 @@ export default async function AttachmentPage({
 }: {
   params: { slug: string }
 }) {
-  const pageContent = await getPageContent(params.slug)
+  const pageContent = await getPageContent(params.slug);
 
-  return <article className="prose dark:prose-invert">{pageContent}</article>
+  return <article className="prose dark:prose-invert">{pageContent}</article>;
 }
