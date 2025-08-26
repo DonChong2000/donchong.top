@@ -402,6 +402,8 @@ export const navigation: Array<NavGroup> = [
       { title: 'Overview', href: '/project-overview' },
       { title: 'This Site', href: '/this-site' },
       { title: 'Drowning Detection & Rescue System', href: '/drowning-detection-rescue-system' },
+      { title: 'Timelapse Machine', href: '/timelapse-machine' },
+
       { title: 'And More...', href: '/theCookbook2',
         children: [
           { title: 'Receipt Extractor', href: '/theCookbook2/receipt-extractor', id: 'Receipt Extractor' },
