@@ -6,8 +6,8 @@ import { remToPx } from '@/lib/remToPx';
 import { useIsInsideMobileNavigation } from '@/components/MobileNavigation';
 
 function useInitialValue<T>(value: T, condition = true) {
-  let initialValue = useRef(value).current
-  return condition ? initialValue : value
+  let initialValue = useRef(value).current;
+  return condition ? initialValue : value;
 }
 
 export function TableOfContents() {
