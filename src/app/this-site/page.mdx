@@ -1,45 +1,47 @@
+import Image from 'next/image'
 export const metadata = {
-  title: 'Attachments',
+  title: 'About This Site',
   description:
-    'On this page, we’ll dive into the different attachment endpoints you can use to manage attachments programmatically.',
+    'This page describes the design and development choices behind my personal website.',
 }
 
 ## My Personal Site
 My personal site is built with Tailwind CSS, a framework used by companies like OpenAI, Shopify, Google I/O, and even NASA. It provides a solid foundation for modern web design, with built-in design guardrails and numerous components that help me create a polished site without needing an art degree.
-## Design
+
+## UI
 Years ago, I thought my work had to be entirely original—that copying others was almost a sin. Over time, I realized that good artists often start by imitating great work and borrowing ideas. So I studied other websites and reshaped what I learned to fit my own needs.
-## Color
-(my img)
-(comparason of orange vs underline)
-
-## Typography
-https://openai.com/zh-Hant-HK/brand/
-From OpenAI's documentation:
-
-font-family "OpenAI Sans", helvetica, sans-serif
-
-H1:
-no H1
-
-H2:
-font-weight 600
-color rgb(237, 237, 237)
-font-size 30px
-No maring or padding added
-
-H4:
-font-weight 600
-color rgb(237, 237, 237)
-font-size 17px
-
-a:
-underline
-This way the link's color dont need to have high contrast
-
-## Images
-From: [The Wall Street Journal - Breaking News, Business, Financial & Economic News, World News and Video](https://www.wsj.com/)
-
-Most of the pictures are 4:3 and fit just right into the article, but sometimes if there is a vertical image, they use wrap-text
-![[Pasted image 20250812222519.png]]
 
 
+
+## Hosting
+
+### Domain Name
+
+I got my domain name from Name Silo, the first year was $1, and renewal for $4.88. I believe this is the cheapest TLD you can find on the market. You might find some subdomain for free, I used to have donchong.imwork.net from oray.com, but they don't offer the same functionality, especially the some you can use on Cloudflare.
+<Image src="/Pasted image 20250826051749.png" alt="" width={856} height={273} className='w-full h-auto'/>
+
+
+## CI/CD
+Simple CI/CD with GitHub Actions
+
+1. **Add SSH secrets in GitHub**
+    <Image src="/Pasted image 20250826153946.png" alt="" width={856} height={273} className='w-full h-auto'/>
+
+2. **Configure `.github/workflows/deploy.yml`**  
+    You can grab a template online or let AI generate one for you. The file tells GitHub Actions:
+    
+    - **When to run** – e.g., on push to a branch, or on a schedule.
+        
+    - **What to run** – build, test, deploy. Basically anything you’d run in your terminal can go here.
+    
+3. **Push changes to the branch**  
+    That push triggers the workflow.  
+    <Image src="/Pasted image 20250826143518.png" alt="" width={856} height={273} className='w-full h-auto'/>
+
+4. **Fix config issues as they pop up**  
+    Usual suspects: SSH key permissions, pm2 command not found due to path problem, etc. Once sorted, the pipeline runs clean.  
+    <Image src="/Pasted image 20250826152929.png" alt="" width={539} height={527} className='w-1/2 h-auto'/>
+
+5. **Done: automated deployment**  
+    Every push to `main` now builds and deploys straight to the server.  
+    <Image src="/Pasted image 20250826152400.png" alt="" width={856} height={273} className='w-full h-auto'/>

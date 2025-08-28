@@ -399,15 +399,15 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Projects',
     links: [
-      { title: 'Overview', href: '/project-overview' },
+      { title: 'Overview', href: '/projects-overview' },
+      { title: 'Chat-CV', href: '/chat-cv' },
       { title: 'This Site', href: '/this-site' },
-      { title: 'Drowning Detection & Rescue System', href: '/drowning-detection-rescue-system' },
-      { title: 'Timelapse Machine', href: '/timelapse-machine' },
-
-      { title: 'And More...', href: '/theCookbook2',
+      { title: 'And More...', href: '/projects',
         children: [
-          { title: 'Receipt Extractor', href: '/theCookbook2/receipt-extractor', id: 'Receipt Extractor' },
-          { title: 'Recipe4', href: '/theCookbook2/1', id: 'Recipe4' },
+          { title: 'Drowning Detection & Rescue System', href: '/projects/drowning-detection-rescue-system', id: 'Drowning Detection & Rescue System' },
+          { title: 'Timelapse Machine', href: '/projects/timelapse-machine', id: 'Timelapse Machine' },
+          { title: 'Receipt Extractor', href: '/projects/receipt-extractor', id: 'Receipt Extractor' },
+
         ],
       },
 
@@ -415,17 +415,21 @@ export const navigation: Array<NavGroup> = [
     ],
   },
   {
-    title: 'Others',
+    title: 'Hobbies',
     links: [
+      { title: 'GTNH', href: '/gtnh' },
       { title: 'Cookbook', href: '/cookbook',
         children: [
           { title: 'Recipe1', href: '/cookbook/1', id: 'Recipe1' },
-          { title: 'Recipe2', href: '/cookbook/2', id: 'Recipe2' },
 
         ],
       },
-      { title: 'GTNH', href: '/gtnh' },
-
+      { title: 'Random Notes', href: '/random-notes',
+        children: [
+          { title: 'The Seagram Building', href: '/random-notes/the-seagram-building', id: 'The Seagram Building' },
+          { title: 'Test', href: '/random-notes/test', id: 'Test' }
+        ],
+      },
     ],
   }
 ];
