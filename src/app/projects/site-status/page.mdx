@@ -1,11 +1,14 @@
 import Image from 'next/image'
 export const metadata = {
-  title: 'Groups',
+  title: 'Status',
   description:
-    'On this page, we’ll dive into the different group endpoints you can use to manage groups programmatically.',
+    '',
 }
 
 # status.donchong.top
+
+> tldr: If you want to monitor your site and services, use <a href="#simple-solution">UptimeRobot</a>.
+
 I want a site that never goes down, mainly to show my site and service status. For that, I plan to use Cloudflare Workers.
 
 ## Setting up Cloudflare Worker
@@ -181,3 +184,15 @@ app.put('/tfg', (req, res) => {
     res.json({"success":"true",'message': 'TFG server is starting!'})
 });
 ```
+
+
+## Simple solution
+After all the wheel reinventing, I met UptimeRobot, a free service that can monitor your site and services, and alert you when they are down, and give you a nice history dashboard. I believe this is all you need for most of the time.
+
+It can monitor:
+- HTTP / Websites
+- Ping for a specific IP address
+- Port (like a Minecraft server port)
+- Keywords (check if a specific keyword exist in the website)
+
+<Image src='/Pasted image 20250829050647.png' width={1300} height={1029} alt='Wrangler Deploy Error' />
