@@ -406,9 +406,8 @@ export const navigation: Array<NavGroup> = [
         children: [
           { title: 'Drowning Detection & Rescue System', href: '/projects/drowning-detection-rescue-system', id: 'Drowning Detection & Rescue System' },
           { title: 'Timelapse Machine', href: '/projects/timelapse-machine', id: 'Timelapse Machine' },
-          { title: 'Receipt Extractor', href: '/projects/receipt-extractor', id: 'Receipt Extractor' },
-          { title: 'Site Status', href: '/projects/site-status', id: 'Site Status' },
-
+          { title: 'Bill-AI', href: '/projects/bill-ai', id: 'Bill-AI' },
+          { title: 'status.donchong.top', href: '/projects/site-status', id: 'status.donchong.top' },
         ],
       },
 

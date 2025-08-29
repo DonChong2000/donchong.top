@@ -1,17 +1,43 @@
+import Image from 'next/image'
 export const metadata = {
   title: 'Groups',
   description:
     'On this page, we’ll dive into the different group endpoints you can use to manage groups programmatically.',
 }
 
-# Site Status test test test hello
+# status.donchong.top
+I want a site that never goes down, mainly to show my site and service status. For that, I plan to use Cloudflare Workers.
 
-## First start with a template
-I just follow the same tutorial in [[../Cloudflare/Deploying a static site via worker]]
+## Setting up Cloudflare Worker
+Before building the real thing, I decided to test the idea using [Bill-AI](/bill-ai). That project is just a static site that converts a JSON object into a table I can copy into Excel. My goal is to replace it with a worker as a test run.
 
+I followed [this guide](https://developers.cloudflare.com/workers/configuration/sites/start-from-scratch/) to kickstart a Cloudflare worker site.
 
-## Ping My Website
-https://paulgalow.com/how-to-check-for-internet-connectivity-node/
+**Problems with Cloudflare**
+
+At first, `npx wrangler deploy` didn’t work, so I tried `npx wrangler publish` instead.
+
+<Image src='/Pasted%20image%2020240817022358.png' width={296} height={49} alt='Wrangler Deploy Error' />
+At of 2025-08-29, this problem is solved.~~The issue came from the default Wrangler install being outdated. Running `npx wrangler --version`, you will get `0.0.30` for some reason which is a very old version. To update it, simply run `npm install wrangler@latest`~~
+
+Many Cloudflare's example are using old syntax, which cause a lot of troubles. Check the  [Migration Guide](https://developers.cloudflare.com/workers/reference/migrate-to-module-workers/) to see how to update your code if you have the same problem. This is also mentioned in a [GitHub Issue](https://github.com/cloudflare/workerd/issues/854).
+
+Then I set up a custom domain in the settings:
+
+<Image src='/Pasted%20image%2020240817025503.png' width={685} height={482} alt='Custom Domain Setup' />
+
+After I updated the prompt in my Bill-ai project and flushed DNS caches, now [Bill-AI](/projects/bill-ai) is online!
+* Chrome: [chrome://net-internals/#dns](https://www.cyberciti.biz/faq/google-chrome-clear-or-flush-the-dns-cache/)
+* Windows Command: `ipconfig /flushdns`
+
+<Image src='/Pasted%20image%2020240817025747.png' width={572} height={344} alt='Site Online' />
+
+## The UI
+...
+
+## Ping my sites
+
+By referencing [this article](https://paulgalow.com/how-to-check-for-internet-connectivity-node/), its very easy to check for internet connectivity in Node.js.
 
 ```js
 const { createConnection } = require("net");
@@ -42,11 +68,11 @@ checkTCP()
   .finally(() => console.log({ isOnline }));
 ```
 
-## Ping My Minecraft Server
-Although the above method also works for minecraft servers, I wish to get more informations about their status and player activity.
+## Ping my Minecraft servers
+Although the above website method also works for minecraft servers, I wish to get more informations about their status and player activity.
 
 A Minecraft Server Status API provided by https://mcstatus.io/ provide just the everything I need.
-Simply by sending a get respond
+Simply by sending a get request to
 `https://api.mcstatus.io/v2/status/java/gtnh.donchong.top`
 I can get a lot of informations like online, players, software version, mods, even SRV Record. 
 ```json
@@ -87,4 +113,71 @@ I can get a lot of informations like online, players, software version, mods, ev
 }
 ```
 
+## Starting my Minecraft server
+Since I was play [TFG Modpack](https://www.curseforge.com/minecraft/modpacks/terrafirmagreg-modern) with my friends,
+food will expire if I keep the server running 24/7, so I need a way to let my friends start the server when they want to play. 
 
+As I am learning Cloudflare and following the theory of ['the more you f**k around, the more you know'](https://youtu.be/WntjAM2wqF8?si=Vtj28V_ewgpCKsQh). 
+  I went for an **unnecessarily over-engineered** approach. This part is just for fun at this point,
+  the code here are more of a proof of concept and for experimentation.
+
+First, When I click the start button on my site, it will send a request PUT request to a my api.donchong.top worker.
+```js
+export async function onRequest(context) {
+    try{
+        const fetchpromuse = await fetch(`https://api.donchong.top/v1/tfg`, {
+            method: 'PUT',
+          })
+        const json = await fetchpromuse.json();
+        return new Response(JSON.stringify(json));
+    }catch(e){
+        // if (e === 'error code: 521') return new Response({error: 'error code: 521, My Oracle server is down!'});
+        return new Response(JSON.stringify(`error: ${e.message}`));
+    }
+}
+
+```
+
+Then the api.donchong.top worker will forward the request to my Oracle Cloud Server.
+```js
+    async PUT(path,request) {
+        try{
+            let serverRes = await fetch('https://test.donchong.top:8081/tfg', {
+                method: 'PUT',
+            })
+            const contentType = serverRes.headers.get('content-type');
+            let jsonResponse;
+            if (contentType && contentType.includes('application/json')) {
+                jsonResponse = await serverRes.json();
+            } else {
+                console.error('Response is not JSON');
+                // jsonResponse = {error: 'Response is not JSON', contentType: contentType};
+                jsonResponse = await serverRes.text();
+            }
+            return jsonResponse;
+        }catch(e){
+            return  {"Error in tfg": e.message}
+        }
+    }
+```
+
+Finally, my Oracle Cloud Server runs an express server that will receive the request and start the Minecraft server
+```js
+app.put('/tfg', (req, res) => {
+    res.setHeader('content-type', 'application/json');
+    if(isTFGRunning){
+        return res.status(409).json({"success":"false", 'message': 'TFG server has started or is starting.'});
+    } 
+    const tfgDirectory = path.resolve(__dirname, '/home/ubuntu/Minecraft/TerraFirmaGreg/');
+    const tfgServer = spawn('sh', ['nodeStart.sh'], { cwd: tfgDirectory });
+    isTFGRunning = true;
+    tfgServer.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`);
+    });
+    tfgServer.on('close', (code) => {
+        isTFGRunning = false;
+        console.log(`Shell script exited with code ${code}`);
+    });
+    res.json({"success":"true",'message': 'TFG server is starting!'})
+});
+```

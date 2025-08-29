@@ -5,11 +5,65 @@ export const metadata = {
     'This page describes the design and development choices behind my personal website.',
 }
 
-# My Personal Site
+# My personal site
 My personal site is built with Tailwind CSS, a framework used by companies like OpenAI, Shopify, Google I/O, and even NASA. It provides a solid foundation for modern web design, with built-in design guardrails and numerous components that help me create a polished site without needing an art degree.
 
 ## UI
 Years ago, I thought my work had to be entirely original—that copying others was almost a sin. Over time, I realized that good artists often start by imitating great work and borrowing ideas. So I studied other websites and reshaped what I learned to fit my own needs.
+
+### OpenAI typography
+I went through one of OpenAI’s documentation with Dev Tools. Here is what I found:
+
+#### Headings
+
+  - **General**:
+      - Capitalization rules: Sentence Case
+      - `font-weight: var(--font-weight-semibold)`
+      - `rgb(237, 237, 237)`
+  - **h1**:
+      - `font-size: 30px`
+      - `letter-spacing: var(--font-tracking-tight)`
+      - `line-height: 39px`
+      - `margin-bottom: 26px`
+  - **h2**:
+      - `font-size: 25px`
+      - `line-height: 32.5px`
+  - **h3**:
+      - `font-size: 20px`
+      - `line-height: 26px`
+  - **h4**:
+      - `font-size: 17px`
+      - `line-height: 22.1px`
+
+#### Page-subtitle
+
+  - `color: rgb(175, 175, 175)`
+  - `size: 18px`
+
+#### Links (`a`)
+
+  - `font-size: 18px`
+  - `font-weight: var(--font-weight-bold)`
+  - `text-decoration: underline`
+  - dimmed when hover
+
+#### Paragraph (`p`)
+
+  - `font-size: 16px`
+  - `rgb(220, 220, 220)`
+  - `margin-bottom: 15px`
+
+#### Organized List (`ol`)
+
+  - Customized bullets icon (ref: Refactoring UI - Supercharge the defaults)
+![[Pasted image 20250829000343.png]]
+
+#### Table Of Content
+
+  - `font-size: 14px`
+  - `color: rgb(175, 175, 175)` (inactive)
+  - `color: rgb(220, 220, 220)` (active)
+  - `font-weight: 600` (active)
 
 
 
