@@ -2,16 +2,20 @@ import Image from 'next/image'
 export const metadata = {
   title: 'Status',
   description:
-    '',
+    'status.donchong.top is my simple cloudflare worker site that shows the status of my personal website and services, and also provides a button to start my Minecraft server when I want to play with my friends.',
 }
 
 # status.donchong.top
 
-> tldr: If you want to monitor your site and services, use <a href="#simple-solution">UptimeRobot</a>.
+> If you want to monitor your site and services, use <a href="#simple-solution">UptimeRobot</a>.
 
-I want a site that never goes down, mainly to show my site and service status. For that, I plan to use Cloudflare Workers.
+## What is this?
+[status.donchong.top](https://status.donchong.top/) is my simple cloudflare worker site that shows the status of my personal website and services, 
+and also provides a button to start my Minecraft server when I want to play with my friends.
+<Image src='/Pasted image 20250829184022.png' width={904} height={675} alt='status.donchong.top screenshot' />
 
 ## Setting up Cloudflare Worker
+I want a site that never goes down, mainly to show my site and service status. For that, I plan to use Cloudflare Workers.
 Before building the real thing, I decided to test the idea using [Bill-AI](/bill-ai). That project is just a static site that converts a JSON object into a table I can copy into Excel. My goal is to replace it with a worker as a test run.
 
 I followed [this guide](https://developers.cloudflare.com/workers/configuration/sites/start-from-scratch/) to kickstart a Cloudflare worker site.
@@ -117,8 +121,9 @@ I can get a lot of informations like online, players, software version, mods, ev
 ```
 
 ## Starting my Minecraft server
-Since I was play [TFG Modpack](https://www.curseforge.com/minecraft/modpacks/terrafirmagreg-modern) with my friends,
-food will expire if I keep the server running 24/7, so I need a way to let my friends start the server when they want to play. 
+> This function is currently shutdown, as we are not playing it now.
+
+When I played TFG Modpack with friends, food would spoil if the server stayed up 24/7, so I needed a way for them to start it only when they wanted to play.
 
 As I am learning Cloudflare and following the theory of ['the more you f**k around, the more you know'](https://youtu.be/WntjAM2wqF8?si=Vtj28V_ewgpCKsQh). 
   I went for an **unnecessarily over-engineered** approach. This part is just for fun at this point,

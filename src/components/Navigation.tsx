@@ -400,7 +400,7 @@ export const navigation: Array<NavGroup> = [
     title: 'Projects',
     links: [
       { title: 'Overview', href: '/projects-overview' },
-      { title: 'Chat-CV', href: '/chat-cv' },
+      // { title: 'Chat-CV', href: '/chat-cv' },
       { title: 'This Site', href: '/this-site' },
       { title: 'And More...', href: '/projects',
         children: [
