@@ -14,7 +14,7 @@ export const metadata = {
 ## What is this?
 [status.donchong.top](https://status.donchong.top/) is my simple cloudflare worker site that shows the status of my personal website and services, 
 and also provides a button to start my Minecraft server when I want to play with my friends.
-<Image src='/Pasted image 20250829184022.png' width={904} height={675} alt='status.donchong.top screenshot' />
+<Image src='/Pasted image 20250829184022.png' width={904} height={675} alt='status.donchong.top screenshot' className='w-full h-auto'/>
 
 ## Setting up Cloudflare Worker
 I want a site that never goes down, mainly to show my site and service status. For that, I plan to use Cloudflare Workers.
@@ -26,20 +26,20 @@ I followed [this guide](https://developers.cloudflare.com/workers/configuration/
 
 At first, `npx wrangler deploy` didn’t work, so I tried `npx wrangler publish` instead.
 
-<Image src='/Pasted%20image%2020240817022358.png' width={296} height={49} alt='Wrangler Deploy Error' />
+<Image src='/Pasted%20image%2020240817022358.png' width={296} height={49} alt='Wrangler Deploy Error' className='w-full h-auto'/>
 At of 2025-08-29, this problem is solved.~~The issue came from the default Wrangler install being outdated. Running `npx wrangler --version`, you will get `0.0.30` for some reason which is a very old version. To update it, simply run `npm install wrangler@latest`~~
 
 Many Cloudflare's example are using old syntax, which cause a lot of troubles. Check the  [Migration Guide](https://developers.cloudflare.com/workers/reference/migrate-to-module-workers/) to see how to update your code if you have the same problem. This is also mentioned in a [GitHub Issue](https://github.com/cloudflare/workerd/issues/854).
 
 Then I set up a custom domain in the settings:
 
-<Image src='/Pasted%20image%2020240817025503.png' width={685} height={482} alt='Custom Domain Setup' />
+<Image src='/Pasted%20image%2020240817025503.png' width={685} height={482} alt='Custom Domain Setup' className='w-full h-auto'/>
 
 After I updated the prompt in my Bill-ai project and flushed DNS caches, now [Bill-AI](/projects/bill-ai) is online!
 * Chrome: [chrome://net-internals/#dns](https://www.cyberciti.biz/faq/google-chrome-clear-or-flush-the-dns-cache/)
 * Windows Command: `ipconfig /flushdns`
 
-<Image src='/Pasted%20image%2020240817025747.png' width={572} height={344} alt='Site Online' />
+<Image src='/Pasted%20image%2020240817025747.png' width={572} height={344} alt='Site Online' className='w-full h-auto'/>
 
 ## The UI
 ...
