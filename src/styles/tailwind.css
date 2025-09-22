@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+@plugin '@tailwindcss/aspect-ratio';
 @config '../../typography.ts';
 @custom-variant dark (&:where(.dark, .dark *));
 
