@@ -1,28 +1,30 @@
 /* eslint-disable @next/next/no-img-element */
-const product = {
-  images: [
+const product = [
     {
-      src: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
+      src: '/signal-2025-09-21-195238_002.jpeg',
       alt: 'Two each of gray, white, and black shirts laying flat.',
+      text: 'Italian Ciabatta',
       href: '/cookbook/1',
     },
     {
-      src: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
+      src: '/signal-2025-09-21-195238_002.jpeg',
       alt: 'Model wearing plain black basic tee.',
+      text: 'Example',
       href: '#',
     },
     {
-      src: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
+      src: '/signal-2025-09-21-195238_002.jpeg',
       alt: 'Model wearing plain gray basic tee.',
+      text: 'Example',
       href: '#',
     },
     {
-      src: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
+      src: '/signal-2025-09-21-195238_002.jpeg',
       alt: 'Model wearing plain white basic tee.',
+      text: 'Example',
       href: '#',
     },
-  ],
-};
+];
 
 export default function Gallery() {
   return (
@@ -30,45 +32,56 @@ export default function Gallery() {
         <div className="lg:grid lg:grid-cols-3 lg:gap-2 ">
 
 
-            <div className="row-span-2 aspect-3/4 size-full rounded-lg object-cover max-lg:hidden hover:opacity-75">
-            <a href={product.images[0].href}>
+            <div className="relative row-span-2 aspect-3/4 size-full rounded-lg object-cover max-lg:hidden hover:opacity-75">
+            <a href={product[0].href}>
                 <img
-                    alt={product.images[0].alt}
-                    src={product.images[0].src}
+                    alt={product[0].alt}
+                    src={product[0].src}
                     className="row-span-2 aspect-3/4 size-full rounded-lg object-cover max-lg:hidden"
                 />
             </a>
-
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <h3 className="relative mt-auto text-center text-l font-bold text-white">{product[0].text}</h3>
+            </div>
             </div>
 
-            <div className="col-start-2 aspect-3/2 size-full rounded-lg object-cover max-lg:hidden hover:opacity-75">
-            <a href={product.images[1].href}>
+            <div className="relative col-start-2 aspect-3/2 size-full rounded-lg object-cover max-lg:hidden hover:opacity-75">
+            <a href={product[1].href}>
                 <img
-                    alt={product.images[1].alt}
-                    src={product.images[1].src}
+                    alt={product[1].alt}
+                    src={product[1].src}
                     className="col-start-2 aspect-3/2 size-full rounded-lg object-cover max-lg:hidden hover:opacity-75"
                 />
             </a>
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <h3 className="relative mt-auto text-center text-l font-bold text-white">{product[1].text}</h3>
+            </div>
             </div>
 
-            <div className="col-start-2 row-start-2 aspect-3/2 size-full rounded-lg object-cover max-lg:hidden hover:opacity-75">
-            <a href={product.images[2].href}>
+            <div className="relative col-start-2 row-start-2 aspect-3/2 size-full rounded-lg object-cover max-lg:hidden hover:opacity-75">
+            <a href={product[2].href}>
                 <img
-                    alt={product.images[2].alt}
-                    src={product.images[2].src}
+                    alt={product[2].alt}
+                    src={product[2].src}
                     className="col-start-2 row-start-2 aspect-3/2 size-full rounded-lg object-cover max-lg:hidden hover:opacity-75"
                 />
             </a>
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <h3 className="relative mt-auto text-center text-l font-bold text-white">{product[2].text}</h3>
+            </div>
             </div>
 
-            <div className="row-span-2 aspect-4/5 size-full object-cover sm:rounded-lg lg:aspect-3/4 hover:opacity-75">
-            <a href={product.images[3].href}>
+            <div className="relative row-span-2 aspect-4/5 size-full object-cover sm:rounded-lg lg:aspect-3/4 hover:opacity-75">
+            <a href={product[3].href}>
                 <img
-                    alt={product.images[3].alt}
-                    src={product.images[3].src}
+                    alt={product[3].alt}
+                    src={product[3].src}
                     className="row-span-2 aspect-4/5 size-full object-cover sm:rounded-lg lg:aspect-3/4 hover:opacity-75"
                 />
             </a>
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <h3 className="relative mt-auto text-center text-l font-bold text-white">{product[3].text}</h3>
+            </div>
             </div>
 
         </div>

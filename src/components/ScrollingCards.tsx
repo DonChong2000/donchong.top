@@ -1,25 +1,25 @@
 const categories = [
   {
-    name: 'LV',
-    href: '#',
-    imageSrc: '/2025-08-10_22.06.22.png',
+    name: 'ULV',
+    href: '#the-beginning',
+    imageSrc: '/2025-08-10_22.17.15.png',
   },
   {
-    name: 'MV - EV',
-    href: '#',
-    imageSrc: '/2025-08-10_22.06.22.png',
+    name: 'LV - MV',
+    href: '#steam-age-and-lv-tier',
+    imageSrc: '/2025-08-10_22.29.38.png',
   },
   {
-    name: 'IV - LuV',
-    href: '#',
-    imageSrc: '/2025-08-10_22.06.22.png',
+    name: 'HV - EV',
+    href: '#mv-hv-ev',
+    imageSrc: '/2025-08-10_22.41.03.png',
   },
   {
-    name: 'Ongoing',
-    href: '#',
-    imageSrc: '/2025-08-10_22.06.22.png',
+    name: 'IV',
+    href: '#iv-tier',
+    imageSrc: '/2025-08-10_23.56.43.png',
   },
-  { name: 'Ongoing2', href: '#', imageSrc: '/2025-08-10_22.06.22.png' },
+  { name: 'ZPM?', href: '#', imageSrc: '/Pasted%20image%2020250630155824.png' },
 ];
 
 export function ScrollingCards(props: React.ComponentPropsWithoutRef<'div'>) {
@@ -43,7 +43,7 @@ export function ScrollingCards(props: React.ComponentPropsWithoutRef<'div'>) {
                       aria-hidden="true"
                       className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-gray-800 opacity-50"
                     />
-                    <span className="relative mt-auto text-center text-l font-bold text-white">{category.name}</span>
+                    <span className="relative mt-auto text-center text-lg font-bold text-white whitespace-nowrap">{category.name}</span>
                   </a>
                 ))}
               </div>
