@@ -7,9 +7,9 @@ export default {
         css: {
           '--tw-prose-body': theme('colors.zinc.700'),
           '--tw-prose-headings': theme('colors.charcoal.700'),
-          '--tw-prose-links': theme('colors.gamboge.500'),
-          '--tw-prose-links-hover': theme('colors.gamboge.600'),
-          '--tw-prose-links-underline': theme('colors.gamboge.500 / 0.3'),
+          '--tw-prose-links': theme('colors.zinc.700'),
+          '--tw-prose-links-hover': theme('colors.zinc.700'),
+          '--tw-prose-links-underline': theme('colors.zinc.700 / 0.3'),
           '--tw-prose-bold': theme('colors.zinc.900'),
           '--tw-prose-counters': theme('colors.zinc.500'),
           '--tw-prose-bullets': theme('colors.zinc.300'),
@@ -282,7 +282,7 @@ export default {
           // Inline elements
           a: {
             color: 'var(--tw-prose-links)',
-            textDecoration: 'underline transparent',
+            textDecoration: 'underline',
             fontWeight: '500',
             transitionProperty: 'color, text-decoration-color',
             transitionDuration: theme('transitionDuration.DEFAULT'),
