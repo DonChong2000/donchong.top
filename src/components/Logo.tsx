@@ -32,7 +32,7 @@ export function Logo(props: React.ComponentPropsWithoutRef<'svg'>) {
       /> */}
 
       <g>
-        <rect width="48" height="48" rx="0" className="fill-charcoal-500 dark:fill-timberwolf-550"/>
+        <rect width="48" height="48" rx="0" className="fill-charcoal-500 dark:fill-timberwolf-500"/>
         <path
           transform="translate(24, 24) scale(0.37) translate(-38.12, -38.5)"
           className=" fill-timberwolf-400 dark:fill-charcoal-500"
@@ -41,7 +41,7 @@ export function Logo(props: React.ComponentPropsWithoutRef<'svg'>) {
         />
       </g>
       <g transform="translate(52, 0)">
-        <rect width="48" height="48" rx="0" className="fill-charcoal-500 dark:fill-timberwolf-550" />
+        <rect width="48" height="48" rx="0" className="fill-charcoal-500 dark:fill-timberwolf-500" />
         <path
           transform="translate(24, 24) scale(0.37) translate(-38.12, -38.5)"
           className=" fill-timberwolf-400 dark:fill-charcoal-500"
@@ -50,7 +50,7 @@ export function Logo(props: React.ComponentPropsWithoutRef<'svg'>) {
         />
       </g>
       <g transform="translate(104, 0)">
-        <rect width="48" height="48" rx="0" className="fill-charcoal-500 dark:fill-timberwolf-550" />
+        <rect width="48" height="48" rx="0" className="fill-charcoal-500 dark:fill-timberwolf-500" />
 
 
         <path
