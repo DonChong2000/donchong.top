@@ -319,7 +319,9 @@ export function CodeGroup({
   let hasTabs = Children.count(children) > 1;
 
   let containerClassName =
-    'my-6 overflow-hidden rounded-2xl bg-zinc-900 shadow-md dark:ring-1 dark:ring-white/10';
+    'my-6 overflow-hidden bg-linear-to-b from-charcoal-500/100 to-charcoal-700/95 rounded-2xl shadow-md dark:ring-1 dark:ring-white/10';
+
+    // 'my-6 overflow-hidden rounded-2xl bg-charcoal-800/95 dark:bg-charcoal-900/95 shadow-md dark:ring-1 dark:ring-white/10';
   let header = (
     <CodeGroupHeader title={title} selectedIndex={tabGroupProps.selectedIndex}>
       {children}

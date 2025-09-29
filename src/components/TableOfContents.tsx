@@ -70,7 +70,7 @@ export function TableOfContents() {
                             sections.some(
                               (s) => s.parentId === section.id && s.id === visibleSections[0],
                             ))
-                          ? "text-gamboge-500"
+                          ? "text-charcoal-500 font-bold"
                           : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white",
                       )}
                     >
