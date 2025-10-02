@@ -26,7 +26,7 @@ export function TableOfContents() {
     0,
     tocItems.findIndex((section) => section.id === visibleSections[0]),
   );
-  let itemHeight = remToPx(2.25);
+  let itemHeight = remToPx(2);
   let height = useIsPresent()
     ? Math.max(1, visibleSections.length) * itemHeight
     : itemHeight;
@@ -40,7 +40,7 @@ export function TableOfContents() {
           {tocItems.length > 1 && (
             <motion.div
               layout
-              className="absolute left-2 top-0 w-0.5 rounded-full bg-charcoal-500 dark:bg-white"
+              className="absolute left-2 top-0 w-0.5 rounded-full bg-charcoal-500 dark:bg-timberwolf-200"
               initial={{ opacity: 0 }}
               animate={{
                 opacity: 1,
@@ -62,12 +62,12 @@ export function TableOfContents() {
             >
               On this page
             </h2> */}
-            <ol role="list" className="mt-16 space-y-3 text-sm">
+            <ol role="list" className="mt-16 space-y-2 text-sm">
               {tocItems.map((section) => (
                 <li key={section.id} className="relative">
                   <h3>
                     <a
-                      href={`#${section.id}`}
+                      href={section.id === '_top' ? '#' : `#${section.id}`}
                       className={clsx(
                         "block text-sm transition",
                         section.level === 3 ? "pl-4" : "pl-0",
@@ -76,7 +76,7 @@ export function TableOfContents() {
                             sections.some(
                               (s) => s.parentId === section.id && s.id === visibleSections[0],
                             ))
-                          ? "text-charcoal-500 font-bold transition-all duration-300 ease-in-out"
+                          ? "text-charcoal-500 font-bold dark:text-timberwolf-200 transition-all duration-300 ease-in-out"
                           : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-all  duration-150 ease-in-out",
                       )}
                     >
