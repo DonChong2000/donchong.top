@@ -20,44 +20,50 @@ export function TableOfContents() {
     isInsideMobileNavigation,
   );
 
+  const tocItems = [{ id: '_top', title: 'Overview', level: 2 }, ...sections];
+
   let firstVisibleSectionIndex = Math.max(
     0,
-    [{ id: '_top' }, ...sections].findIndex(
-      (section) => section.id === visibleSections[0],
-    ),
+    tocItems.findIndex((section) => section.id === visibleSections[0]),
   );
-  let itemHeight = remToPx(2);
+  let itemHeight = remToPx(2.25);
   let height = useIsPresent()
     ? Math.max(1, visibleSections.length) * itemHeight
     : itemHeight;
   let top = firstVisibleSectionIndex * itemHeight;
 
   return (
-    <div className="hidden xl:block xl:w-64 xl:flex-none xl:sticky xl:top-[0.75rem] xl:h-[calc(100vh)] xl:overflow-y-auto xl:py-16 xl:pl-6 xl:border-l xl:border-zinc-900/10 xl:dark:border-white/10">
-      <nav aria-labelledby="on-this-page-title" className="relative pl-2">
+    <div className="hidden xl:block xl:w-64 xl:flex-none xl:sticky xl:top-[0.75rem] xl:h-[calc(100vh)] xl:overflow-y-auto xl:py-16 xl:pl-6 "> {/* xl:border-l xl:border-zinc-900/10 xl:dark:border-white/10 */}
+      <nav aria-labelledby="on-this-page-title" className="relative pl-5">
+        <div className="absolute top-0 left-2 h-full w-[2px] bg-zinc-200 dark:bg-zinc-800" />
         <AnimatePresence initial={!isInsideMobileNavigation}>
-          {sections.length > 0 && (
+          {tocItems.length > 1 && (
             <motion.div
               layout
+              className="absolute left-2 top-0 w-0.5 rounded-full bg-charcoal-500 dark:bg-white"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { delay: 0.2 } }}
+              animate={{
+                opacity: 1,
+                transition: { delay: 0.2 },
+              }}
               exit={{ opacity: 0 }}
-              className="absolute inset-x-0 top-0"
-              // className="absolute inset-x-0 top-0 bg-zinc-800/2.5 will-change-transform dark:bg-white/2.5"
-              style={{ borderRadius: 8, height, top }}
+              style={{
+                height: 24,
+                top: top,
+              }}
             />
           )}
         </AnimatePresence>
-        {tableOfContents.length > 0 && (
+        {tocItems.length > 1 && (
           <>
-            <h2
+            {/* <h2
               id="on-this-page-title"
               className="font-display text-sm font-medium text-charcoal-700 dark:text-white"
             >
               On this page
-            </h2>
-            <ol role="list" className="mt-4 space-y-3 text-sm">
-              {tableOfContents.map((section) => (
+            </h2> */}
+            <ol role="list" className="mt-16 space-y-3 text-sm">
+              {tocItems.map((section) => (
                 <li key={section.id} className="relative">
                   <h3>
                     <a
