@@ -39,13 +39,13 @@ export function Layout({
         </motion.header>
 
         <div className="relative flex h-full justify-center">
-          {/* <div className="flex flex-col flex-auto px-4 pt-14 sm:px-6 lg:px-8"> */}
-            {/* <div className="mx-auto max-w-2xl lg:max-w-5xl "> */}
-            <div className="flex w-full max-w-2xl lg:max-w-5xl flex-col pt-14">
+          <div className="flex flex-col flex-auto px-4 pt-14 sm:px-6 lg:px-8 max-w-2xl lg:max-w-5xl">
+            <div className="mx-auto">
+            {/* <div className="flex w-full max-w-2xl lg:max-w-5xl flex-col pt-14"> */}
               <main className="flex-auto">{children}</main>
               <Footer />
             </div>
-          {/* </div> */}
+            </div>
           <TableOfContents />
         </div>
 
