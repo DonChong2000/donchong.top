@@ -70,8 +70,8 @@ export function TableOfContents() {
                             sections.some(
                               (s) => s.parentId === section.id && s.id === visibleSections[0],
                             ))
-                          ? "text-charcoal-500 font-bold"
-                          : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white",
+                          ? "text-charcoal-500 font-bold transition-all duration-300 ease-in-out"
+                          : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-all  duration-150 ease-in-out",
                       )}
                     >
                       {section.title}
