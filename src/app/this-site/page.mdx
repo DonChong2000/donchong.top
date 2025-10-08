@@ -1,88 +1,389 @@
+
 import Image from 'next/image'
+import { getImageMap } from '@/lib/imgMap'
+export const img = getImageMap(import.meta.url)
 export const metadata = {
   title: 'About This Site',
   description:
     'This page describes the design and development choices behind my personal website.',
 }
 
-# My personal site
+
 My personal site is built with Tailwind CSS, a framework used by companies like OpenAI, Shopify, Google I/O, and even NASA. It provides a solid foundation for modern web design, with built-in design guardrails and numerous components that help me create a polished site without needing an art degree.
 
-## UI
+---
+# Front End
 Years ago, I thought my work had to be entirely original—that copying others was almost a sin. Over time, I realized that good artists often start by imitating great work and borrowing ideas. So I studied other websites and reshaped what I learned to fit my own needs.
+## Interface
+The site’s foundation comes from Tailwind's Protocol template, which I customized and built upon.
+### Nav
+The default navigation doesn’t support submenus—it just nests markdown headings as sub-elements. That works fine for documentation sites like OpenAI’s, but I needed a cleaner, more flexible structure. I redesigned the navigation into a dropdown menu with two levels of categorization, making it easier to organize topics while maintaining a clean interface.
 
-### OpenAI typography
-I went through one of OpenAI’s documentation with Dev Tools. Here is what I found:
+![[Pasted image 20251001212435.png]]
 
-#### Headings
+### Table of Contents Design
 
-  - **General**:
-      - Capitalization rules: Sentence Case
-      - `font-weight: var(--font-weight-semibold)`
-      - `rgb(237, 237, 237)`
-  - **h1**:
-      - `font-size: 30px`
-      - `letter-spacing: var(--font-tracking-tight)`
-      - `line-height: 39px`
-      - `margin-bottom: 26px`
-  - **h2**:
-      - `font-size: 25px`
-      - `line-height: 32.5px`
-  - **h3**:
-      - `font-size: 20px`
-      - `line-height: 26px`
-  - **h4**:
-      - `font-size: 17px`
-      - `line-height: 22.1px`
+#### Cloudflarepo,
+Since the new nav menu makes single-page navigation less intuitive, I added a two-level table of contents on the right side of the page, inspired by Cloudflare’s documentation layout.
+![[Pasted image 20251001235111.png]]
 
-#### Page-subtitle
+#### OpenAI
+When I compared my table of contents with OpenAI’s, I noticed theirs felt smoother because of the transition animation. I added a similar effect to improve the flow in my design. I also introduced a vertical indicator, which makes the two-layer table of contents more organized. Finally, I removed the side border, since the rail already highlights the table of contents effectively, resulting in a cleaner, simpler look.
+![[Pasted image 20251001215541.png]]
 
-  - `color: rgb(175, 175, 175)`
-  - `size: 18px`
+The first draft and the refined comparison:
+![[Pasted image 20251002020241.png]]
 
-#### Links (`a`)
+I positioned the table of contents to the right of the main content, which looks better on wide screens.
+![[Pasted image 20251002035355.png]]
+## Color
+I’ve never been good at art, so picking a theme for my site was kind of a struggle. Then I saw this ad on Instagram that just looked really clean and elegant. The slight tint in the white gave it this silky vibe that felt grand.
+![[color_inspire.jpg]]
 
-  - `font-size: 18px`
-  - `font-weight: var(--font-weight-bold)`
-  - `text-decoration: underline`
-  - dimmed when hover
+I tossed the image into [Coolors](https://coolors.co/) to grab my main colors. I also added a gamboge for highlights, but I’ll keep it to a minimum since it doesn’t quite fit the elegant vibe I’m going for. I might make use of shaders to mimic the wrinkles of the cloth, and hopefully brings out the clean and elegant vibe.
 
-#### Paragraph (`p`)
+**The three major color:** 
+Timberwolf: `#d6d8d3`
+Charcoal: `#3B4458`
+Gamboge: `#ec9a29`
 
-  - `font-size: 16px`
-  - `rgb(220, 220, 220)`
-  - `margin-bottom: 15px`
+![[Pasted image 20250927002450.png]]
+![[Pasted image 20250927003810.png]]
+### Making sure it looks right
+Since my Eye-Care monitor shows an obvious green-yellow tint and my portable monitor is not much better, my best option is to rely on the MacBook as a reference. It is not perfect, but its color accuracy is generally trusted and more than enough for building my personal site. I turned off True Tone, set the brightness to maximum, and adjusted the typography color configs and key elements to my preference.
 
-#### Organized List (`ol`)
+![[color_compare.png]]
 
-  - Customized bullets icon (ref: Refactoring UI - Supercharge the defaults)
-![[Pasted image 20250829000343.png]]
+### Picking Color to my preference
+#### Background
+After comparing with charcoal-800, I still like the original better. Funny how often that happens in design and programming.tg
 
-#### Table Of Content
+~~I added   `--color-charcoal-850: #12151B ` as my dark theme background color, I found it impossible to replicate the feeling of the reference image it include a variety of blues with light and shader, this is the color a half step lighter than too dark.~~ 
 
-  - `font-size: 14px`
-  - `color: rgb(175, 175, 175)` (inactive)
-  - `color: rgb(220, 220, 220)` (active)
-  - `font-weight: 600` (active)
+#### Links
+
+> "When you’re including a link in a block of otherwise non-link text, it’s important to make sure that the link stands out and looks clickable." 
+> -- Refactoring UI
+
+Although using gamboge is nice and sharp, but I want to keep the theme as clean as possible.
+![[Pasted image 20250927205256.png]]
+
+I tried using charcoal-200 for links instead of gamboge, It is a little hard to differentiate. 
+![[Pasted image 20250927205035.png]]
+
+So I took OpenAI documentation approach, adding underline to indicate the link is clickable.
+![[Pasted image 20250927205455.png]]
+
+By comparing this and OpenAI documentation, mine is somehow brighter than it should be. The underline is taking too much attention and brighten the word. The underline should be a step dimmer than the link.
+
+![[Pasted image 20250927210022.png]]
+
+And the same also works for hover and bright theme
+![[Pasted image 20250927230231.png]]
+
+#### Code Blocks
+While inspecting OpenAI’s documentation closely, I noticed subtle color bands in their code blocks. I might be able to use the same technique to give my site some shadows and a folded texture.
+
+The CSS they use is `background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%)` which create a artificial color band effect. 
+
+![[Pasted image 20250928202442.png]]
+
+After learning a bit about linear-gradient, I found a way to create controllable color bands.
+![[Pasted image 20250928222916.png]]
+
+For in my case I can just use repeating-linear-gradient
+![[Pasted image 20250928225652.png]]
+### Making sure readability
+WCAG is a set of guidelines that help make websites accessible for people with disabilities. I’m not aiming to meet every requirement, but many of the guidelines also point toward strong website design in general. There are plenty of tools to check compliance, and one key area is color contrast. This ensures that most parts of the site meet contrast standards for better readability.
+
+There are many tools to help check the contrast of the site, I use a Chrome plugin [Accessible Web Helper](https://chromewebstore.google.com/detail/accessible-web-helper/gdnpkbipbholkoaggmlblpbmgemddbgb?hl=en&pli=1) check is there any bad designs.
+
+![[Pasted image 20251001205044.png]]
+
+It also highlight the problematic element, which makes it easy to locate and fix the problem. Such as here I forgot to assign a color for dark theme Table Of Content. 
+![[Pasted image 20251002000020.png]]
 
 
-### Resueable layouts
-GTNH, Homepage
+## Icon
+I started by creating a simple icon using [favicon.io](https://favicon.io/).
 
-## Hosting
+**Version 1**  
+I quickly combined a few elements to see how they worked together. The “D” and “Don” felt redundant, and the icon didn’t have enough contrast in light mode.  
+![[Pasted image 20250923174340.png]]  
+![[Pasted image 20250923174350.png]]
 
-### Domain Name
+**Version 2**  
+Next, I paired my name with the icon. It looked better, but still not quite right.  
+![[Pasted image 20250923174435.png]]
 
-I got my domain name from [Name Silo](https://www.namesilo.com/), the first year was $1, and renewal for $4.88. I believe this is the cheapest TLD you can find on the market. You might find some subdomain for free, I used to have donchong.imwork.net from oray.com, but they don't offer the same functionality, especially the some you can use on Cloudflare.
-<Image src="/Pasted image 20250826051749.png" alt="" width={856} height={273} className='w-full h-auto'/>
+**Version 3**  
+I studied how other brands use single-letter icons, like Facebook and LinkedIn. Most either drop the full name or go for a completely different design. I decided to keep only the **D**.  
+![[Pasted image 20250923182537.png]]  
+![[Pasted image 20250923182621.png]]  
+![[Pasted image 20250923182825.png]]  
+![[Pasted image 20250923183003.png]]  
+![[Pasted image 20250923175100.png]]
+
+**Version 4**  
+I refined the proportions and made both light and dark versions. The white one still looked a bit muddy.  
+![[Pasted image 20250923181453.png]]
+
+**Version 5**  
+I rebuilt the icon in SVG for sharper scaling and easier adjustments, then tuned the colors. (Left: New, Right: Old)
+![[Pasted image 20250923192710.png]]  
+
+The two squares started to remind me of the **WIRED** logo, so I turned **DON** into a wordmark.  
+![[Pasted image 20250923193521.png]]
+
+It looked playful, almost like the emoji version “🅳🅾🅽,” so I removed the rounded corners.  
+![[Pasted image 20250923194932.png]]
+
+At this stage it felt solid, but the “N” in *Abril Fatface* looked unbalanced.  
+![[Pasted image 20250923195156.png]]
+
+I thickened the “N”, but the serif still felt off. It might need a different font altogether.  
+![[Pasted image 20250923200339.png]]
+
+In the meantime, I tried a few abstract takes on “DON,” but none captured the right feel.  
+![[Pasted image 20250923201722.png]]  
+![[Pasted image 20250923201831.png]]
+
+After searching many font, I couldn't find one gives the same vibe. So I customized the font myself. After several rounds of tweaking, I reached a final version I’m happy with.  
+![[Pasted image 20250923212225.png]]  
+![[Pasted image 20250923215256.png]]
+
+A few weeks later, I came across the BBC icon. No wonder the icon felt familiar somehow. Reinventing the wheel can be fun.  
+![[Pasted image 20251004024548.png]]
 
 
-## CI/CD
-Simple CI/CD with GitHub Actions
 
-1. **Add SSH secrets in GitHub**
-    <Image src="/Pasted image 20250826153946.png" alt="" width={856} height={273} className='w-full h-auto'/>
+---
 
+
+## Image Optimization in Next
+The mdx syntax `![]` will render a simple `<img>` tag and result in a image 4.6MB in size. Which takes significant amount of time to load even with fast 4G.
+
+![[Pasted image 20250820160328.png]]
+
+### Why use next/image
+Next JS provide a easy way to optimize images, it will do the follows:
+1. Convert the image into WebP automatically, it has smaller file size and faster in website loading
+
+  ![[Pasted image 20250819225632.png]]
+
+2. Use `srcset` automatically, provide difference size of image for the UI. The intrinsic size of the image is 2560 x 1411 (98.7kB), and it render as 640 x 353 (0.2 kB).
+
+  ![[Pasted image 20250819225057.png]]
+
+
+### How to use next/image
+Include `'next/image'` and use it like an `<img>` tag.
+
+```js
+import Image from 'next/image'
+...
+
+<Image src="/profile.png" width={500} height={500} alt="Picture of the author" />
+````
+
+Mind its a bit different for tis props:
+- `width` and `height` are the intrinsic image size in pixels, not the display size of the image. They hints the aspect ratio to prevent cumulative layout shift.
+- `Sizes` define the render size at different breakpoints.
+
+#### Blur placeholder when loading
+
+`placeholder="blur"` will render a blur image when the actual image still loading.
+If the image is from static import, `blurDataURL` is not needed.
+
+```js
+import img from '/src/images/GTNH/2025-05-27_15.49.00.png'
+...
+<Image src={img} alt="" width={2560} height={1440}  placeholder="blur"/>
+```
+
+Result:
+
+![[Pasted image 20250820001112.png]]
+
+For images from the public folder:
+
+```js
+<Image src="/2025-08-10_22.06.00.png" alt="" width={2560} height={1440} placeholder='blur' blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAECAYAAACzzX7wAAAAkElEQVR4AQCEAHv/AnpgR/+RdVf/o4Ri/5yCYf+Yf2D/nohu/52HbP9zXkP/ArrH1ACsuMoAkqW7AJamuQCPqbIAfZGcAH+OnACptcUAAvf+BgDo7fEA7vDwAPn79wAIAgQA/AgHAPwNBwD6BAMAAu359ADyB/8A+BEFAAEZBwABFgYABgIHAP3+AAD7+wUAAAAA//95TSSpAAAABklEQVQDAGoOOsfIzthpAAAAAElFTkSuQmCC'/>
+```
+
+Result:
+![[Pasted image 20250820001616.png]]
+
+The official site recommended [joe-bell/plaiceholder: Beautiful image placeholders, without the hassle.](https://github.com/joe-bell/plaiceholder) to generate blur images. I think it needs an extra wrapper to make the code nice, otherwise it is too dirty.
+
+### Positioning `<Image />`
+
+#### Make it responsive
+
+Styling it with `width: 100%` and `height: 'auto'` will change the image size dynamically.
+
+```tsx
+<Image
+  src="/2025-08-10_22.06.00.png"
+  alt="A dirt house in Minecraft"
+  width={2560}
+  height={1440}
+  className='w-full h-auto'
+/> 
+```
+
+#### Scaling the image
+
+```js
+<Image
+  src="/Pasted%20image%2020250812201622.png"
+  alt="Seagram Building"
+  width={800}
+  height={1200}
+  className='w-1/2 h-auto'
+/>
+```
+
+### Future Improvements
+
+The mdx component `![]` should be able replaced with `<Image />`, however the width and height are mandatory, so it take a bit extra works. Maybe pairing it with sharp for obtaining image size and placeholder for blurring effect is the way to go. Will come back later as a future improvement.
+
+### Automatic Static Image Import
+
+**Added on:** 2025-10-06
+
+I ran into three annoying problems when working with images in Next.js:
+
+1. Images must explicitly define `width` and `height`.
+2. The blur placeholder need `blurDataURL` when using URL or path import
+3. Image paths in the `public` folder get messy fast.
+
+To clean this up, I decided to:
+
+* Import images **statically** instead of by path.
+* Give each page its **own `images` folder**, matching my Obsidian file structure.
+
+When images are imported statically, Next.js automatically detects their dimensions and generates blur placeholders natively — no manual setup required.
+
+#### First Attempt
+
+Initially, I wrote a small script to auto-import every image inside a folder and store them in an `img` object:
+
+In **`test/images/img.tsx`**:
+
+```js
+const imageContext = require.context('', false, /\.(png|jpe?g|svg|gif)$/);
+export default imageContext.keys().reduce((acc, path) => {
+  const key = path.replace('./', '');
+  acc[key] = imageContext(path);
+  return acc;
+}, {});
+```
+
+Then I could use it like this:
+
+In **`test/page.mdx`**:
+
+```js
+import img from './images/img'
+<Image src={img['follow2.png']} />
+```
+
+This worked fine — it was simple and automatic. But having the same import script in every folder felt repetitive and messy.
+
+#### The Helper Script
+
+So I made a central helper to handle it globally:
+
+**`src/lib/imgMap.js`**
+
+```js
+const allImages = require.context('../app', true, /images\/.*\.(png|jpe?g|svg|gif)$/);
+
+/**
+ * Returns static images from a page’s './images' folder
+ * 
+ * Example folder structure:
+ * ├───test
+ * │   │   page.mdx
+ * │   └───images
+ * │           follow2.png
+ *
+ * @param {string} mdxUrl - Pass `import.meta.url` from the MDX file
+ */
+export function getImageMap(mdxUrl) {
+  const match = mdxUrl.match(/\/app\/([^/]+)\//);
+  const section = match ? match[1] : null;
+
+  if (!section) {
+    console.warn(`Could not determine section from ${mdxUrl}`);
+    return {};
+  }
+
+  const prefix = `./${section}/images/`;
+  const map = {};
+
+  allImages.keys().forEach((key) => {
+    if (key.startsWith(prefix)) {
+      const filename = key.replace(prefix, '');
+      map[filename] = allImages(key).default;
+    }
+  });
+
+  return map;
+}
+```
+
+Now, in **`test/page.mdx`**:
+
+```js
+import { getImageMap } from '@/lib/imgMap'
+export const img = getImageMap(import.meta.url)
+
+<Image src={img['color.png']} alt="Logo" placeholder="blur" />
+```
+
+#### Result
+
+* No need to specify `width` and `height` manually.
+* Native blur placeholders just work.
+* Clean image organization per page.
+
+![[Pasted image 20251006054656.png]]
+
+### Transforming `![]()` into a Custom `Next/Image` Component
+
+The first thing I tried was modifying the MDX image component — only to realize that `![]()` can pass *only strings* as the `src` parameter. 
+
+In my setup, images are statically imported and stored in an `img` object, which can’t be directly passed as a `src`.
+
+To solve this, I built a **remark plugin** that parses the Markdown AST and transforms expressions like `![](img['foo'])` into a proper `Next/Image` component right inside the MDX.
+
+```js
+![Logo](img['color.png']) {/** ✅ Converted into <Image /> */}
+![Logo](img['Pasted image 20250630155824.png']) {/** ❌ Rendered as plain text */}
+![Logo](<img['Pasted image 20250630155824.png']>) {/** ✅ Converted into <Image /> */}
+![Test](https://na.cx/i/zuXjaPX.jpg) {/** ✅ Handled by default MDX logic */}
+```
+
+Now, my mdx is more clean and next/image's benefits still applies, but with the following limitation:
+1. Filename must not contain empty spaces
+2. `img[]` is still not native syntax, I cannot simply copy my obsidian notes over.
+
+After realizing Obsidian doesn’t use standard MDX syntax, I found I had more flexibility. I now convert all `![[imgsrc]]` references into my `next/Image` format with Remark, and it works perfectly.
+
+### Reference
+
+* [Components: Image | Next.js](https://nextjs.org/docs/pages/api-reference/components/image)
+
+
+# Back End
+
+## ## Simple CI/CD with GitHub Actions
+
+1. **Add SSH secrets in GitHub**  
+    ![[Pasted image 20250826153946.png]]
+    
 2. **Configure `.github/workflows/deploy.yml`**  
     You can grab a template online or let AI generate one for you. The file tells GitHub Actions:
     
@@ -92,17 +393,17 @@ Simple CI/CD with GitHub Actions
     
 3. **Push changes to the branch**  
     That push triggers the workflow.  
-    <Image src="/Pasted image 20250826143518.png" alt="" width={856} height={273} className='w-full h-auto'/>
-
+    ![[Pasted image 20250826143518.png]]
+    
 4. **Fix config issues as they pop up**  
     Usual suspects: SSH key permissions, pm2 command not found due to path problem, etc. Once sorted, the pipeline runs clean.  
-    <Image src="/Pasted image 20250826152929.png" alt="" width={539} height={527} className='w-1/2 h-auto'/>
-
+    ![[Pasted image 20250826152929.png]]
+    
 5. **Done: automated deployment**  
     Every push to `main` now builds and deploys straight to the server.  
-    <Image src="/Pasted image 20250826152400.png" alt="" width={856} height={273} className='w-full h-auto'/>
+    ![[Pasted image 20250826152400.png]]
+    
 
 
-## More features to go
-- Image Optimization
-- Tag filters
+---
+# Host and Network
