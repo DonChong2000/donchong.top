@@ -1,6 +1,9 @@
+
 import Image from 'next/image'
 import { getImageMap } from '@/lib/imgMap'
 export const img = getImageMap(import.meta.url)
+
+
 export const metadata = {
   title: 'Test Page',
   description: 'This is a test page.',
@@ -13,9 +16,19 @@ import img from './images/img' */}
 # Test
 
 
-![Logo](img['color.png'])
-![Logo](img['Screenshot 2025-10-01 012146.png']) 
-![Logo](<img['Screenshot 2025-10-01 012146.png']>)
-![Test](https://na.cx/i/zuXjaPX.jpg)
+
+{/* <div className='w-1/2'> */}
+{/* ![Logo](img['color.png']) */}
+{/* </div> */}
+{/* ![Logo](img['Screenshot 2025-10-01 012146.png']) */}
+
+{/* ![Logo](<img['Screenshot 2025-10-01 012146.png']>) */}
+
+{/* ![Test](https://na.cx/i/zuXjaPX.jpg) */}
 
 {/* <Image src={img['color.png']} alt="Logo" placeholder="blur"/> */}
+{/* ![Logo]('Screenshot 2025-10-01 012146.png') */}
+
+![[Pasted image 20250820001616.png]]
+
+![[Pasted image 20250630155824.png]]
