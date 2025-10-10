@@ -1,4 +1,3 @@
-
 import Image from 'next/image'
 import { getImageMap } from '@/lib/imgMap'
 export const img = getImageMap(import.meta.url)
@@ -8,7 +7,17 @@ export const metadata = {
     'This page describes the design and development choices behind my personal website.',
 }
 
+# Why am I building this site?
 
+I built this site for several reasons.
+First, I wanted to deepen my understanding of modern frontend technologies. Although I work as a full-stack programmer at IBM, I know my frontend skills still have a lot of room for improvement. The last time I built a website was back in high school, when jQuery was the go-to framework. Since then, the frontend landscape has evolved dramatically, and I haven’t kept up as well as I’d like. So, I decided to build this site as a way to learn new tools and frameworks and hopefully improve my design sense along the way.
+
+Another reason is that I want interviewers and colleagues to see a more complete picture of who I am. In an era where AI-generated resumes, cover letters, and even personal statements have become commonplace, much of what we read online often feels hollow. I’m tired of content that lacks authenticity. I value work that carries a sense of warmth, something that clearly reflects real effort and genuine thought.
+
+To stand out from the flood of AI-generated content, I believe the best way is to express a vivid personality, to document my learning journey, share my thought process, and show that there is a real human behind the words.
+
+I don’t claim to be an expert, but this site represents what I’ve learned and where I’ve been. Hopefully, it gives you a better sense of my skills and personality, and helps you decide whether I might be a good fit for your team.
+# Building My Site
 My personal site is built with Tailwind CSS, a framework used by companies like OpenAI, Shopify, Google I/O, and even NASA. It provides a solid foundation for modern web design, with built-in design guardrails and numerous components that help me create a polished site without needing an art degree.
 
 ---
@@ -23,7 +32,7 @@ The default navigation doesn’t support submenus—it just nests markdown headi
 
 ### Table of Contents Design
 
-#### Cloudflarepo,
+#### Cloudflare,
 Since the new nav menu makes single-page navigation less intuitive, I added a two-level table of contents on the right side of the page, inspired by Cloudflare’s documentation layout.
 ![[Pasted image 20251001235111.png]]
 
@@ -53,6 +62,7 @@ Gamboge: `#ec9a29`
 Since my Eye-Care monitor shows an obvious green-yellow tint and my portable monitor is not much better, my best option is to rely on the MacBook as a reference. It is not perfect, but its color accuracy is generally trusted and more than enough for building my personal site. I turned off True Tone, set the brightness to maximum, and adjusted the typography color configs and key elements to my preference.
 
 ![[color_compare.png]]
+
 
 ### Picking Color to my preference
 #### Background
@@ -182,7 +192,6 @@ Include `'next/image'` and use it like an `<img>` tag.
 ```js
 import Image from 'next/image'
 ...
-
 <Image src="/profile.png" width={500} height={500} alt="Picture of the author" />
 ````
 
@@ -216,7 +225,7 @@ Result:
 
 The official site recommended [joe-bell/plaiceholder: Beautiful image placeholders, without the hassle.](https://github.com/joe-bell/plaiceholder) to generate blur images. I think it needs an extra wrapper to make the code nice, otherwise it is too dirty.
 
-### Positioning `<Image />`
+#### Positioning `<Image />`
 
 #### Make it responsive
 
@@ -244,11 +253,11 @@ Styling it with `width: 100%` and `height: 'auto'` will change the image size dy
 />
 ```
 
-### Future Improvements
+### Improvements
 
 The mdx component `![]` should be able replaced with `<Image />`, however the width and height are mandatory, so it take a bit extra works. Maybe pairing it with sharp for obtaining image size and placeholder for blurring effect is the way to go. Will come back later as a future improvement.
 
-### Automatic Static Image Import
+#### Automatic Static Image Import
 
 **Added on:** 2025-10-06
 
@@ -265,7 +274,7 @@ To clean this up, I decided to:
 
 When images are imported statically, Next.js automatically detects their dimensions and generates blur placeholders natively — no manual setup required.
 
-#### First Attempt
+##### First Attempt
 
 Initially, I wrote a small script to auto-import every image inside a folder and store them in an `img` object:
 
@@ -291,36 +300,34 @@ import img from './images/img'
 
 This worked fine — it was simple and automatic. But having the same import script in every folder felt repetitive and messy.
 
-#### The Helper Script
+##### The Helper Script
 
 So I made a central helper to handle it globally:
 
 **`src/lib/imgMap.js`**
 
 ```js
+// Collect every image under /content/**/images/
 const allImages = require.context('../app', true, /images\/.*\.(png|jpe?g|svg|gif)$/);
 
 /**
- * Returns static images from a page’s './images' folder
- * 
- * Example folder structure:
+ * Returns static images from './image' folder
  * ├───test
  * │   │   page.mdx
  * │   └───images
  * │           follow2.png
- *
+ * │           img.tsx
  * @param {string} mdxUrl - Pass `import.meta.url` from the MDX file
  */
 export function getImageMap(mdxUrl) {
-  const match = mdxUrl.match(/\/app\/([^/]+)\//);
-  const section = match ? match[1] : null;
-
-  if (!section) {
-    console.warn(`Could not determine section from ${mdxUrl}`);
+  const match = mdxUrl.match(/\/app\/(.*)\/[^/]+$/);
+  const pagePath = match ? match[1] : null;
+  if (!pagePath) {
+    console.warn(`Could not determine page path from ${mdxUrl}`);
     return {};
   }
 
-  const prefix = `./${section}/images/`;
+  const prefix = `./${pagePath}/images/`;
   const map = {};
 
   allImages.keys().forEach((key) => {
@@ -332,6 +339,7 @@ export function getImageMap(mdxUrl) {
 
   return map;
 }
+
 ```
 
 Now, in **`test/page.mdx`**:
@@ -351,7 +359,7 @@ export const img = getImageMap(import.meta.url)
 
 ![[Pasted image 20251006054656.png]]
 
-### Transforming `![]()` into a Custom `Next/Image` Component
+#### Custom syntax `![[]]`
 
 The first thing I tried was modifying the MDX image component — only to realize that `![]()` can pass *only strings* as the `src` parameter. 
 
@@ -372,14 +380,9 @@ Now, my mdx is more clean and next/image's benefits still applies, but with the 
 
 After realizing Obsidian doesn’t use standard MDX syntax, I found I had more flexibility. I now convert all `![[imgsrc]]` references into my `next/Image` format with Remark, and it works perfectly.
 
-### Reference
-
-* [Components: Image | Next.js](https://nextjs.org/docs/pages/api-reference/components/image)
-
-
 # Back End
 
-## ## Simple CI/CD with GitHub Actions
+## Simple CI/CD with GitHub Actions
 
 1. **Add SSH secrets in GitHub**  
     ![[Pasted image 20250826153946.png]]
@@ -407,3 +410,10 @@ After realizing Obsidian doesn’t use standard MDX syntax, I found I had more f
 
 ---
 # Host and Network
+
+
+
+# Bugs
+
+- Large Image are not supported
+![[This Site-2025-10-08.png]]
