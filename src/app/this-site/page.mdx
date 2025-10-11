@@ -412,8 +412,18 @@ After realizing Obsidian doesn’t use standard MDX syntax, I found I had more f
 # Host and Network
 
 
-
 # Bugs
 
 - Large Image are not supported
-![[This Site-2025-10-08.png]]
+	![[This Site-2025-10-08.png]]
+
+## Fixed Bugs
+
+### Google Translate Causes Errors
+
+When translating the site using Google Translate, the following error appears. The same issue also occurs on **protocol.tailwindui.com**.
+After some research, I found a solution in [this Stack Overflow post](https://stackoverflow.com/questions/50784302/uncaught-notfounderror-failed-to-execute-insertbefore-on-node).
+By adding `translate="no"` to the site’s anchor, Google Translate is prevented from interfering with the DOM structure, which resolves the problem.
+
+![[Pasted image 20251010164816.png]]
+
