@@ -100,7 +100,7 @@ export default {
           },
           ul: {
             listStyleType: 'disc',
-            marginTop: theme('spacing.5'),
+            // marginTop: theme('spacing.5'),
             marginBottom: theme('spacing.5'),
             paddingLeft: '1.625rem',
           },
