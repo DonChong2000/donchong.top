@@ -57,7 +57,7 @@ export default {
             marginTop: theme('spacing.6'),
             marginBottom: theme('spacing.6'),
             fontSize: theme('fontSize.base')[0],
-
+            overflowWrap: 'break-word',
           },
           '[class~="lead"]': {
             fontSize: theme('fontSize.base')[0],
