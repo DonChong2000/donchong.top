@@ -39,7 +39,7 @@ export function Layout({
         </motion.header>
 
         <div className="relative flex h-full justify-center px-4 sm:px-6 lg:px-8">
-          <div className="flex max-w-2xl flex-col pt-14 lg:max-w-5xl xl:pr-20">
+          <div className="flex max-w-2xl flex-col pt-14 lg:max-w-2xl 2xl:max-w-5xl xl:pr-20">
             <main className="flex-auto">{children}</main>
             <Footer />
           </div>
