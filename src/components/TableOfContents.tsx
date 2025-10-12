@@ -33,7 +33,7 @@ export function TableOfContents() {
   let top = firstVisibleSectionIndex * itemHeight;
 
   return (
-    <div className="hidden xl:block xl:w-64 xl:flex-none xl:sticky xl:top-0 xl:h-screen xl:overflow-y-auto xl:py-16 xl:pl-6 "> {/* xl:border-l xl:border-zinc-900/10 xl:dark:border-white/10 */}
+    <div className="hidden xl:block xl:w-64 xl:flex-none xl:sticky xl:top-0 xl:h-screen xl:overflow-y-auto xl:py-16 "> {/* xl:border-l xl:border-zinc-900/10 xl:dark:border-white/10 */}
       <nav aria-labelledby="on-this-page-title" className="relative pl-5">
         <div className="absolute top-0 left-2 h-full w-[2px] bg-zinc-200 dark:bg-zinc-800" />
         <AnimatePresence initial={!isInsideMobileNavigation}>
