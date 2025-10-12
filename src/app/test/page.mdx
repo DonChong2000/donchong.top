@@ -13,3 +13,9 @@ export const metadata = {
 # Test
 
 The CSS they use is background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%) which create a artificial color band effect. 
+```js
+![Logo](img['color.png']) {/** ✅ Converted into <Image /> */}
+![Logo](img['Pasted image 20250630155824.png']) {/** ❌ Rendered as plain text */}
+![Logo](<img['Pasted image 20250630155824.png']>) {/** ✅ Converted into <Image /> */}
+![Test](https://na.cx/i/zuXjaPX.jpg) {/** ✅ Handled by default MDX logic */}
+```
