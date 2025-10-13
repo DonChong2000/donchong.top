@@ -55,6 +55,7 @@ export const remarkWikiLinkImages = () => (tree) => {
           },
           { type: 'mdxJsxAttribute', name: 'alt', value: imageName },
           { type: 'mdxJsxAttribute', name: 'placeholder', value: 'blur' },
+          // { type: 'mdxJsxAttribute', name: 'blurDataURL', value: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' }, //Use this for debug.
         ],
         children: [],
       });
