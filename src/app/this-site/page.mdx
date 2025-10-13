@@ -86,12 +86,22 @@ Based on Tailwind CSS’s Protocol template, I customized the navigation bar and
 
 | Nav               | TOC               |
 | ----------------- | ----------------- |
-| ![[Picture2.png]] | ![[Picture1.png]] |
+|![[Picture2.png]]  | ![[Picture1.png]] |
 #### [Image Optimaztion:](#image-optimization-in-next)
 
-This site uses [next/image](https://nextjs.org/docs/app/getting-started/images) to improve loading performance and display a blurred preview while images load, which eliminates any layout shift. It also supports Obsidian-style image syntax (`![[]]`) through a custom Remark plugin.
+This site uses [next/image](https://nextjs.org/docs/app/getting-started/images) to improve loading performance and display a blurred preview while images load, which eliminates any layout shift. It also supports Obsidian-style image syntax `![[]]` through a custom Remark plugin.
 
-![[Pasted image 20250820001112.png]]
+
+<div class="flex justify-center w-full gap-5">
+  <Image src={img['Pasted image 20250820160328.png']}  />
+  <Image src={img['Picture3.png']}/>
+</div>
+
+#### [CI/CD](#simple-ci-cd-with-git-hub-actions)
+This site uses a simple CI/CD pipeline powered by GitHub Actions. Whenever I push changes to the repository, the host automatically builds and restarts the server. This ensures the site stays up to date and helps me catch issues immediately.
+![[Pasted image 20251013161416.png]]
+
+---
 
 # Building My Site
 My personal site is built with Tailwind CSS, a framework used by companies like OpenAI, Shopify, Google I/O, and even NASA. It provides a solid foundation for modern web design, with built-in design guardrails and numerous components that help me create a polished site without needing an art degree.
