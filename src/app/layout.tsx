@@ -4,6 +4,7 @@ import glob from 'fast-glob';
 import { Providers } from '@/app/providers';
 import { Layout } from '@/components/Layout';
 import { type Section } from '@/components/SectionProvider';
+import EasterEgg from '@/components/EasterEgg';
 
 import '@/styles/tailwind.css';
 import path from 'path';
@@ -49,6 +50,7 @@ export default async function RootLayout({
     <html lang="en" className="h-full" suppressHydrationWarning>
       <body className="flex min-h-full bg-white antialiased dark:bg-charcoal-800">
         <Providers>
+          <EasterEgg />
           <div className="w-full">
             <Layout allSections={allSections}>{children}</Layout>
           </div>
