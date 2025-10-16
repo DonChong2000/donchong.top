@@ -438,7 +438,7 @@ export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {
   return (
     <nav {...props}>
       <ul role="list">
-        <TopLevelNavItem href="/aboutMe">About Me</TopLevelNavItem>
+        <TopLevelNavItem href="/me">About Me</TopLevelNavItem>
         {/* <TopLevelNavItem href="/contacts">Contacts</TopLevelNavItem> */}
         {/* <TopLevelNavItem href="#">Documentation</TopLevelNavItem>
         <TopLevelNavItem href="#">Support</TopLevelNavItem> */}
