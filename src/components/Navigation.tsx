@@ -408,6 +408,7 @@ export const navigation: Array<NavGroup> = [
           { title: 'Timelapse Machine', href: '/projects/timelapse-machine', id: 'Timelapse Machine' },
           { title: 'Bill-AI', href: '/projects/bill-ai', id: 'Bill-AI' },
           { title: 'status.donchong.top', href: '/projects/site-status', id: 'status.donchong.top' },
+          { title: 'Comparing ASR Solutions', href: '/projects/comparing-asr-solutions', id: 'Comparing ASR Solutions' },
         ],
       },
 

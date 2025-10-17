@@ -48,7 +48,7 @@ export default function EasterEgg() {
       █▌                   ▐█
       ███████████████████████
 
-      Think -> try -> repeat.
+      Think -> Try -> Repeat.
       donchong.top/me
       _________________________
 
