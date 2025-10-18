@@ -23,7 +23,7 @@ const variantStyles = {
     'rounded-full bg-timberwolf-900 py-1 px-3 text-white hover:bg-timberwolf-700 dark:bg-gamboge-500 dark:text-white dark:hover:bg-gamboge-400',
   outline:
     'rounded-full py-1 px-3 text-timberwolf-700 ring-1 ring-inset ring-timberwolf-900/10 hover:bg-timberwolf-900/2.5 hover:text-timberwolf-900 dark:text-timberwolf-400 dark:ring-white/10 dark:hover:bg-white/5 dark:hover:text-white',
-  text: 'text-gamboge-500 hover:text-gamboge-600 dark:text-gamboge-400 dark:hover:text-gamboge-500',
+  text: 'text-charcoal-400 hover:text-gamboge-600 dark:text-gamboge-400 dark:hover:text-gamboge-500',
 };
 
 type ButtonProps = {

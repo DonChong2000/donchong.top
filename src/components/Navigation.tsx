@@ -402,7 +402,7 @@ export const navigation: Array<NavGroup> = [
       { title: 'Overview', href: '/projects-overview' },
       // { title: 'Chat-CV', href: '/chat-cv' },
       { title: 'This Site', href: '/this-site' },
-      { title: 'And more...', href: '/projects',
+      { title: 'And more...', href: '/projects/drowning-detection-rescue-system',
         children: [
           { title: 'Drowning Detection & Rescue System', href: '/projects/drowning-detection-rescue-system', id: 'Drowning Detection & Rescue System' },
           { title: 'Timelapse Machine', href: '/projects/timelapse-machine', id: 'Timelapse Machine' },
