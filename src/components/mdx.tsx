@@ -86,6 +86,14 @@ export function Col({
   );
 }
 
+export function table(props: React.ComponentPropsWithoutRef<'table'>) {
+  return (
+    <div className="my-6 overflow-x-auto">
+      <table {...props} />
+    </div>
+  );
+}
+
 export function Properties({ children }: { children: React.ReactNode }) {
   return (
     <div className="my-6">
