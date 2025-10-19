@@ -145,9 +145,9 @@ function CodePanel({
   let child = Children.toArray(children).find(isValidElement);
 
   if (child) {
-    tag = child.props.tag ?? tag;
-    label = child.props.label ?? label;
-    code = child.props.code ?? code;
+    tag = (child.props as any).tag ?? tag;
+    label = (child.props as any).label ?? label;
+    code = (child.props as any).code ?? code;
   }
 
   if (!code) {
