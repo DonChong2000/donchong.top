@@ -1,0 +1,101 @@
+import Image from 'next/image'
+import { getImageMap } from '@/lib/imgMap'
+export const img = getImageMap(import.meta.url)
+export const metadata = {
+  title: 'Comparing ASR Solutions',
+  description:
+    'Bill-ai is an OCR-powered receipt extractor I built to automate our roommate expense tracking, converting receipt images into spreadsheet-ready data for easier bookkeeping and future spending analysis.',
+}
+
+# Transcriber
+
+I often want to summarize YouTube videos using different AI tools, but most of them either can’t work without a transcript or require a paid plan. I figured—why not just add a Whisper transcriber myself? So I decided to code it out and turn it into an AI-powered utility.
+
+By comparing various ASR services on the market, I selected Cloudflare for this purpose. Here are the research findings of the ASR options available: [Comparing ASR Solutions](/projects/comparing-asr-solutions).
+
+## What it can do
+
+* Fetch existing YouTube transcripts (if available).
+* Generate transcriptions from any YouTube, video, or audio link — including Discord attachments.
+* Transcribe in parallel, achieving 2–6× faster speeds.
+* Completely free to use.
+
+The Sample: [How to win: Steve Cohen on markets and the Mets](https://youtu.be/l3JLUFgUpkQ?si=Z1el3hVH9Ut5BjL5) has no built in subtitle, and the bot transcribed a 25mins video within a minute.
+![[Pasted image 20251018192924.png]]
+
+Here’s an example of transcribing from a direct file link. It’s a random video of my friends chatting outdoors. The poor audio quality resulted in inaccurate transcription (even I couldn’t really understand it, haha). Good audio quality is crucial for accurate transcriptions, so I bought a DJI Mic Mini, hoping to automatically transcribe all my trip videos in the future.
+![[Pasted image 20251018194945.png]]
+##  Parallel transcribing
+By dividing the audio into segments and transcribing them in parallel, the transcription process becomes significantly faster. In the example below, this approach reduced the total processing time by 55 seconds. Cloudflare supports up to 16 concurrent requests before returning errors.
+
+However, splitting audio introduces some overhead, and excessive segmentation can reduce transcription coherence. To balance performance and accuracy, a minimum chunk length of 150 seconds is set.
+
+No splitting:
+	![[Pasted image 20251018193655.png]]
+Spited:
+	![[Pasted image 20251018193658.png]]
+
+## Free quota
+10,000 neurons is ~4.5 hours. When testing the parallel function with a 1.5-hour video, I quickly ran out of quota after just a few runs. Still, that’s more than enough for personal use. Cloudflare costs about $0.00051 per minute, which translates to 32.7 hours per dollar, quite affordable for most use cases.
+
+If you are willing to pay more, I think lemonfox.ai offers the best value for ASR services, see  [Comparing ASR Solutions](/projects/comparing-asr-solutions) for comparison.
+
+![[Pasted image 20251018195656.png]]
+## The prompts
+After multiple times of iterations, I come up with the following prompts that can generate the program in one go. This prompt also describes how the program works.
+
+```
+Code in NodeJS, CommomJS:
+export the function as getTranscript(link)
+
+Important:
+- const fs = require('fs').promises; // Use fs.promises for async operations
+- const fsSync = require('fs'); // Use fsSync for synchronous operations like checking file existence
+- Use as few npm package as possible. Use fluent-ffmpeg,axios,fs,path,ytdl-core
+- Provide a usage example with sample audio URL: https://filedn.com/lvpQyX5dxsK7TR0Vaa6Pr1k/Gemini%20%E7%AA%81%E7%84%B6%E7%9C%9F%E9%A6%99%E4%BA%86%20%E5%A6%82%E4%BD%95%E7%94%A8%E5%A5%BD%E7%94%A8%E9%80%8FGemini.mp3
+- My cloudflare account: 6cef0b2f126356a3dee567e091e44d0f
+
+Func:
+download audio from link, or youtube link
+split the audio into X part,
+call cloudflare's whisper-large-v3-turbo API,
+obtain each transcript,
+Combine Transcript
+return as string
+
+Input: Audio file URL / Youtube link
+Output: String of transcipt
+
+Steps:
+1. If the link is youtube url, download the file using ytdl, add .mp3 extention to the file.
+2. If the link is general URL, Download audio file from URL
+3. if audio file is not mp3, convert into mp3 using toMP3()
+4. If the audio is less than 150s*16, split into 150s each, else split evenly into 16 chunks
+5. Store their path in "files" array
+6. Use map function to and transcribe()
+7. get back a array of strings
+8. Combine those strings and return a single string
+
+toMP3():
+use node-ffmpeg to convert any audio file into mp3
+
+convert(X):
+use node-ffmpeg to
+1. Splite MP3 into X MP3 files
+2. return arrays of string containes file paths.
+
+transcribe():
+1. use axios, use get method with JSON body
+2. 'audio' string required, Base64 encoded value of the audio data.
+3. WHISPER_API_URL = `https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/openai/whisper-large-v3-turbo`;
+ref:https://developers.cloudflare.com/workers-ai/models/whisper-large-v3-turbo/
+4. If the segment transcribe failed, retry one more time
+
+```
+
+
+## Bugs / Problems
+
+- Unfortunately, my Oracle server has been IP-banned by YouTube. [A Github  issue about this problem](https://github.com/jagrosh/MusicBot/issues/1588)
+- Since Google doesn't want people to crawl their data for AI use, many YouTube-related packages often fail or need frequent updates, especially packages related to obtaining transcripts. 
+![[Pasted image 20251018182043.png]]

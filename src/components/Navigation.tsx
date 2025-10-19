@@ -409,6 +409,7 @@ export const navigation: Array<NavGroup> = [
           { title: 'Bill-AI', href: '/projects/bill-ai', id: 'Bill-AI' },
           { title: 'status.donchong.top', href: '/projects/site-status', id: 'status.donchong.top' },
           { title: 'Comparing ASR Solutions', href: '/projects/comparing-asr-solutions', id: 'Comparing ASR Solutions' },
+          { title: 'Transcriber', href: '/projects/transcriber', id: 'Transcriber' },
         ],
       },
 
