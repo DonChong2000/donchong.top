@@ -420,6 +420,7 @@ export const navigation: Array<NavGroup> = [
     title: 'Hobbies',
     links: [
       { title: 'GTNH', href: '/gtnh' },
+      { title: 'Factorio', href: '/factorio' },
       { title: 'Cookbook', href: '/cookbook',
         children: [
           { title: 'Recipe1', href: '/cookbook/1', id: 'Recipe1' },

@@ -1,0 +1,34 @@
+import Image from 'next/image'
+import { getImageMap } from '@/lib/imgMap'
+export const img = getImageMap(import.meta.url)
+
+export const metadata = {
+  title: 'Groups',
+  description:
+    'On this page, we’ll dive into the different group endpoints you can use to manage groups programmatically.',
+}
+
+# Base Tour: The Pre-space exploration
+This is a record of our K2SE Nauvis base, documenting the journey from chopping down the first tree to achieving rapid rocket launches. The K2SE modpack turns Factorio into a true marathon, forcing us to solve immense resource demands and complex logistical problems.
+![[Screenshot 2025-10-27 215558.png]]
+![[Pasted image 20251027221040.png]]
+## Logistic
+## Resources
+## Smeltery
+## Power Generation
+Our entire base runs on **100% solar energy**. We built **23,000 solar panels** and **50,000 accumulators** to meet our power needs day or night. The reason we chose solar power is because it’s **maintenance-free**, **TPS-friendly**, and easily **scalable**.
+
+The solar panels generate **2.3 GW** during the day, which fills up the **490 GJ** energy buffer for peak consumption and nighttime operation.
+![[Pasted image 20251027222751.png]]
+
+#### Why not nuclear
+
+While a few huge nuclear reactors could supply our energy needs, it’s not uncommon for our logistic network to fail. If that happens, our nuclear fuel supply would stop, causing a power outage and leaving our defenses open to biters. Solar power is dependable and autonomous, removing this critical point of failure.
+
+#### The ratio
+
+The optimal ratio is usually 25 solar panels to 21 accumulators, which is what we used initially. However, after hundreds of biter nests rushed our base, the power drained completely, causing an outage that allowed the biters to break through our defenses. Because of this, we added a huge extra energy buffer to prevent a similar failure from happening again.
+
+<div className='w-full lg:w-1/2 '>![[Pasted image 20251027223549.png]]</div>
+
+## Defense
