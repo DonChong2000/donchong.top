@@ -1,4 +1,6 @@
-import { Projects } from '@/components/Projects'
+import Image from 'next/image'
+import { getImageMap } from '@/lib/imgMap'
+export const img = getImageMap(import.meta.url)
 import { Recipes } from '@/components/Recipes'
 import { HeroPattern } from '@/components/HeroPattern'
 import {DetailOverlay} from '@/components/DetailOverlay'
@@ -11,16 +13,58 @@ export const metadata = {
 }
 
 
-
 {/* <HeroPattern /> */}
 # Notes Worth Sharing
 This blog is where I share my projects, hobbies, and the little things that catch my eye. I’ve been writing notes as part of my learning since I was young, but I quickly realized dumping all 368 of them online wasn’t meaningful. Notes for myself are different from notes meant for others. So instead, I’ve taken a “less is more” approach—refining, distilling, and pulling out the gems. This space is about sharing that journey, and the joy of what I’ve learned. I hope you enjoy it.
 
 ## Projects
-<DetailOverlay />
+<DetailOverlay callouts={
+[
+  {
+    name: 'This Site',
+    description: 'How I built this site',
+    imageSrc: '/homepage/icon-trim.png',
+    imageAlt: 'How I built this site',
+    href: '/this-site',
+  },
+  {
+    name: 'Summary of my FYP',
+    description: 'Swimming Pool Drown Detection and Rescue System',
+    imageSrc: '/homepage/fyp.jpg',
+    imageAlt: 'Swimming Pool Drown Detection and Rescue System ',
+    href: '/projects/drowning-detection-rescue-system',
+  },
+  {
+    name: 'Timelapse Machine',
+    description: 'Record changes with moving camera',
+    imageSrc: '/homepage/timelapseMachine.jpg',
+    imageAlt: 'Record changes with moving camera',
+    href: '/projects/timelapse-machine',
+  }
+]} />
 
 ## My Favorite Recipes
 <Gallery />
+## Gameplays
+<DetailOverlay callouts={
+[
+  {
+    name: 'GregTech: New Horizons',
+    description: 'Ongoing marathon of the hardest modpack',
+    imageSrc: '/2025-08-10_22.41.03.png',
+    imageAlt: 'Ongoing marathon of the hardest modpack',
+    href: '/gtnh',
+  },
+  {
+    name: 'Factorio',
+    description: 'Base tour of my K2SE journey',
+    imageSrc: '/homepage/Screenshot2025-10-30210553.png',
+    imageAlt: 'Base tour of my K2SE journey',
+    href: 'factorio',
+  }
+]} />
+
+
 
 {/* <Projects />
 

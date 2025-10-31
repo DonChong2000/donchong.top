@@ -24,7 +24,7 @@ While I may still be a junior programmer, this site represents what I’ve learn
 - Domain from Name Silo, managed by Cloudflare
 - Proxied by Cloudflare, providing SSL/TSL, DDoS protection, caching, etc.
 
-#### [Theme:](#theme)
+#### [Theme](#theme)
 The colors are from a random picture that caught my eyes. I use the tinted gray and deep blue as the main color, and keep to color as clean as possible.
 <div className="flex flex-row w-full ">
   <div className="flex flex-col items-center justify-center h-20 bg-timberwolf-500 w-1/3 text-charcoal-750">
@@ -45,7 +45,7 @@ The colors are from a random picture that caught my eyes. I use the tinted gray 
 ![[color_inspire.jpg]]
 </div>
 
-#### [Logo:](#logo)
+#### [Logo](#logo)
 The logo's initial design was not intended to have a specific meaning, yet the simple block shape resonated with my aesthetic preference. It has since taken on the meaning of building blocks, symbolizing my process of creating projects and playing Minecraft block by block.
 
 The logo began as a simple letter 'D' and evolved into its current form. The font is a modification of Abril Fatface. I adjusted the 'N' character to give the wordmark a more stable and balanced overall appearance.
@@ -91,22 +91,21 @@ Based on Tailwind CSS’s Protocol template, I customized the navigation bar and
 
 This site uses [next/image](https://nextjs.org/docs/app/getting-started/images) to improve loading performance and display a blurred preview while images load, which eliminates any layout shift. It also supports Obsidian-style image syntax `![[]]` through a custom Remark plugin.
 
-
 <div className="flex justify-center w-full gap-5">
   <Image src={img['Pasted image 20250820160328.png']} alt='Image size difference' />
   <Image src={img['Picture3.png']} alt='loading blur image sample'/>
 </div>
 
-#### [CI/CD:](#simple-ci-cd-with-git-hub-actions)
+
+#### [CI/CD](#simple-ci-cd-with-git-hub-actions)
 This site uses a simple CI/CD pipeline powered by GitHub Actions. Whenever I push changes to the repository, the host automatically builds and restarts the server. This ensures the site stays up to date and helps me catch issues immediately.
 ![[Pasted image 20251013161416.png]]
 
----
 
+---
 # Building My Site
 My personal site is built with Tailwind CSS, a framework used by companies like OpenAI, Shopify, Google I/O, and even NASA. It provides a solid foundation for modern web design, with built-in design guardrails and numerous components that help me create a polished site without needing an art degree.
 
----
 # Front End
 Years ago, I thought my work had to be entirely original—that copying others was almost a sin. Over time, I realized that good artists often start by imitating great work and borrowing ideas. So I studied other websites and reshaped what I learned to fit my own needs.
 
@@ -137,7 +136,8 @@ After comparing with charcoal-800, I still like the original better. Funny how o
 
 #### Links
 
-> "When you’re including a link in a block of otherwise non-link text, it’s important to make sure that the link stands out and looks clickable." 
+> When you’re including a link in a block of otherwise non-link text, it’s important to make sure that the link stands out and looks clickable. 
+>
 > -- Refactoring UI
 
 Although using gamboge is nice and sharp, but I want to keep the theme as clean as possible.
@@ -155,6 +155,18 @@ By comparing this and OpenAI documentation, mine is somehow brighter than it sho
 
 And the same also works for hover and bright theme
 ![[Pasted image 20250927230231.png]]
+
+#### Using Images
+
+> Bad photos will ruin a design, even if everything else about it looks great.
+>
+> -- Refactoring UI
+
+The photos for my projects had inaccurate white balance, or the scenes themselves weren't perfectly neutral. This made my homepage look messy and unprofessional. I adjusted the image's white balance, and this little tweaking gives a much cleaner vibe.
+
+![[Pasted image 20251030220155.png]]
+![[Pasted image 20251030220215.png]]
+
 
 #### Code Blocks
 While inspecting OpenAI’s documentation closely, I noticed subtle color bands in their code blocks. I might be able to use the same technique to give my site some shadows and a folded texture.
@@ -520,5 +532,4 @@ By adding `translate="no"` to the site’s anchor, Google Translate is prevented
 #### Long string and code block lead to layout shift on phone
 
 Adding `break-word` property and fixing minor layout mistake fixes the problem.
-
-{/* ![[Pasted image 20251011231440.png]] */}
+	![[Pasted image 20251011231440.png]] 
