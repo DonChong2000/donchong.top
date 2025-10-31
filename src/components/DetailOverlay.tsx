@@ -1,35 +1,23 @@
 import Image from "next/image";
 
-const callouts = [
-  {
-    name: 'Desk and Office',
-    description: 'Work from home accessories',
-    imageSrc: '/2025-08-10_22.06.00.png',
-    imageAlt: 'Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug.',
-    href: '#',
-  },
-  {
-    name: 'Self-Improvement',
-    description: 'Journals and note-taking',
-    imageSrc: '/2025-08-10_22.41.03.png',
-    imageAlt: 'Wood table with porcelain mug, leather journal, brass pen, leather key ring, and a houseplant.',
-    href: '#',
-  },
-  {
-    name: 'Timelapse Machine',
-    description: 'Record changes with moving camera',
-    imageSrc: '/timelapseMachine.webp',
-    imageAlt: 'Record changes with moving camera',
-    href: '/projects/timelapse-machine',
-  },
-];
+interface Callout {
+  name: string;
+  description: string;
+  imageSrc: string;
+  imageAlt: string;
+  href: string;
+}
 
-export function DetailOverlay() {
+interface DetailOverlayProps {
+  callouts: Callout[];
+}
+
+export function DetailOverlay({ callouts }: DetailOverlayProps) {
   return (
 
       <div>
 
-          <div className="space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0">
+          <div className="space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0 mt-4">
             {callouts.map((callout) => (
               <div key={callout.name} className="group relative">
                 <div className="relative h-80 w-full overflow-hidden rounded-lg  sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64 GH not-prose">

@@ -29,7 +29,7 @@ const product = [
 export default function Gallery() {
   return (
     <div>
-        <div className="lg:grid lg:grid-cols-3 lg:gap-2 ">
+        <div className="lg:grid lg:grid-cols-3 lg:gap-2 not-prose mt-4">
 
 
             <div className="relative row-span-2 aspect-3/4 size-full rounded-lg object-cover max-lg:hidden hover:opacity-75">
