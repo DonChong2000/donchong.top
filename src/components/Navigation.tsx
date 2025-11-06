@@ -402,11 +402,11 @@ export const navigation: Array<NavGroup> = [
       { title: 'Overview', href: '/projects-overview' },
       // { title: 'Chat-CV', href: '/chat-cv' },
       { title: 'This Site', href: '/this-site' },
-      { title: 'And more...', href: '/projects/drowning-detection-rescue-system',
+      { title: 'Drowning Detection & Rescue System', href: '/projects/drowning-detection-rescue-system', id: 'Drowning Detection & Rescue System' },
+      { title: 'Bill-AI', href: '/projects/bill-ai', id: 'Bill-AI' },
+      { title: 'And more...', href: '/projects/timelapse-machine',
         children: [
-          { title: 'Drowning Detection & Rescue System', href: '/projects/drowning-detection-rescue-system', id: 'Drowning Detection & Rescue System' },
           { title: 'Timelapse Machine', href: '/projects/timelapse-machine', id: 'Timelapse Machine' },
-          { title: 'Bill-AI', href: '/projects/bill-ai', id: 'Bill-AI' },
           { title: 'status.donchong.top', href: '/projects/site-status', id: 'status.donchong.top' },
           { title: 'Comparing ASR Solutions', href: '/projects/comparing-asr-solutions', id: 'Comparing ASR Solutions' },
           { title: 'Transcriber', href: '/projects/transcriber', id: 'Transcriber' },
@@ -421,18 +421,18 @@ export const navigation: Array<NavGroup> = [
     links: [
       { title: 'GTNH', href: '/gtnh' },
       { title: 'Factorio', href: '/factorio' },
-      { title: 'Cookbook', href: '/cookbook',
-        children: [
-          { title: 'Recipe1', href: '/cookbook/1', id: 'Recipe1' },
+      // { title: 'Cookbook', href: '/cookbook',
+      //   children: [
+      //     { title: 'Recipe1', href: '/cookbook/1', id: 'Recipe1' },
 
-        ],
-      },
-      { title: 'Random Notes', href: '/random-notes',
-        children: [
-          { title: 'The Seagram Building', href: '/random-notes/the-seagram-building', id: 'The Seagram Building' },
-          { title: 'Test', href: '/random-notes/test', id: 'Test' }
-        ],
-      },
+      //   ],
+      // },
+      // { title: 'Random Notes', href: '/random-notes',
+      //   children: [
+      //     { title: 'The Seagram Building', href: '/random-notes/the-seagram-building', id: 'The Seagram Building' },
+      //     { title: 'Test', href: '/random-notes/test', id: 'Test' }
+      //   ],
+      // },
     ],
   }
 ];
