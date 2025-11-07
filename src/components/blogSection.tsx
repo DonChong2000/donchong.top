@@ -6,7 +6,7 @@ const posts = [
     title: 'DonChong.Top',
     href: '/this-site',
     description:
-      'Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel iusto corrupti dicta laboris incididunt.',
+      'This site is my portfolio and a platform for sharing my work. It’s a full-stack project spanning front-end and back-end development, networking, cloud hosting, and CI/CD. Here, I document the technical details and design decisions behind its development.',
     imageUrl:
       '/homepage/icon-trim.png',
     date: 'Jul 17, 2025',
@@ -18,7 +18,7 @@ const posts = [
     title: 'Swimming Pool Drown Detection and Rescue System (FYP)',
     href: '/projects/drowning-detection-rescue-system',
     description:
-      'A system that detects drowning incidents using a wearable device, pinpoints the location with computer vision, and deploys a robotic float for active rescue. I contributed to the concept, research, WebApp, and integration of the computation, wearable, and robotic components, as well as assisting in wearable development.',
+      'My final-year project is a system design for pool safety. It detects drowning incidents using a wearable device, pinpoints the location using computer vision, and deploys a robotic float for active rescue.',
     imageUrl:
       '/homepage/fyp_croped.png',
     date: 'Apr 20, 2022',
@@ -30,7 +30,7 @@ const posts = [
     title: 'Timelapse Machine',
     href: '/projects/timelapse-machine',
     description:
-      'A system that detects drowning incidents using a wearable device, pinpoints the location with computer vision, and deploys a robotic float for active rescue. I contributed to the concept, research, WebApp, and integration of the computation, wearable, and robotic components, as well as assisting in wearable development.',
+      'A robot that captures motion timelapses — condensing hours of activity into smooth, dynamic short clips using a moving camera. Developed in C++ on the STM32 platform.',
     imageUrl:
       '/homepage/timelapseMachine.jpg',
     date: 'Dec 1, 2020',
@@ -42,7 +42,7 @@ const posts = [
     title: 'Bill-AI',
     href: '/projects/bill-ai',
     description:
-      'A system that detects drowning incidents using a wearable device, pinpoints the location with computer vision, and deploys a robotic float for active rescue. I contributed to the concept, research, WebApp, and integration of the computation, wearable, and robotic components, as well as assisting in wearable development.',
+      'A reliable receipt extractor converts a receipt picture into a spreadsheet table. This helped us with our bookkeeping for over a year, anywhere, anytime.',
     imageUrl:
       '/homepage/bill-ai2.png',
     date: 'Nov 08, 2024',
@@ -54,7 +54,7 @@ const posts = [
     title: 'status.donchong.top',
     href: '/projects/site-status',
     description:
-      'A system that detects drowning incidents using a wearable device, pinpoints the location with computer vision, and deploys a robotic float for active rescue. I contributed to the concept, research, WebApp, and integration of the computation, wearable, and robotic components, as well as assisting in wearable development.',
+      'A simple monitor site for my personal website and other services. Along with the Minecraft server starting function.',
     imageUrl:
       '/homepage/status2.png',
     date: 'Aug 27, 2024',
@@ -66,7 +66,7 @@ const posts = [
     title: 'Transriber',
     href: '/projects/transcriber',
     description:
-      'A system that detects drowning incidents using a wearable device, pinpoints the location with computer vision, and deploys a robotic float for active rescue. I contributed to the concept, research, WebApp, and integration of the computation, wearable, and robotic components, as well as assisting in wearable development.',
+      'A free tool that accepts any media input — including YouTube links, direct video or audio URLs, or Discord attachments — and generates subtitles from it.',
     imageUrl:
       '/homepage/transcriber2.png',
     date: 'May 30, 2025',
