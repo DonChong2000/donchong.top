@@ -401,7 +401,7 @@ export const navigation: Array<NavGroup> = [
     links: [
       { title: 'Overview', href: '/projects-overview' },
       // { title: 'Chat-CV', href: '/chat-cv' },
-      { title: 'This Site', href: '/this-site' },
+      { title: 'DonChong.Top', href: '/this-site' },
       { title: 'Drowning Detection & Rescue System', href: '/projects/drowning-detection-rescue-system'},
       { title: 'Bill-AI', href: '/projects/bill-ai' },
       { title: 'And more...', href: '/projects/timelapse-machine',
