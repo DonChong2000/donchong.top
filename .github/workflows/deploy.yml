@@ -43,7 +43,7 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          cd /home/ubuntu/donchong.top/donchong.top
+          cd /home/ubuntu/github/donchong.top
           git pull
           npm install
           npm run build
