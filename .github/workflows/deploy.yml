@@ -45,6 +45,8 @@ jobs:
         script: |
           cd /home/ubuntu/github/donchong.top
           git pull
+          export NVM_DIR=/home/${{ secrets.SSH_USERNAME }}/.nvm
+          source /home/${{ secrets.SSH_USERNAME }}/.nvm/nvm.sh
           npm install
           npm run build
           pm2 restart tailwindui-protocol || pm2 start npm --name "tailwindui-protocol" -- start
