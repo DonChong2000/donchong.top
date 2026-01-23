@@ -408,12 +408,18 @@ export const navigation: Array<NavGroup> = [
         children: [
           { title: 'Timelapse Machine', href: '/projects/timelapse-machine', id: 'Timelapse Machine' },
           { title: 'status.donchong.top', href: '/projects/site-status', id: 'status.donchong.top' },
-          { title: 'Comparing ASR Solutions', href: '/projects/comparing-asr-solutions', id: 'Comparing ASR Solutions' },
           { title: 'Recipe Generator', href: '/projects/recipe-generator', id: 'Recipe Generator' },
         ],
       },
 
 
+    ],
+  },
+  {
+    title: 'Notes',
+    links: [
+      { title: 'LeetCode Grind', href: '/test' },
+      { title: 'Comparing ASR Solutions', href: '/notes/comparing-asr-solutions', id: 'Comparing ASR Solutions' },
     ],
   },
   {
