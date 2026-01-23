@@ -3,8 +3,8 @@ import { getImageMap } from '@/lib/imgMap';
 export const img = getImageMap(import.meta.url);
 
 export const metadata = {
-    title: 'Test Page',
-    description: 'This is a test page.',
+    title: 'The LeetCode Grind',
+    description: 'A technical retrospective on completing the Grind 75 curriculum in TypeScript, featuring performance tips for JavaScript data structures and summaries of core algorithmic patterns.',
 };
 
 # The LeetCode Grind
@@ -33,8 +33,6 @@ This page documents my process of grinding LeetCode and the lessons learned from
 I completed Grind 75 in about eight weeks, with 27 days of actual coding. I did it in TypeScript, a language I had wanted to learn for a long time. Interestingly, I found the first two weeks to be the most challenging because I was learning many algorithms from scratch. Once I became familiar with the core design patterns and algorithms, tackling 'Hard' problems felt no more difficult than the 'Easy' ones did at the very beginning.
 ![[Pasted image 20260120225601.png]]
 
-## Note
-
 Here, I would like to take note of the common algorithms and their application from the easiest to the most advanced ones. I won’t dive into the details of the algorithms, but rather focus on the concepts and key takeaways.
 
 - Bitmap
@@ -45,7 +43,7 @@ Here, I would like to take note of the common algorithms and their application f
 
 ### Bitmap
 
-In LeetCode problems, we often need to count occurrences of alphabetical characters. A simple approach is to create an `number[]` and use the characters' ASCII values as indices. Since the ASCII codes for these characters span from **65** ('A') to **122** ('z'), we need an array of size **58** ($122 - 65 + 1 = 58$) to fit them all. Note that this range also includes non-alphabetical symbols such as `[`, `\`, `]`, `^`, and `_`.
+In LeetCode problems, we often need to count occurrences of alphabetical characters. A simple approach is to create a `number[]` and use the characters' ASCII values as indices. Since the ASCII codes for these characters span from **65** ('A') to **122** ('z'), we need an array of size **58** ($122 - 65 + 1 = 58$) to fit them all. Note that this range also includes non-alphabetical symbols such as `[`, `\`, `]`, `^`, and `_`.
 
 ```ts
 let sum = new Array(58).fill(0);
@@ -58,7 +56,7 @@ for (let char of 'hello') {
 Alternatively, a simpler way is to use 128 as the size to cover the full ASCII. And by using typed arrays, slots are initialized as 0s like follow:
 
 ```ts
-let sum = new Int32Array(128); // will filled with 0 by itself
+let sum = new Int32Array(128); // will be filled with 0 by itself
 for (let char of 'hello') {
   sum[char.charCodeAt(0)]++; //Would be a good idea to guard it with < 128.
 }
@@ -76,16 +74,20 @@ They are the two basic data structures in programming, with different usage and 
 | arr.splice(a,b) | Add / Remove / Modify a section of array | O(N)            |
 | arr.slice(a,b)  | Get a portion of the array               | O(N)            |
 
+Here are some benchmarks I tested. Shift is way more inefficient than I expected.
+![[Pasted image 20260123151411.png]]
+
 We can observe two important points:
 
 1. `shift()` runs in O(N) time because JavaScript does not provide a native queue implementation. This can become a bottleneck in problems with strict time limits.
 
-2. Both `splice()` and `slice()` also run in O(N) time. While this is expected, use of these methods can still cause performance issues under tight computational constraints.
+2. Both `splice()` and `slice()` run in O(N) time. While this is expected, use of these methods can still cause performance issues under tight computational constraints.
 
-My solution to this two problem is using pointers.
+The solution to these two problems is using pointers.
 
-**shift()**
-For shift(), a better real world practice is to use prebuild packages like "yocto-queue". But in LeetCode, a simple implementation can be achieved by using a head pointer pointer the start of the array.
+#### shift()
+
+For shift(), a better real-world practice is to use packages like "yocto-queue". But in LeetCode, a simple implementation can be achieved by using a head pointer pointing to the start of the array.
 
 To add an element, we do the same, push():
 
@@ -95,7 +97,7 @@ let arr: number[] = [];
 arr.push(1);
 ```
 
-And to shift() an element, we utilize the head pointer:
+And to `shift()` an element, we utilize the head pointer:
 
 ```ts
 console.log(arr[head]);
@@ -103,15 +105,10 @@ head++; //the first element is gone.
 // optional: if head > 1000, splice the first 1000 out
 ```
 
-And the size of the array becomes:
+And to iterate the array, we do:
 
 ```ts
-arr.length - head;
-```
-
-And to iterate the array we do:
-
-```ts
+// (arr.length - head) becomes the size of the array
 while (arr.length - head > 0) {
   console.log(arr[head]);
   head++;
@@ -122,16 +119,16 @@ for (let i = head; i < arr.length; i++) {
 }
 ```
 
-We can wrap all these into a class, but in the context of LeetCode, this is more than enough. If we need to solve a bigger question I would prefer using a real library instead.
+We can wrap all these into a class, but in the context of LeetCode, this is more than enough. If we need to solve a bigger question, I would prefer using a real library instead.
 
-**splice()`and`slice()**
-In some questions like [224. Basic Calculator](https://leetcode.com/problems/basic-calculator/), we need to work on array recursively (at least in my approach). These two operations create a new array and will lead to run time exceeded error. Instead going back to basics primitive method, using two pointer to indicate start and end, and a pass by reference of the array would do the trick in O(1).
+#### `splice()` and `slice()`
+In some questions like [224. Basic Calculator](https://leetcode.com/problems/basic-calculator/), we need to work on the array recursively (at least in my approach). These two operations create a new array and will lead to run time exceeded error. Instead, using the old school two pointers to indicate start and end, and a pass by reference of the array would do the trick in O(1).
 
 ### DFS / BFS
 
 They are the fundamentals of many LeetCode problems, which are not difficult but worth mentioning. One easy application of them is traversing a tree.
 
-Depth-first search is usually implemented with recursion. Where we recur in a different order to achieve a different traversal order.
+Depth-first search is usually implemented with recursion. Where we recurse in a different order to achieve a different traversal order.
 
 ```ts
 // Left, Right, Current (LRC order) / post-order
@@ -162,12 +159,12 @@ function bfs(root: TreeNode): void {
 }
 ```
 
-## DP / HashMap / Backtracking
+### DP / HashMap / Backtracking
 
 Dynamic Programming (DP)
 Essentially, DP is about saving and reusing intermediate answers in a recursive problem. Take [[70. Climbing Stairs](https://leetcode.com/problems/climbing-stairs/)](https://leetcode.com/problems/climbing-stairs/) as an example:
 
-First we need to figure out a recursive answer / path.
+First, we need to figure out a recursive answer / path.
 
 ```ts
 function climbStairs(n: number): number {
@@ -194,7 +191,7 @@ function climbStairs(n: number): number {
 }
 ```
 
-And once we understand our solution is about building the answer from the ground up, i.e. to calculate N=4, we need to calculate N=3 and N=2, we can further optimize the algorithm.
+And once we understand our solution is about building the answer from the ground up, i.e., to calculate N=4, we need to calculate N=3 and N=2, we can further optimize the algorithm.
 
 ```ts
 function climbStairs(n: number): number {
@@ -210,35 +207,38 @@ function climbStairs(n: number): number {
 }
 ```
 
-**HashMap**
+#### HashMap
 
 I stumbled across an interesting comment under the LRU cache question. And the key questions here are:
 
-1. Is Map in JavaScript deterministic?
+1. Is Map in JavaScript deterministic (follow insertion order)?
 2. Is insert/delete operations in Map O(1)
+    <div className="w-full lg:w-1/2 ">
+        ![[Pasted image 20260122195649.png]]
+    </div>
 
-![[Pasted image 20260122195649.png]]
-
+**Answer:**
 1. A map in JavaScript is deterministic. Which means the order of the elements follows the insertion order. You can find this from ECMA 24.1.3.5. The same also applies to Set.
 
-![[Pasted image 20260122200931.png]]
+    ![[Pasted image 20260122200931.png]]
 
-2. Both Insert or Delete are O(1) operations, regardless of the size. I use Gemini to generate a benchmark, which prove the O(1) characteristics.
+2. Both Insert or Delete are O(1) operations, regardless of the size. I used a benchmark script to verify the O(1) characteristics.
 
-Note: The max size of Map, or any object in V8 is 2^24, therefore I only tested up to 16777216.
-https://stackoverflow.com/questions/54452896/maximum-number-of-entries-in-node-js-map
-![[Pasted image 20260122204235.png]]
-![[Pasted image 20260122204018.png]]
+    Note: 16777216 items is the design maximum of the V8 engine.
+    https://stackoverflow.com/questions/54452896/maximum-number-of-entries-in-node-js-map
+    ![[Pasted image 20260122204235.png]]
+    ![[Pasted image 20260122204018.png]]
 
-**Back Tracking**
+#### Back Tracking
 Honestly, I don't think I have enough backtracking knowledge to write insight on it, haha.
+
 Backtracking is simply returning to the previous step when there is no path.
-Usually backtracking is recursion based, aims to trim off failed path and avoid forking multiple copy of data by modifying the steps.
+Usually, backtracking is recursion-based, aims to trim off failed paths and avoid forking multiple copies of data by modifying the steps.
 
-## Priority queue / Heap
+### Priority queue / Heap
 
-It is a data structure where we only cares about the Largest element / Smallest element.
-It is a complete binary tree presented as a array.
+It is a data structure where we only care about the Largest element / Smallest element.
+It is a complete binary tree presented as an array.
 
 | Operation                       | Time Complexity                           |
 | ------------------------------- | ----------------------------------------- |
@@ -249,9 +249,12 @@ It is a complete binary tree presented as a array.
 | **Build Heap**                  | **O(n)**                                  |
 | **Merge (two heaps)**           | **O(n)** (not efficient for binary heaps) |
 
-In LeetCode you can simply use them (or implement it like me if you have not done it before)
+In LeetCode, you can simply use the Heap type (or implement it like me if you have not done it before)
 
 ```typescript
 bottomHalf: MaxHeap<number> = new MaxHeap<number>();
 topHalf: MinHeap<number> = new MinHeap<number>();
 ```
+
+LeetCode status as of 2026-01-23
+![[Pasted image 20260123030202.png]]
