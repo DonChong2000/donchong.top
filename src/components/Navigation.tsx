@@ -418,7 +418,7 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Notes',
     links: [
-      { title: 'LeetCode Grind', href: '/test' },
+      { title: 'The LeetCode Grind', href: '/notes/the-leetcode-grind' },
       { title: 'Comparing ASR Solutions', href: '/notes/comparing-asr-solutions', id: 'Comparing ASR Solutions' },
     ],
   },
