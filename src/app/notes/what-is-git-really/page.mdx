@@ -1,0 +1,177 @@
+import Image from 'next/image';
+import { getImageMap } from '@/lib/imgMap';
+export const img = getImageMap(import.meta.url);
+
+export const metadata = {
+  title: 'The LeetCode Grind',
+  description: 'A technical retrospective on completing the Grind 75 curriculum in TypeScript, featuring performance tips for JavaScript data structures and summaries of core algorithmic patterns.',
+};
+
+# What is Git really?
+I first met Git when I was 15. But honestly, I have no idea how it works, let alone what it actually is. And I stumble across extramly good Git explanation video, that makes me want to tear Git apart and understand what every command does, not just casting Git magics.
+
+## Data Structure of Git
+- Git is a tree, a one-way family tree.
+- Commits are snapshots of the project.
+- Branches are pointers to a commit.
+- HEAD is the pointer we are looking at.
+
+### Git init
+Let's `git init` and explain everything on the way.
+```sh
+> git init
+Initialized empty Git repository in C:/blabla/.git/
+```
+
+It creates a bunch of files in `./git`, and this initializes a git repo. 
+```sh
+.
+└── .git
+    ├── HEAD # <--- This is our HEAD pointer
+    ├── config
+    ├── description
+    ├── hooks
+    │   ├── [truncated...]
+    ├── info
+    │   └── exclude
+    ├── objects
+    │   ├── info
+    │   └── pack
+    └── refs
+        ├── heads
+        └── tags
+
+10 directories, 18 file
+```
+
+The file HEAD is our pointer, and the content `ref:refs/heads/main` means we are at the main branch.
+```sh
+> cat .git/HEAD
+ref: refs/heads/main
+```
+
+### First commit
+Let's work on our repo, and submit our first commit.
+```sh
+> touch HelloGit.txt
+> git add HelloGit.txt
+> git commit
+> ...
+```
+
+Our commit hash is 572f7b4c2808484e8078e09acccc073b810502f0
+And our main branch pointer also contain this hash
+```sh
+> cat .git/refs/heads/main
+572f7b4c2808484e8078e09acccc073b810502f0
+```
+
+`#572f7b` is our first node of the tree, and the head and main pointer are both pointing at it.
+![[Pasted image 20260124043246.png]]
+***
+
+Now we create a second edit and commit to the main branch.
+The head and main pointer are pointing to our latest commit `#770994`.
+Our folder contains `HelloGit.txt` and `SecondEdit.txt`.
+```sh
+> touch SecondEdit.txt
+> git add SecondEdit.txt
+> git commit
+```
+![[Pasted image 20260124043635.png]]
+***
+We can go back in time by checking out our first commit, `#572f7b`. This loads a snapshot of the project exactly as it existed at that moment. Only `HelloGit.txt` exists, and `SecondEdit.txt` is gone.
+```sh
+> git checkout 572f7
+> cat .git/HEAD
+572f7b4c2808484e8078e09acccc073b810502f0
+>cat .git/refs/heads/main
+770994fdbb67ece2f7aac1f3461b9f780652d30e
+```
+![[Pasted image 20260124043705.png]]
+***
+### Branching
+Let's try branching off from the main branch. Creating a new branch will create a pointer named "inAnotherUniverse", and nothing more than that, no snapshots, no copies, no new node.
+
+"inAnotherUniverse" stores #770994, which points to the latest commit, also the same as the main branch, where we are branching off from.
+```sh
+> git checkout main
+> git branch inAnotherUniverse
+> ls .git/refs/heads/
+inAnotherUniverse  main
+> cat .git/refs/heads/inAnotherUniverse
+770994fdbb67ece2f7aac1f3461b9f780652d30e
+```
+![[Pasted image 20260124045154.png]]
+Actually, we can branch from any commits we want.
+```sh
+> git checkout 572f7b
+> git branch fairytaleUniverse
+> cat .git/refs/heads/fairytaleUniverse
+572f7b4c2808484e8078e09acccc073b810502f0
+```
+![[Pasted image 20260124221946.png]]
+Although we have created a branch, the `HEAD` pointer is still at commit `#572f7b4` rather than `fairytaleUniverse`. We are currently in a **detached HEAD state**, meaning `HEAD` is not pointing to any branch. Any commits made from this state will be **unreachable** since there are no pointers to reference them. Git’s garbage collection will permanently delete them, usually after 30 days.
+
+```sh
+> git branch
+* (HEAD detached at 572f7b4)
+  fairytaleUniverse
+  inAnotherUniverse
+  main
+```
+
+We can find all these branch pointers in git_test\.git\refs\heads, and all they store is just a commit hash.
+
+```sh
+> ls .git/refs/heads/
+fairytaleUniverse  inAnotherUniverse  main
+
+> cat .git/refs/heads/*
+572f7b4c2808484e8078e09acccc073b810502f0
+770994fdbb67ece2f7aac1f3461b9f780652d30e
+770994fdbb67ece2f7aac1f3461b9f780652d30e
+```
+
+***
+Now I create a commit from the fairytaleUniverse, and at this moment, the tree branches out for real.
+```sh
+> git checkout fairytaleUniverse
+> touch fairy.txt
+> git add fairy.txt
+> git commit
+```
+![[Pasted image 20260124225944.png]]
+
+### Merging
+Let's finish our first section by merging `in Another Universe` and `fairytale Universe`, and see what will happen. This will create a new commit `9fe006`, and it is a head of our main branch. 
+```sh
+> git checkout inAnotherUniverse
+> git pull # Always make sure you are on the latest version.
+> git merge fairytaleUniverse
+```
+![[Pasted image 20260124225716.png]]
+
+***
+Now we are ahead of main, what if we merge `inAnotherUniverse` and `main`, will it create a new commit? It fast-forwards and does not create a new commit. It changes the main pointer from `#572f7b` to `#770994`
+```sh
+> git checkout main
+> git pull
+> git merge inAnotherUniverse
+Updating 770994f..9fe006a
+Fast-forward
+ fairy.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 fairy.txt
+```
+
+![[Pasted image 20260124230142.png]]
+
+## Staging Area, Working Directory
+## Reset, Revert, Restore
+
+## Rebase
+
+
+Reference:
+https://youtu.be/Ala6PHlYjmw?si=tKV1dADXO55Y2jJq
