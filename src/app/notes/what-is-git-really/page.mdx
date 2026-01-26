@@ -8,7 +8,7 @@ export const metadata = {
 };
 
 # What is Git really?
-I first met Git when I was 15. But honestly, I have no idea how it works, let alone what it actually is. And I stumble across extramly good Git explanation video, that makes me want to tear Git apart and understand what every command does, not just casting Git magics.
+I first met Git when I was 15. But honestly, I have no idea how it works, let alone what it actually is. And I stumble across extremely good Git explanation video, that makes me want to tear Git apart and understand what every command does, not just casting Git magics. I am not only going to write about the git command, but also about how those commands work. So having some basic knowledge will help a lot in reading this blog.
 
 ## Data Structure of Git
 - Git is a tree, a one-way family tree.
@@ -155,8 +155,10 @@ Let's finish our first section by merging `in Another Universe` and `fairytale U
 ***
 Now we are ahead of main, what if we merge `inAnotherUniverse` and `main`, will it create a new commit? It fast-forwards and does not create a new commit. It changes the main pointer from `#572f7b` to `#770994`
 ```sh
-> git checkout main
 > git pull
+> git merge main # Good practices: merge the main into the sub-branch and resolve conflicts here.
+Already up to date.
+> git checkout main
 > git merge inAnotherUniverse
 Updating 770994f..9fe006a
 Fast-forward
@@ -164,14 +166,247 @@ Fast-forward
  1 file changed, 0 insertions(+), 0 deletions(-)
  create mode 100644 fairy.txt
 ```
-
 ![[Pasted image 20260124230142.png]]
+*** 
+Finally, let me introduce a very useful command `git log --graph --reflog`. This will show logs in git visually. And we can use it to verify if the graphs I drew above are correct.
+```sh
+chong@DONCHONG:[truncated]/git_test$ git log --graph --reflog
+*   commit 9fe006ac0e277b191de7ec70f789ce60f8217bdd (HEAD -> main, inAnotherUniverse)
+|\  Merge: 770994f 8959e7f
+| | Author: don@winUbuntu <donchong2000@gmail.com>
+| | Date:   Sat Jan 24 22:41:36 2026 -0700
+| |
+| |     Merge branch 'fairytaleUniverse' into inAnotherUniverse
+| |
+| * commit 8959e7f103ab1aa5efda740ba15b70200e5fb1d2 (fairytaleUniverse)
+| | Author: don@winUbuntu <donchong2000@gmail.com>
+| | Date:   Sat Jan 24 22:25:31 2026 -0700
+| |
+| |     Creating fairy
+| |
+* | commit 770994fdbb67ece2f7aac1f3461b9f780652d30e
+|/  Author: don@winUbuntu <donchong2000@gmail.com>
+|   Date:   Sat Jan 24 03:38:51 2026 -0700
+|
+|       This is second edit
+|
+* commit 572f7b4c2808484e8078e09acccc073b810502f0
+  Author: don@winUbuntu <donchong2000@gmail.com>
+  Date:   Sat Jan 24 03:24:25 2026 -0700
 
-## Staging Area, Working Directory
+      This is our first commit
+```
+
+## How Git store our files?
+Git is a magical tool, allowing us to revisit any point in time in a blink. This is possible because Git stores a snapshot of the entire project every time we create a commit. But wouldn't saving the whole project each time consume an enormous amount of space? Let’s explore how Git efficiently saves our files.
+
+### Snapshots
+Let's open up our latest commit `#9fe006` and see what's inside. We can find this snapshot inside `.git/objects/9f`, file name `e006ac0e277b191de7ec70f789ce60f8217bdd`. The first two character is the folder name, and the rest is the file name.
+
+This is a binary file, and we can read the content of this file with the `git cat-file` command. 
+If you are really interested in reading this file as is, you may take a look at this section: [[#How to read a blob]].
+
+```sh
+> git cat-file -p 9fe006ac0e277b191de7ec70f789ce60f8217bdd
+tree 1adbed20c8b4756ceba562ecafe22677d1fcdf44
+parent 770994fdbb67ece2f7aac1f3461b9f780652d30e
+parent 8959e7f103ab1aa5efda740ba15b70200e5fb1d2
+author don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700
+committer don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700
+
+Merge branch 'fairytaleUniverse' into inAnotherUniverse
+```
+
+This file stores details about this commit, such as its parents and who committed it. And there is a `tree` that we don't know what it is, let's `git cat-file` the tree blob to look inside.
+```sh
+> git cat-file -p 1adbed20c8b4756ceba562ecafe22677d1fcdf44
+100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391    HelloGit.txt
+100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391    SecondEdit.txt
+100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391    fairy.txt
+
+> git cat-file -p e69de29bb2d1d6434b8b29ae775ad8c2e48c539
+ # output nothing
+```
+We can see the filenames and their associated blob hashes. But why are the hashes identical? 
+Git compresses file data into 'blobs' and generates a hash based on their content. If two files have identical content, they produce the same hash and are stored as a single blob to save space. Let's create another file with different content, and see what the difference is.
+
+```sh
+> echo beepbeep > robot.txt
+> git add . && git commit
+> git cat-file -p HEAD
+tree ad3976dec6c9dff217ec0273d0b90c1adee433a1
+parent 9fe006ac0e277b191de7ec70f789ce60f8217bdd
+author don@winUbuntu <donchong2000@gmail.com> 1769412519 -0700
+committer don@winUbuntu <donchong2000@gmail.com> 1769412519 -0700
+
+adding robot
+```
+
+`robot.txt` has a different hash, and if we read this blob, we can see the content of robot.txt.
+```sh
+> git cat-file -p ad3976dec6c9dff217ec0273d0b90c1adee433a1
+100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391    HelloGit.txt
+100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391    SecondEdit.txt
+100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391    fairy.txt
+100644 blob e608e561beb2bd1548a9368cd1d230ea1fd09ad7    robot.txt
+
+> git cat-file -p e608e561beb2bd1548a9368cd1d230ea1fd09ad7
+beepbeep
+```
+
+Git stores files with the same content in the same blob. Which means all unmodified files use the previous blob and the same hash to be stored. And only the modified files will be saved as a new blob. 
+
+### Staging, Stash, Working Diretory
+Knowing how and where Git stores files will be useful when we introduce more git commands. Before we finalize changes and create a commit, Git manages our files across three primary areas:
+
+- Working Directory: This contains the actual files you see and edit in your project folder.
+- Staging Area: This is where files are to be included in the next commit.
+- Stash Area: This is a temporary place to save files for later use.
+
+- 1
+- 1
+- 1
+- 1
+- 1
+- 1
+- 1
+
+
 ## Reset, Revert, Restore
 
-## Rebase
+### Reset
+#### git reset to the ghostUniverse
+git reset simply changes the pointer of the current branch; we can change it to anywhere we want, not only where we have been.
+```sh
+> git checkout 572f7b
+> touch ghost.txt
+> git add .
+> git commit
+# Now our HEAD is at detached state, 
+# and we branch off from 572f7b with no branch name.
+> git checkout main
+> git reset d74b3a
+```
+
+Now our main branch points to our the ghost commit. We can visualize it by running git log. I hope this further clarifies that branches are just a label, and we store all our work in the whole git family tree, not the "main branch".
+
+```sh
+> git log --graph --reflog
+* commit d74b3a4cbf9c535951b5bd7d3aede71d43bc98c8 (HEAD -> main)
+| Author: don@winUbuntu <donchong2000@gmail.com>
+| Date:   Sun Jan 25 19:39:46 2026 -0700
+|
+|     ghost is created
+|
+| * commit 9fe006ac0e277b191de7ec70f789ce60f8217bdd (inAnotherUniverse)
+|/| Merge: 770994f 8959e7f
+| | Author: don@winUbuntu <donchong2000@gmail.com>
+| | Date:   Sat Jan 24 22:41:36 2026 -0700
+| |
+| |     Merge branch 'fairytaleUniverse' into inAnotherUniverse
+| |
+| * commit 8959e7f103ab1aa5efda740ba15b70200e5fb1d2 (fairytaleUniverse)
+| | Author: don@winUbuntu <donchong2000@gmail.com>
+| | Date:   Sat Jan 24 22:25:31 2026 -0700
+| |
+| |     Creating fairy
+| |
+* | commit 770994fdbb67ece2f7aac1f3461b9f780652d30e
+|/  Author: don@winUbuntu <donchong2000@gmail.com>
+|   Date:   Sat Jan 24 03:38:51 2026 -0700
+|
+|       This is second edit
+|
+* commit 572f7b4c2808484e8078e09acccc073b810502f0
+  Author: don@winUbuntu <donchong2000@gmail.com>
+  Date:   Sat Jan 24 03:24:25 2026 -0700
+
+      This is our first commit
+```
+
+### Rebase
+
+## HEAD
+What do `git reset HEAD~1` do?
+Some say `git reset HEAD~1` is the "undo" button for your latest commit. But what is the latest commit? If I am working on my branch and someone commits, will I reset their commit?
+
+A more precise answer is  `git reset HEAD~1`: move my current branch pointer to `HEAD~1`. And since HEAD points to where we are, we roll back by 1 commit. If we are on the main branch, `HEAD~1` points to `770994`. And if we are on `fairytaleUniverse`, HEAD~1 points to `572f7b`
+
+```sh
+> git checkout main
+> git rev-parse HEAD
+9fe006ac0e277b191de7ec70f789ce60f8217bdd
+> git rev-parse HEAD~1
+770994fdbb67ece2f7aac1f3461b9f780652d30e
+> git rev-parse HEAD~2
+572f7b4c2808484e8078e09acccc073b810502f0
+
+> git checkout fairytaleUniverse
+> git rev-parse HEAD
+8959e7f103ab1aa5efda740ba15b70200e5fb1d2
+> git rev-parse HEAD~1
+572f7b4c2808484e8078e09acccc073b810502f0
+
+```
+
+![[Pasted image 20260125192357.png]]
+What if we got two parents?
+HEAD~1 selects the first parent, which the branch you were on when the merge was ran. We can move between parents using HEAD^n.
+```sh
+> git checkout 9fe006
+> git rev-parse HEAD
+9fe006ac0e277b191de7ec70f789ce60f8217bd
+> git rev-parse HEAD~1
+770994fdbb67ece2f7aac1f3461b9f780652d30
+
+> git rev-parse HEAD^1
+770994fdbb67ece2f7aac1f3461b9f780652d30e
+> git rev-parse HEAD^2
+8959e7f103ab1aa5efda740ba15b70200e5fb1d2
+```
 
 
-Reference:
-https://youtu.be/Ala6PHlYjmw?si=tKV1dADXO55Y2jJq
+## Appendix
+### Lies that I made
+
+##### Git is a DAG, not a family tree. 
+A family tree is inaccurate because: Commits can have one, two, more than two parents, and you can merge any two commit together, even two commits in the same history.
+
+A DAG means:
+- Directed: It has one direction, child cannot point at parents.
+- Acyclic: There is no loops.
+- Graph: Like a tree, but allows more interconnections like merging multiple commits together.
+### How to read a blob
+We can use a python library `zlib` to read the content of a blob. Here is a demo of reading the commit `#9fe006`. Our file is `e006ac0e277b191de7ec70f789ce60f8217bdd` inside the `9f` folder.
+
+```sh
+[truncated]\.git\objects\9f>python3 # we run python in REPL for demo
+>>> import zlib
+>>> file = 'e006ac0e277b191de7ec70f789ce60f8217bdd'
+>>> file_content = open(file, 'rb').read()
+>>> file_content_decompressed = zlib.decompress(file_content)
+>>> file_content_decompressed
+b"commit 328\x00tree 1adbed20c8b4756ceba562ecafe22677d1fcdf44\nparent 770994fdbb67ece2f7aac1f3461b9f780652d30e\nparent 8959e7f103ab1aa5efda740ba15b70200e5fb1d2\nauthor don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700\ncommitter don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700\n\nMerge branch 'fairytaleUniverse' into inAnotherUniverse\n"
+
+>>> len(file_content_decompressed)
+339
+```
+
+It is the same as what we get from `git cat-file`,except the type is missing.
+we can use `git cat-file -t 9fe006a` to check the filetype of a blob too.
+```sh
+commit #filetype
+328 # 328 Bytes folloing the header
+\x00 # a null byte, separate the header and content
+tree 1adbed20c8b4756ceba562ecafe22677d1fcdf44\n
+parent 770994fdbb67ece2f7aac1f3461b9f780652d30e\n
+parent 8959e7f103ab1aa5efda740ba15b70200e5fb1d2\n
+author don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700\n
+committer don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700\n
+\n
+Merge branch 'fairytaleUniverse' into inAnotherUniverse\n
+```
+
+## Reference:
+- [Git Will Finally Make Sense After This - LearnThatStack](https://youtu.be/Ala6PHlYjmw?si=tKV1dADXO55Y2jJq)
+- [Reading git objects - Curious git](https://matthew-brett.github.io/curious-git/reading_git_objects.html)
