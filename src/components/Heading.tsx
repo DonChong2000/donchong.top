@@ -122,7 +122,7 @@ export function Heading<Level extends 2 | 3>({
       <Component
         ref={ref}
         id={generatedId}
-        className={tag || label ? 'mt-2 scroll-mt-32' : 'scroll-mt-24'}
+        className={tag || label ? 'mt-2 scroll-mt-32' : 'scroll-mt-16'}
         {...props}
       >
         {anchor ? (
