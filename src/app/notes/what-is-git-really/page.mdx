@@ -8,7 +8,7 @@ export const metadata = {
 };
 
 # What is Git really?
-I first met Git when I was 15. But honestly, I have no idea how it works, let alone what it actually is. And I stumble across extremely good Git explanation video, that makes me want to tear Git apart and understand what every command does, not just casting Git magics. I am not only going to write about the git command, but also about how those commands work. So having some basic knowledge will help a lot in reading this blog.
+I have been using git for many years. But honestly, I have no idea how it works, let alone what it actually is. And I stumble across extremely good Git explanation video, that makes me want to tear Git apart and understand what every command does, not just casting Git magics. I am not only going to write about the git command, but also about how those commands work. So having some basic knowledge will help a lot in reading this blog.
 
 ## Data Structure of Git
 - Git is a tree, a one-way family tree.
@@ -150,7 +150,7 @@ Let's finish our first section by merging `in Another Universe` and `fairytale U
 > git pull # Always make sure you are on the latest version.
 > git merge fairytaleUniverse
 ```
-![[Pasted image 20260124225716.png]]
+![[Pasted image 20260128014502.png]]
 
 ***
 Now we are ahead of main, what if we merge `inAnotherUniverse` and `main`, will it create a new commit? It fast-forwards and does not create a new commit. It changes the main pointer from `#572f7b` to `#770994`
@@ -166,7 +166,7 @@ Fast-forward
  1 file changed, 0 insertions(+), 0 deletions(-)
  create mode 100644 fairy.txt
 ```
-![[Pasted image 20260124230142.png]]
+![[Pasted image 20260128014437.png]]
 *** 
 Finally, let me introduce a very useful command `git log --graph --reflog`. This will show logs in git visually. And we can use it to verify if the graphs I drew above are correct.
 ```sh
@@ -204,7 +204,7 @@ Git is a magical tool, allowing us to revisit any point in time in a blink. This
 Let's open up our latest commit `#9fe006` and see what's inside. We can find this snapshot inside `.git/objects/9f`, file name `e006ac0e277b191de7ec70f789ce60f8217bdd`. The first two character is the folder name, and the rest is the file name.
 
 This is a binary file, and we can read the content of this file with the `git cat-file` command. 
-If you are really interested in reading this file as is, you may take a look at this section: [[#How to read a blob]].
+If you are really interested in reading this file as is, you may take a look at this section: [[#How to read a object]].
 
 ```sh
 > git cat-file -p 9fe006ac0e277b191de7ec70f789ce60f8217bdd
@@ -217,7 +217,7 @@ committer don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700
 Merge branch 'fairytaleUniverse' into inAnotherUniverse
 ```
 
-This file stores details about this commit, such as its parents and who committed it. And there is a `tree` that we don't know what it is, let's `git cat-file` the tree blob to look inside.
+This file stores details about this commit, such as its parents and who committed it. And there is a `tree` that we don't know what it is, let's `git cat-file` the tree object to look inside.
 ```sh
 > git cat-file -p 1adbed20c8b4756ceba562ecafe22677d1fcdf44
 100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391    HelloGit.txt
@@ -256,23 +256,110 @@ beepbeep
 
 Git stores files with the same content in the same blob. Which means all unmodified files use the previous blob and the same hash to be stored. And only the modified files will be saved as a new blob. 
 
-### Staging, Stash, Working Diretory
-Knowing how and where Git stores files will be useful when we introduce more git commands. Before we finalize changes and create a commit, Git manages our files across three primary areas:
 
-- Working Directory: This contains the actual files you see and edit in your project folder.
-- Staging Area: This is where files are to be included in the next commit.
-- Stash Area: This is a temporary place to save files for later use.
 
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
+### Staging Area
+Before we create a commit, Git keeps track of your changes in three places:
+- Working Directory: The files in your project folder that you can see and edit.
+- Staging Area: The changes to include in the next commit.
+- Stash Area: This is a temporary place to save unfinished changes.
+---
 
+Here, I will show you what actually happened when you stage a file. We will use `cuteCat.txt` as an example. 
+
+First, we create `cute Cat.text`, right now it is in the working directory. Then we run: `git add cuteCat.txt`. This stages `cuteCat.txt` and will be included in the next commit.
+
+```sh
+> echo meow > cuteCat.txt
+> git add cuteCat.txt
+> git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   cuteCat.txt
+```
+
+But what exactly does "staging" a file mean? There are actually two things happening:
+1. Create a blob for changed files
+2. Update the staging area to include the hash of the changed file.
+
+**Creating blob for changed files**
+
+ If we compare the `.git/objects` folder before and after `git add`, we can see that Git created a new file `5d5c3c...` inside a new folder named **`37`**.
+
+```sh
+> echo meow > cuteCat.txt
+> ls .git/objects/    # Before git add
+0d  12  1a  57  77  89  92  9f  ad  d7  e6  info  pack
+> git add cuteCat.txt
+> ls .git/objects/    # After git add, new folder 37 is created
+0d  12  1a  37  57  77  89  92  9f  ad  d7  e6  info  pack
+> ls .git/objects/37/
+5d5c3ce54c13190b2be179e7f3717ebdfd5adf    # the new object
+```
+And the new file contains, you guessed it: "meow". When we run `git add`, Git hashes the file contents and stores them as new blob objects.
+```sh
+> git cat-file -p 375d5c3ce54c13190b2be179e7f3717ebdfd5adf
+meow
+```
+
+**The actual "Staging Area"**
+
+The "staging area" is actually just a file `.git/index` saved as a binary in a [specific way](https://stackoverflow.com/questions/4084921/what-does-the-git-index-contain-exactly). But if we open it up with a hex editor, we can still find our "cuteCat.txt" and its blob hash. The content is similar to ` git ls-files --stage`.
+
+```sh
+> git ls-files --stage
+100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0       HelloGit.txt
+100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0       SecondEdit.txt
+100644 375d5c3ce54c13190b2be179e7f3717ebdfd5adf 0       cuteCat.txt
+100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0       fairy.txt
+```
+
+![[Pasted image 20260127194657.png]]
+Finally, let's verify our staging area is indeed a file that contains hashes of every file, like a tree object we see in a commit. We delete the index file and reset everything, and see what's in our staging area.
+```sh
+> rm .git/index
+> git reset head --hard
+HEAD is now at 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
+> git ls-files --stage
+100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0       HelloGit.txt
+100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0       SecondEdit.txt
+100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0       fairy.txt
+```
+![[Pasted image 20260128014757.png]]
+
+### Stash
+Stash is a place to temporarily hold your tracked files in working directory and staging files, in a stack (FILO) manner. Let's stash our cute cat as a demo.
+
+```sh
+> git stash
+Saved working directory and index state WIP on main: 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
+> ls
+HelloGit.txt  SecondEdit.txt  fairy.txt
+> git status
+On branch main
+nothing to commit, working tree clean
+```
+I created a new file `cardbox`, and stash it on top of our cute cat. Wait... It did not stash the file; `cardboard.txt` is still in our working directory. 
+```sh
+> touch cardboard.txt
+> git stash
+No local changes to save
+> ls
+HelloGit.txt  SecondEdit.txt  cardboard.txt  fairy.txt
+```
+Well, `git stash` alone will only stash tracked files, the files git ever seen before. If you want to stash it, we need to add `-u` for newly created files, or `-a` for ignored files. Btw, we can use `-m` to modify the message, so we can know which stash we are looking for.
+
+```sh
+> git stash -a -m thisIsCardboard
+Saved working directory and index state On main: thisIsCardboard
+> git stash list
+stash@{0}: On main: thisIsCardboard
+stash@{1}: WIP on main: 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
+```
 
 ## Reset, Revert, Restore
+
 
 ### Reset
 #### git reset to the ghostUniverse
@@ -326,11 +413,58 @@ Now our main branch points to our the ghost commit. We can visualize it by runni
 
 ### Rebase
 
-## HEAD
+## Appendix
+### Lies that I made
+
+#### Git is a DAG, not a family tree. 
+A family tree is inaccurate because: Commits can have one, two, more than two parents, and you can merge any two commit together, even two commits in the same history.
+
+A DAG means:
+- Directed: It has one direction, child cannot point at parents.
+- Acyclic: There is no loops.
+- Graph: Like a tree, but allows more interconnections like merging multiple commits together.
+####  I did not mention the remote part.
+I decided not to include the concepts of **remote**, **push**, and **pull** here because I want to focus on the internal mechanism of Git rather than on how to use it as a tool. However, these features are still an important part of Git, and learning how to collaborate with other developers is also essential.
+
+For example, writing structured and clean commit messages is an important practice when using Git. You may want to check out [[https://www.conventionalcommits.org/zh-hant/v1.0.0/](https://www.conventionalcommits.org/zh-hant/v1.0.0/)] if you would like to learn more.
+
+### How to read a object
+We can use a python library `zlib` to read the content of this commit object. Here is a demo of reading the commit `#9fe006`. Our file is `e006ac0e277b191de7ec70f789ce60f8217bdd` inside the `9f` folder.
+
+```sh
+[truncated]\.git\objects\9f>python3 # we run python in REPL for demo
+>>> import zlib
+>>> file = 'e006ac0e277b191de7ec70f789ce60f8217bdd'
+>>> file_content = open(file, 'rb').read()
+>>> file_content_decompressed = zlib.decompress(file_content)
+>>> file_content_decompressed
+b"commit 328\x00tree 1adbed20c8b4756ceba562ecafe22677d1fcdf44\nparent 770994fdbb67ece2f7aac1f3461b9f780652d30e\nparent 8959e7f103ab1aa5efda740ba15b70200e5fb1d2\nauthor don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700\ncommitter don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700\n\nMerge branch 'fairytaleUniverse' into inAnotherUniverse\n"
+
+>>> len(file_content_decompressed)
+339
+```
+
+It is the same as what we get from `git cat-file`,except the type is missing.
+we can use `git cat-file -t 9fe006a` to check the filetype of a object too.
+```sh
+commit #filetype
+328 # 328 Bytes folloing the header
+\x00 # a null byte, separate the header and content
+tree 1adbed20c8b4756ceba562ecafe22677d1fcdf44\n
+parent 770994fdbb67ece2f7aac1f3461b9f780652d30e\n
+parent 8959e7f103ab1aa5efda740ba15b70200e5fb1d2\n
+author don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700\n
+committer don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700\n
+\n
+Merge branch 'fairytaleUniverse' into inAnotherUniverse\n
+```
+
+### HEAD pointer
 What do `git reset HEAD~1` do?
+
 Some say `git reset HEAD~1` is the "undo" button for your latest commit. But what is the latest commit? If I am working on my branch and someone commits, will I reset their commit?
 
-A more precise answer is  `git reset HEAD~1`: move my current branch pointer to `HEAD~1`. And since HEAD points to where we are, we roll back by 1 commit. If we are on the main branch, `HEAD~1` points to `770994`. And if we are on `fairytaleUniverse`, HEAD~1 points to `572f7b`
+A more precise answer is: it move my current branch pointer to `HEAD~1`. And since HEAD points to where we are, we roll back by 1 commit. If we are on the main branch, `HEAD~1` points to `770994`. And if we are on `fairytaleUniverse`, HEAD~1 points to `572f7b`
 
 ```sh
 > git checkout main
@@ -365,48 +499,8 @@ HEAD~1 selects the first parent, which the branch you were on when the merge was
 8959e7f103ab1aa5efda740ba15b70200e5fb1d2
 ```
 
-
-## Appendix
-### Lies that I made
-
-##### Git is a DAG, not a family tree. 
-A family tree is inaccurate because: Commits can have one, two, more than two parents, and you can merge any two commit together, even two commits in the same history.
-
-A DAG means:
-- Directed: It has one direction, child cannot point at parents.
-- Acyclic: There is no loops.
-- Graph: Like a tree, but allows more interconnections like merging multiple commits together.
-### How to read a blob
-We can use a python library `zlib` to read the content of a blob. Here is a demo of reading the commit `#9fe006`. Our file is `e006ac0e277b191de7ec70f789ce60f8217bdd` inside the `9f` folder.
-
-```sh
-[truncated]\.git\objects\9f>python3 # we run python in REPL for demo
->>> import zlib
->>> file = 'e006ac0e277b191de7ec70f789ce60f8217bdd'
->>> file_content = open(file, 'rb').read()
->>> file_content_decompressed = zlib.decompress(file_content)
->>> file_content_decompressed
-b"commit 328\x00tree 1adbed20c8b4756ceba562ecafe22677d1fcdf44\nparent 770994fdbb67ece2f7aac1f3461b9f780652d30e\nparent 8959e7f103ab1aa5efda740ba15b70200e5fb1d2\nauthor don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700\ncommitter don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700\n\nMerge branch 'fairytaleUniverse' into inAnotherUniverse\n"
-
->>> len(file_content_decompressed)
-339
-```
-
-It is the same as what we get from `git cat-file`,except the type is missing.
-we can use `git cat-file -t 9fe006a` to check the filetype of a blob too.
-```sh
-commit #filetype
-328 # 328 Bytes folloing the header
-\x00 # a null byte, separate the header and content
-tree 1adbed20c8b4756ceba562ecafe22677d1fcdf44\n
-parent 770994fdbb67ece2f7aac1f3461b9f780652d30e\n
-parent 8959e7f103ab1aa5efda740ba15b70200e5fb1d2\n
-author don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700\n
-committer don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700\n
-\n
-Merge branch 'fairytaleUniverse' into inAnotherUniverse\n
-```
-
 ## Reference:
-- [Git Will Finally Make Sense After This - LearnThatStack](https://youtu.be/Ala6PHlYjmw?si=tKV1dADXO55Y2jJq)
+- [Git Will Finally Make Sense After This - LearnThatStack ](https://youtu.be/Ala6PHlYjmw?si=tKV1dADXO55Y2jJq)
 - [Reading git objects - Curious git](https://matthew-brett.github.io/curious-git/reading_git_objects.html)
+- https://stackoverflow.com/questions/4084921/what-does-the-git-index-contain-exactly
+- https://stackoverflow.com/a/66309040
