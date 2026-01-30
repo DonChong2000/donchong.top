@@ -16,9 +16,16 @@ export function TableOfContents() {
   const tableOfContents = useSectionStore((s) => s.sections);
   let isInsideMobileNavigation = useIsInsideMobileNavigation();
   let [sections, visibleSections] = useInitialValue(
-    [useSectionStore((s) => s.sections), useSectionStore((s) => s.visibleSections)],
+    [
+      useSectionStore((s) => s.sections),
+      useSectionStore((s) => s.visibleSections),
+    ],
     isInsideMobileNavigation,
   );
+
+  if (sections.length === 0) {
+    return null;
+  }
 
   const tocItems = [{ id: '_top', title: 'Overview', level: 2 }, ...sections];
 
@@ -33,14 +40,16 @@ export function TableOfContents() {
   let top = firstVisibleSectionIndex * itemHeight;
 
   return (
-    <div className="hidden xl:block xl:w-64 xl:flex-none xl:sticky xl:top-0 xl:h-screen xl:overflow-y-auto xl:py-16 "> {/* xl:border-l xl:border-zinc-900/10 xl:dark:border-white/10 */}
+    <div className="hidden xl:sticky xl:top-0 xl:block xl:h-screen xl:w-64 xl:flex-none xl:overflow-y-auto xl:py-16">
+      {' '}
+      {/* xl:border-l xl:border-zinc-900/10 xl:dark:border-white/10 */}
       <nav aria-labelledby="on-this-page-title" className="relative pl-5">
         <div className="absolute top-0 left-2 h-full w-[2px] bg-zinc-200 dark:bg-zinc-800" />
         <AnimatePresence initial={!isInsideMobileNavigation}>
           {tocItems.length > 1 && (
             <motion.div
               layout
-              className="absolute left-2 top-0 w-0.5 rounded-full bg-charcoal-500 dark:bg-timberwolf-200"
+              className="absolute top-0 left-2 w-0.5 rounded-full bg-charcoal-500 dark:bg-timberwolf-200"
               initial={{ opacity: 0 }}
               animate={{
                 opacity: 1,
@@ -69,15 +78,17 @@ export function TableOfContents() {
                     <a
                       href={section.id === '_top' ? '#' : `#${section.id}`}
                       className={clsx(
-                        "block text-sm transition",
-                        section.level === 3 ? "pl-4" : "pl-0",
+                        'block text-sm transition',
+                        section.level === 3 ? 'pl-4' : 'pl-0',
                         section.id === visibleSections[0] ||
                           (section.level === 2 &&
                             sections.some(
-                              (s) => s.parentId === section.id && s.id === visibleSections[0],
+                              (s) =>
+                                s.parentId === section.id &&
+                                s.id === visibleSections[0],
                             ))
-                          ? "text-charcoal-500 font-bold dark:text-timberwolf-200 transition-all duration-300 ease-in-out"
-                          : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-all  duration-150 ease-in-out",
+                          ? 'font-bold text-charcoal-500 transition-all duration-300 ease-in-out dark:text-timberwolf-200'
+                          : 'text-zinc-600 transition-all duration-150 ease-in-out hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white',
                       )}
                     >
                       {section.title}

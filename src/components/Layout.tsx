@@ -8,17 +8,21 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Logo } from '@/components/Logo';
 import { Navigation } from '@/components/Navigation';
-import { type Section, SectionProvider } from '@/components/SectionProvider';
+import {
+  type Section,
+  SectionProvider,
+} from '@/components/SectionProvider';
 import { TableOfContents } from '@/components/TableOfContents';
 
 export function Layout({
   children,
   allSections,
 }: {
-  children: React.ReactNode
-  allSections: Record<string, Array<Section>>
+  children: React.ReactNode;
+  allSections: Record<string, Array<Section>>;
 }) {
   let pathname = usePathname();
+  const hasSections = (allSections[pathname]?.length ?? 0) > 0;
 
   return (
     <SectionProvider sections={allSections[pathname] ?? []}>
@@ -39,7 +43,11 @@ export function Layout({
         </motion.header>
 
         <div className="relative flex h-full justify-center px-4 sm:px-6 lg:px-8">
-          <div className="flex w-full flex-col pt-14 lg:max-w-2xl 2xl:max-w-3xl xl:pr-10">
+          <div
+            className={`flex w-full flex-col pt-14 ${
+              hasSections ? 'xl:max-w-2xl' : 'xl:max-w-3xl'
+            } xl:pr-10 2xl:max-w-3xl`}
+          >
             <main className="flex-auto">{children}</main>
             <Footer />
           </div>
@@ -47,8 +55,6 @@ export function Layout({
             <TableOfContents />
           </div>
         </div>
-
-
       </div>
     </SectionProvider>
   );
