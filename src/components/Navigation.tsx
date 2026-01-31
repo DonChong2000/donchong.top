@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { AnimatePresence, motion} from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import { Button } from '@/components/Button';
 import { useIsInsideMobileNavigation } from '@/components/MobileNavigation';
@@ -15,20 +15,22 @@ import { ChevronDownIcon } from './icons/ChevronDownIcon';
 import { ChevronRightIcon } from './icons/ChevronRightIcon';
 
 interface NavGroup {
-  title: string,
+  title: string;
   links: {
-    title: string,
-    href: string,
+    title: string;
+    href: string;
     children?: {
-      title: string,
-      href: string,
-      id: string,
-    }[],
-  }[]
+      title: string;
+      href: string;
+      id: string;
+    }[];
+  }[];
 }
 
-
-function usePersistentState<T>(key: string, defaultValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
+function usePersistentState<T>(
+  key: string,
+  defaultValue: T,
+): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [state, setState] = useState<T>(defaultValue);
   const hasMounted = useRef(false);
 
@@ -69,8 +71,8 @@ function TopLevelNavItem({
   href,
   children,
 }: {
-  href: string
-  children: React.ReactNode
+  href: string;
+  children: React.ReactNode;
 }) {
   return (
     <li className="md:hidden">
@@ -91,11 +93,11 @@ function NavLink({
   active = false,
   isAnchorLink = false,
 }: {
-  href: string
-  children: React.ReactNode
-  tag?: string
-  active?: boolean
-  isAnchorLink?: boolean
+  href: string;
+  children: React.ReactNode;
+  tag?: string;
+  active?: boolean;
+  isAnchorLink?: boolean;
 }) {
   return (
     <Link
@@ -124,9 +126,9 @@ function VisibleSectionHighlight({
   pathname,
   openDropdowns,
 }: {
-  group: NavGroup
-  pathname: string
-  openDropdowns: { [key: string]: boolean }
+  group: NavGroup;
+  pathname: string;
+  openDropdowns: { [key: string]: boolean };
 }) {
   const itemHeight = remToPx(2);
   let calculatedTop = -1; // Sentinel value
@@ -187,9 +189,9 @@ function ActivePageMarker({
   pathname,
   openDropdowns,
 }: {
-  group: NavGroup
-  pathname: string
-  openDropdowns: { [key: string]: boolean }
+  group: NavGroup;
+  pathname: string;
+  openDropdowns: { [key: string]: boolean };
 }) {
   const itemHeight = remToPx(2);
   const offset = remToPx(0.25);
@@ -252,9 +254,9 @@ function ParentLink({
   isOpen,
   setIsOpen,
 }: {
-  link: NavGroup['links'][number]
-  isOpen: boolean
-  setIsOpen: (isOpen: boolean) => void
+  link: NavGroup['links'][number];
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 }) {
   const pathname = usePathname();
 
@@ -262,7 +264,7 @@ function ParentLink({
     <motion.li layout="position" className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between gap-2 py-1 pr-3 text-sm transition pl-4 text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+        className="flex w-full items-center justify-between gap-2 py-1 pr-3 pl-4 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
       >
         <span className="truncate">{link.title}</span>
         {isOpen ? (
@@ -307,8 +309,8 @@ function NavigationGroup({
   group,
   className,
 }: {
-  group: NavGroup
-  className?: string
+  group: NavGroup;
+  className?: string;
 }) {
   // If this is the mobile navigation then we always render the initial
   // state, so that the state does not change during the close animation.
@@ -328,7 +330,7 @@ function NavigationGroup({
     ) !== -1;
 
   const [openDropdowns, setOpenDropdowns] = usePersistentState<{
-    [key: string]: boolean
+    [key: string]: boolean;
   }>(`nav-group-dropdown-state-${group.title}`, {});
 
   const handleDropdownToggle = (title: string) => {
@@ -402,17 +404,32 @@ export const navigation: Array<NavGroup> = [
       { title: 'Overview', href: '/projects-overview' },
       // { title: 'Chat-CV', href: '/chat-cv' },
       { title: 'DonChong.Top', href: '/this-site' },
-      { title: 'Drowning Detection & Rescue System', href: '/projects/drowning-detection-rescue-system'},
+      {
+        title: 'Drowning Detection & Rescue System',
+        href: '/projects/drowning-detection-rescue-system',
+      },
       { title: 'Bill-AI', href: '/projects/bill-ai' },
-      { title: 'And more...', href: '/projects/timelapse-machine',
+      {
+        title: 'And more...',
+        href: '/projects/timelapse-machine',
         children: [
-          { title: 'Timelapse Machine', href: '/projects/timelapse-machine', id: 'Timelapse Machine' },
-          { title: 'status.donchong.top', href: '/projects/site-status', id: 'status.donchong.top' },
-          { title: 'Recipe Generator', href: '/projects/recipe-generator', id: 'Recipe Generator' },
+          {
+            title: 'Timelapse Machine',
+            href: '/projects/timelapse-machine',
+            id: 'Timelapse Machine',
+          },
+          {
+            title: 'status.donchong.top',
+            href: '/projects/site-status',
+            id: 'status.donchong.top',
+          },
+          {
+            title: 'Recipe Generator',
+            href: '/projects/recipe-generator',
+            id: 'Recipe Generator',
+          },
         ],
       },
-
-
     ],
   },
   {
@@ -420,7 +437,10 @@ export const navigation: Array<NavGroup> = [
     links: [
       { title: 'The LeetCode Grind', href: '/notes/the-leetcode-grind' },
       { title: 'What is Git Really?', href: '/notes/what-is-git-really' },
-      { title: 'Comparing ASR Solutions', href: '/notes/comparing-asr-solutions' },
+      {
+        title: 'Comparing ASR Solutions',
+        href: '/notes/comparing-asr-solutions',
+      },
     ],
   },
   {
@@ -428,7 +448,7 @@ export const navigation: Array<NavGroup> = [
     links: [
       { title: 'GTNH', href: '/gtnh' },
       { title: 'Factorio', href: '/factorio' },
-      // { title: 'Cookbook', href: '/cookbook',
+      { title: "Don's Cookbook", href: '/dons-cookbook' },
       //   children: [
       //     { title: 'Recipe1', href: '/cookbook/1', id: 'Recipe1' },
 
@@ -441,7 +461,7 @@ export const navigation: Array<NavGroup> = [
       //   ],
       // },
     ],
-  }
+  },
 ];
 
 export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {

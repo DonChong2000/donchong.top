@@ -1,0 +1,95 @@
+import Image, { type StaticImageData } from 'next/image';
+import type { SVGProps } from 'react';
+
+type GridItem = {
+  src: StaticImageData | string;
+  alt?: string;
+  title: string;
+  href?: string;
+};
+
+type GalleryGridProps = {
+  items: GridItem[];
+  title?: string;
+  description?: string;
+};
+
+function ExternalLinkIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      width={16}
+      height={16}
+      viewBox="0 0 13 13"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      {...props}
+    >
+      <path
+        d="M8.125 1.625H11.375V4.875"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5.41602 7.58333L11.3743 1.625"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9.75 7.04167V10.2917C9.75 10.579 9.63586 10.8545 9.4327 11.0577C9.22953 11.2609 8.95398 11.375 8.66667 11.375H2.70833C2.42102 11.375 2.14547 11.2609 1.9423 11.0577C1.73914 10.8545 1.625 10.579 1.625 10.2917V4.33333C1.625 4.04602 1.73914 3.77047 1.9423 3.5673C2.14547 3.36414 2.42102 3.25 2.70833 3.25H5.95833"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+const defaultDescription =
+  "I've been cooking for myself for a few years now, and I've discovered some fantastic recipes that I really want to share. Most of these are gems I found online that have earned a 'thumbs up' from my roommates.";
+const defaultTitle = "Don's Recipe";
+
+export default function GalleryGrid({
+  items,
+  title = defaultTitle,
+  description = defaultDescription,
+}: GalleryGridProps) {
+  return (
+    <>
+      <h1 className="mx-auto text-center text-3xl font-semibold">{title}</h1>
+      <p className="mx-auto mt-2 max-w-lg text-center text-sm text-slate-500">
+        {description}
+      </p>
+
+      <div className="mx-auto mt-12 flex max-w-5xl flex-wrap items-center justify-center gap-4">
+        {items.map((item, idx) => (
+          <div
+            key={`${item.src}-${idx}`}
+            className="group relative overflow-hidden rounded-lg"
+          >
+            <Image
+              src={item.src}
+              alt={item.alt ?? 'image'}
+              className="not-prose size-56 object-cover object-top"
+              width={224}
+              height={224}
+              sizes="(max-width: 768px) 100vw, 224px"
+            />
+            <div className="absolute inset-0 flex flex-col justify-end bg-charcoal/25 p-4 text-white opacity-0 transition-all duration-300 group-hover:opacity-100 dark:bg-white/15">
+              <h1 className="text-xl font-medium text-timberwolf-300 text-shadow-lg">
+                {item.title}
+              </h1>
+              <a
+                className="not-prose"
+                href={item.href ?? '#'}
+                className="flex items-center gap-1 text-sm text-white/70"
+              ></a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
