@@ -3,8 +3,8 @@ import { getImageMap } from '@/lib/imgMap';
 export const img = getImageMap(import.meta.url);
 
 export const metadata = {
-  title: 'The LeetCode Grind',
-  description: 'A technical retrospective on completing the Grind 75 curriculum in TypeScript, featuring performance tips for JavaScript data structures and summaries of core algorithmic patterns.',
+  title: 'What is Git Really?',
+  description: 'A deep dive into the internal mechanics of Git, exploring how it uses tree-based data structures, snapshots, and blob hashing to manage version control.',
 };
 
 # What is Git really?
@@ -267,7 +267,7 @@ Before we create a commit, Git keeps track of your changes in three places:
 
 Here, I will show you what actually happened when you stage a file. We will use `cuteCat.txt` as an example. 
 
-First, we create `cute Cat.text`, right now it is in the working directory. Then we run: `git add cuteCat.txt`. This stages `cuteCat.txt` and will be included in the next commit.
+First, we create `cute Cat.txt`, right now it is in the working directory. Then we run: `git add cuteCat.txt`. This stages `cuteCat.txt` and will be included in the next commit.
 
 ```sh
 > echo meow > cuteCat.txt
@@ -304,8 +304,7 @@ meow
 ```
 
 **The actual "Staging Area"**
-
-The "staging area" is actually just a file `.git/index` saved as a binary in a [specific way](https://stackoverflow.com/questions/4084921/what-does-the-git-index-contain-exactly). But if we open it up with a hex editor, we can still find our "cuteCat.txt" and its blob hash. The content is similar to ` git ls-files --stage`.
+The "staging area" is actually just a file `.git/index` saved as a binary in a [specific way](https://stackoverflow.com/questions/4084921/what-does-the-git-index-contain-exactly). But if we open it up with a hex editor, we can still find our "cuteCat.txt" and its blob hash. The content is similar to `git ls-files --stage`.
 
 ```sh
 > git ls-files --stage
@@ -326,38 +325,155 @@ HEAD is now at 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
 100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0       SecondEdit.txt
 100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0       fairy.txt
 ```
-![[Pasted image 20260128014757.png]]
+![[Pasted image 20260130215643.png]]
 
 ### Stash
-Stash is a place to temporarily hold your tracked files in working directory and staging files, in a stack (FILO) manner. Let's stash our cute cat as a demo.
+Stash is a place to temporarily hold your tracked files in working directory and staging files, in a stack (FILO) manner. Right now the cute cat is in staging area, let's create a `cardboard.txt` in working tree and stash them as a demo:
 
 ```sh
+> touch cardboard.xtx
 > git stash
 Saved working directory and index state WIP on main: 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
-> ls
-HelloGit.txt  SecondEdit.txt  fairy.txt
-> git status
-On branch main
-nothing to commit, working tree clean
 ```
-I created a new file `cardbox`, and stash it on top of our cute cat. Wait... It did not stash the file; `cardboard.txt` is still in our working directory. 
+Wait... It did not stash `cardboard.txt` , it is still in our working directory. 
 ```sh
-> touch cardboard.txt
-> git stash
-No local changes to save
 > ls
 HelloGit.txt  SecondEdit.txt  cardboard.txt  fairy.txt
 ```
-Well, `git stash` alone will only stash tracked files, the files git ever seen before. If you want to stash it, we need to add `-u` for newly created files, or `-a` for ignored files. Btw, we can use `-m` to modify the message, so we can know which stash we are looking for.
+Well, `git stash` alone will only stash tracked files, the files git ever seen before.  Let's pop that stash and try that again:
+```sh
+> git stash pop
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   cuteCat.txt
 
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        cardboard.txt
+```
+
+If you want to stash it, we need to add `-u` for newly created files, or `-a` for ignored files. Also, we can use `-m` to modify the message, so we can know which stash we are looking for.
 ```sh
 > git stash -a -m thisIsCardboard
 Saved working directory and index state On main: thisIsCardboard
 > git stash list
 stash@{0}: On main: thisIsCardboard
-stash@{1}: WIP on main: 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
 ```
 
+#### Inside stash
+Git stores our latest stash in `.git/refs/stash`, and the whole stash stack in `.git/logs/refse/stash`. I wonder how git stores our things inside... It is a Git commit object, we have seen `#9fe006`, but there are two parents we never head of.
+```sh
+> cat .git/refs/stash
+b517b6ea949220437e7363aff64e375ef51c4b7
+> git cat-file -t b517b6ea949220437e7363aff64e375ef51c4b7
+commit
+> git cat-file -p b517b6ea949220437e7363aff64e375ef51c4b7
+tree 9955efe051b5b8e9e0fc90f5e418625c64ccba5f
+parent 9fe006ac0e277b191de7ec70f789ce60f8217bdd
+parent 65d0d0cb1d36bb117549d3fe8c0f04f17c2d0e5e
+parent 885682e9fb86eb9c7da63920ae44d7e1c860239f
+author don@winUbuntu <donchong2000@gmail.com> 1769834356 -0700
+committer don@winUbuntu <donchong2000@gmail.com> 1769834356 -0700
+```
+
+Let's crack them open and see what inside:
+The first one has a message of "index on main", which is the staging area we just investigate before, and the other file is "untracked files", which is our working directory. And from looking into their tree object, they are indeed what we are looking for.
+```sh
+> git cat-file -p 65d0d0cb1d36bb117549d3fe8c0f04f17c2d0e5e
+tree 9955efe051b5b8e9e0fc90f5e418625c64ccba5f
+parent 9fe006ac0e277b191de7ec70f789ce60f8217bdd
+author don@winUbuntu <donchong2000@gmail.com> 1769834356 -0700
+committer don@winUbuntu <donchong2000@gmail.com> 1769834356 -0700
+
+index on main: 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
+
+> git cat-file -p 9955efe051b5b8e9e0fc90f5e418625c64ccba5f
+100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391    HelloGit.txt
+100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391    SecondEdit.txt
+100644 blob 375d5c3ce54c13190b2be179e7f3717ebdfd5adf    cuteCat.txt
+100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391    fairy.txt
+
+> git cat-file -p 885682e9fb86eb9c7da63920ae44d7e1c860239f
+tree bf81bb1e72f595d92b2c73a89f6a465052981560
+author don@winUbuntu <donchong2000@gmail.com> 1769834356 -0700
+committer don@winUbuntu <donchong2000@gmail.com> 1769834356 -0700
+
+untracked files on main: 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
+
+$ git cat-file -p bf81bb1e72f595d92b2c73a89f6a465052981560
+100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391    cardboard.txt
+```
+
+![[Pasted image 20260130220153.png]]
+
+#### Default stash behavior
+By default, git stash pop restores your working tree, but does not restore the changes were originally staged.  
+
+To demonstrate, I make sure everything is clean by making a `git reset`. Put V1 "meow" into staging and V2 "nyan" into the working tree. 
+
+```sh
+> git reset --hard HEAD
+HEAD is now at 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
+> ls
+HelloGit.txt  SecondEdit.txt  fairy.txt
+> echo meow > cuteCat.txt
+> git add cuteCat.txt
+> echo nyan > cuteCat.txt
+```
+After stashing and popping, the staged V1 is replaced with V2:
+```sh
+> git stash
+Saved working directory and index state WIP on main: 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
+> git stash pop
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   cuteCat.txt
+
+Dropped refs/stash@{0} (4cb6e8cc5cbeed3f951507854dab33f06cadc214)
+> git diff --staged
+diff --git a/cuteCat.txt b/cuteCat.txt
+new file mode 100644
+index 0000000..38805f6
+--- /dev/null
++++ b/cuteCat.txt
+@@ -0,0 +1 @@
++nyan
+```
+To make sure git restore you files as is, you can run `git stash pop --index`, and git will place them back in the original place. Btw, Git stores your working directory in the tree of the stash commit object, and the staged one in the parent(index)'s tree .
+```sh
+> git stash pop --index
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   cuteCat.txt
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   cuteCat.txt
+
+Dropped refs/stash@{0} (1f3f2d13e26fdd2fec6ff8e7f80164349229bb3d)
+> git diff
+diff --git a/cuteCat.txt b/cuteCat.txt
+index 375d5c3..38805f6 100644
+--- a/cuteCat.txt
++++ b/cuteCat.txt
+@@ -1 +1 @@
+-meow
++nyan
+```
+
+#### Summery
+Git stash puts your working files and staged files into a temporary commit. And you can stash multiple times to save multiple "ongoing progress".
+- `git stash`: stash your work, `-u` to include untracked files, `-m` to modify message.
+- Latest stash stored at `.git/refs/stash`, and the stash stack in `.git/logs/refse/stash`
+- A stash is a commit object and your data is stored in:
+	- tree: the working tree
+	- parent (staging index): staging area
+	- parent (untracked): files git never seen
+- `git stash pop` will drop your original staging changes, use `--index` to preserve it.
 ## Reset, Revert, Restore
 
 
