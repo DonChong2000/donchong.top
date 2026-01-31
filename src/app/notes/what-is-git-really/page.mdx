@@ -3,8 +3,8 @@ import { getImageMap } from '@/lib/imgMap';
 export const img = getImageMap(import.meta.url);
 
 export const metadata = {
-  title: 'What is Git Really?',
-  description: 'A deep dive into the internal mechanics of Git, exploring how it uses tree-based data structures, snapshots, and blob hashing to manage version control.',
+        title: 'What is Git Really?',
+        description: 'A deep dive into the internal mechanics of Git, exploring how it uses tree-based data structures, snapshots, and blob hashing to manage version control.',
 };
 
 # What is Git really?
@@ -470,8 +470,9 @@ Git stash puts your working files and staged files into a temporary commit. And 
 	- parent (staging index): staging area
 	- parent (untracked): files git never seen
 - `git stash pop` will drop your original staging changes, use `--index` to preserve it.
-## Reset, Revert, Restore
----
+## Re..Re..Re..Re..
+Reset, Revert, Restore, Rebase. Am I the only one get confused? Or Git deserves some git blame for naming? 
+
 ### Reset
 `git reset` sets our branch pointer to any specific commit, and allows us to wipe or bring files in our working tree and staged area. 
 
@@ -654,9 +655,62 @@ Now our main branch points to the ghost commit. We can visualize it by running g
 | --soft            | No                 | No                      | No              |
 | --mixed (default) | Yes                | No                      | No              |
 | --hard            | Yes                | Yes                     | No              |
+### Revert
+Revert won’t touch old commits. It adds a new commit that undoes a commit. If something was added, it gets removed; if something was removed, it comes back. Revert is best for: 
+1. Reverting old commits 
+2. Reverting for a reason, for record. 
+3. For safety, when you are not certain.
+#### Reverting a simple commit
+Here we try to revert the commit `#770994`, where we added the file `SecondEdit.txt`
+```sh
+> git revert 770994
+[main 2cfacff] Revert "This is second edit"
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 SecondEdit.txt
+ 
+> git show
+commit 2cfacffedfa3aca2fe7ce5e7fb1ef75b91df5be9 (HEAD -> main)
+Author: don@winUbuntu <donchong2000@gmail.com>
+Date:   Sat Jan 31 14:48:49 2026 -0700
 
+    Revert "This is second edit"
+
+    This reverts commit 770994fdbb67ece2f7aac1f3461b9f780652d30e.
+
+diff --git a/SecondEdit.txt b/SecondEdit.txt
+deleted file mode 100644
+index e69de29..0000000
+```
+![[Pasted image 20260131150833.png]]
+#### Reverting a merge
+Reverting a merge is a bit different, here we try revert `#9fe006`, and it failed.
+```sh
+> git reset --hard HEAD~1 # back to #9fe006 for clean demo
+> git revert head
+error: commit 9fe006ac0e277b191de7ec70f789ce60f8217bdd is a merge but no -m option was given.
+fatal: revert failed
+```
+We need to provide which branch we want to revert to, using the `-m` parameter followed by parent number. Here we choose our first parent (`770994`) as our main branch.
+```sh
+> git revert -m 1 head # revert to thr first parent.
+[main ae10c9e] Revert "Merge branch 'fairytaleUniverse' into inAnotherUniverse"
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 fairy.txt
+```
+![[Pasted image 20260131153436.png]]
+As a result, `fairy.txt` is removed. Later, if I try to merge that branch back in:
+```sh
+> git merge 8959e7
+Already up to date.
+```
+Git tells us we are already up to date! This happens because the merge history is preserved. The commit is already integrated into the main branch. We just undo the changes, not undoing the merge itself.
+
+### Restore
 ### Rebase
 to add tmr.
+
+### Summary
+
 
 ## Appendix
 ---
