@@ -82,9 +82,8 @@ export default function GalleryGrid({
                 {item.title}
               </h1>
               <a
-                className="not-prose"
+                className="not-prose flex items-center gap-1 text-sm text-white/70"
                 href={item.href ?? '#'}
-                className="flex items-center gap-1 text-sm text-white/70"
               ></a>
             </div>
           </div>

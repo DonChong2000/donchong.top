@@ -22,6 +22,7 @@ export function TableOfContents() {
     ],
     isInsideMobileNavigation,
   );
+  let isPresent = useIsPresent();
 
   if (sections.length === 0) {
     return null;
@@ -34,7 +35,7 @@ export function TableOfContents() {
     tocItems.findIndex((section) => section.id === visibleSections[0]),
   );
   let itemHeight = remToPx(2);
-  let height = useIsPresent()
+  let height = isPresent
     ? Math.max(1, visibleSections.length) * itemHeight
     : itemHeight;
   let top = firstVisibleSectionIndex * itemHeight;
