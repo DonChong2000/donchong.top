@@ -428,7 +428,6 @@ Saved working directory and index state WIP on main: 9fe006a Merge branch 'fairy
 > git stash pop
 On branch main
 Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
         new file:   cuteCat.txt
 
 Dropped refs/stash@{0} (4cb6e8cc5cbeed3f951507854dab33f06cadc214)
@@ -446,12 +445,9 @@ To make sure git restore you files as is, you can run `git stash pop --index`, a
 > git stash pop --index
 On branch main
 Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
         new file:   cuteCat.txt
 
 Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
         modified:   cuteCat.txt
 
 Dropped refs/stash@{0} (1f3f2d13e26fdd2fec6ff8e7f80164349229bb3d)
@@ -475,10 +471,130 @@ Git stash puts your working files and staged files into a temporary commit. And 
 	- parent (untracked): files git never seen
 - `git stash pop` will drop your original staging changes, use `--index` to preserve it.
 ## Reset, Revert, Restore
-
-
+---
 ### Reset
-#### git reset to the ghostUniverse
+`git reset` sets our branch pointer to any specific commit, and allows us to wipe or bring files in our working tree and staged area. 
+
+Git reset have three different options --soft, --mixed, and --hard, which allows us to keep unstages files or staged files in different way.
+
+Let's see it in action:
+
+#### Preparation
+Here I put `SecondEdit.txt` on staging, and fairy.txt on working tree.
+```sh
+> git reset --hard head # make sure everything is clean
+> echo "at staging" > SecondEdit.txt
+> git add SecondEdit.txt
+> echo "at working tree" > fairy.txt
+> git status
+On branch main
+Changes to be committed:
+        modified:   SecondEdit.txt
+
+Changes not staged for commit:
+        modified:   fairy.txt
+```
+I stash the current state. We restore this stash without deleting it using `git stash apply`
+```sh
+> git stash
+Saved working directory and index state WIP on main: 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
+> git stash apply --index # This stash will not removed.
+On branch main
+Changes to be committed:
+        modified:   SecondEdit.txt
+
+Changes not staged for commit:
+        modified:   fairy.txt
+```
+#### Reset to current base commit
+`--soft` will keep both staged and unstaged changes, only moving the branch pointer, in this case, it reset nothing.
+```sh
+> git reset --soft head
+> git status
+On branch main
+Changes to be committed:
+        modified:   SecondEdit.txt
+Changes not staged for commit:
+        modified:   fairy.txt
+```
+
+`--mixed` reset our staging area (index). Note both file are updated in working directory, so they are now both now not staged.
+```sh
+> git reset --mixed head
+Unstaged changes after reset:
+M       SecondEdit.txt
+M       fairy.txt
+> git status
+On branch main
+Changes not staged for commit:
+        modified:   SecondEdit.txt
+        modified:   fairy.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+Here I restore our initial state before trying `--hard` option.
+```sh
+> git reset --hard head
+> git stash apply --index
+```
+
+`--hard` will wipe both working directory and staging area. 
+```sh
+> git reset --hard head
+HEAD is now at 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
+chong@DONCHONG:/mnt/c/Users/chong/Desktop/public/git_test$ git status
+On branch main
+nothing to commit, working tree clean
+```
+
+#### Reset to previous commit
+Now we try to do the same and see if we can bring staging area and working directory to previous commit.
+
+Then we do `git reset --soft`. This keep both "staging area" and "working tree" unchanged. Since `fairy.txt` is in the staging area (index) we kept, it is now in the staging area as a new file.
+```sh
+# skiped the part I reset everything
+> git reset --soft HEAD~1
+
+# We are back to previous commit #770994
+> git show
+commit 770994fdbb67ece2f7aac1f3461b9f780652d30e (HEAD -> main)
+[truncated]...
+
+> git status
+On branch main
+Changes to be committed:
+        modified:   SecondEdit.txt
+        new file:   fairy.txt
+Changes not staged for commit:
+        modified:   fairy.txt
+> git show :fairy.txt # empty
+```
+
+Next is `--mixed`, which will wipe the staging area, only retaining the working directory.
+```sh
+# skiped the part I reset everything, including going back to 9fe006a
+> git reset HEAD~1 #mixed is the default option
+> git status
+On branch main
+Changes not staged for commit:
+        modified:   SecondEdit.txt
+Untracked files:
+        fairy.txt # Not in index, therefore untracked
+```
+
+And Finally `--hard`, and it wipes everything.
+```sh
+# skiped the part I reset everything, including going back to 9fe006a
+> git reset --hard head~1
+HEAD is now at 770994f This is second edit
+> git status
+On branch main
+nothing to commit, working tree clean
+```
+
+To read more on how `head~1` works, take a look at [[#More on HEAD pointer]].
+#### Reset to anywhere
 git reset simply changes the pointer of the current branch; we can change it to anywhere we want, not only where we have been.
 ```sh
 > git checkout 572f7b
@@ -491,6 +607,7 @@ git reset simply changes the pointer of the current branch; we can change it to 
 > git reset d74b3a
 ```
 
+![[Pasted image 20260131021134.png]]
 Now our main branch points to our the ghost commit. We can visualize it by running git log. I hope this further clarifies that branches are just a label, and we store all our work in the whole git family tree, not the "main branch".
 
 ```sh
@@ -527,23 +644,36 @@ Now our main branch points to our the ghost commit. We can visualize it by runni
       This is our first commit
 ```
 
+
+#### Summery
+1. `git reset` move our branch pointer. And keep/wipe staging and working directory accordingly.
+2. We can reset our branch to any commit we want, even branches we never reach before.
+
+| Mode              | Wipe Staging Area? | Wipe Working Diretory? | Wipe untracked? |
+| ----------------- | ------------------ | ---------------------- | --------------- |
+| --soft            | No                 | No                     | No              |
+| --mixed (default) | Yes                | No                     | No              |
+| --hard            | Yes                | Yes                    | No              |
+
 ### Rebase
+to add tmr.
 
 ## Appendix
+---
 ### Lies that I made
 
-#### Git is a DAG, not a family tree. 
-A family tree is inaccurate because: Commits can have one, two, more than two parents, and you can merge any two commit together, even two commits in the same history.
+1. **Git is a DAG, not a family tree.** 
 
-A DAG means:
-- Directed: It has one direction, child cannot point at parents.
-- Acyclic: There is no loops.
-- Graph: Like a tree, but allows more interconnections like merging multiple commits together.
-####  I did not mention the remote part.
-I decided not to include the concepts of **remote**, **push**, and **pull** here because I want to focus on the internal mechanism of Git rather than on how to use it as a tool. However, these features are still an important part of Git, and learning how to collaborate with other developers is also essential.
+	A family tree is inaccurate because: Commits can have one, two, more than two parents, and you can merge any two commit together, even two commits in the same history. A DAG means:
+	- Directed: It has one direction, child cannot point at parents.
+	- Acyclic: There is no loops.
+	- Graph: Like a tree, but allows more interconnections like merging multiple commits together.
+2. I did not mention the remote part.
 
-For example, writing structured and clean commit messages is an important practice when using Git. You may want to check out [[https://www.conventionalcommits.org/zh-hant/v1.0.0/](https://www.conventionalcommits.org/zh-hant/v1.0.0/)] if you would like to learn more.
-
+	I decided not to include the concepts of **remote**, **push**, and **pull** here because I want to focus on the internal mechanism of Git rather than on how to use it as a tool. However, these features are still an important part of Git, and learning how to collaborate with other developers is also essential.
+	
+	For example, writing structured and clean commit messages is an important practice when using Git. You may want to check out [[https://www.conventionalcommits.org/zh-hant/v1.0.0/](https://www.conventionalcommits.org/zh-hant/v1.0.0/)] if you would like to learn more.
+---
 ### How to read a object
 We can use a python library `zlib` to read the content of this commit object. Here is a demo of reading the commit `#9fe006`. Our file is `e006ac0e277b191de7ec70f789ce60f8217bdd` inside the `9f` folder.
 
@@ -575,12 +705,13 @@ committer don@winUbuntu <donchong2000@gmail.com> 1769319696 -0700\n
 Merge branch 'fairytaleUniverse' into inAnotherUniverse\n
 ```
 
-### HEAD pointer
+---
+### More on HEAD pointer
 What do `git reset HEAD~1` do?
 
 Some say `git reset HEAD~1` is the "undo" button for your latest commit. But what is the latest commit? If I am working on my branch and someone commits, will I reset their commit?
 
-A more precise answer is: it move my current branch pointer to `HEAD~1`. And since HEAD points to where we are, we roll back by 1 commit. If we are on the main branch, `HEAD~1` points to `770994`. And if we are on `fairytaleUniverse`, HEAD~1 points to `572f7b`
+A more precise answer would be: it move my current branch pointer to `HEAD~1`. And since HEAD points to where we are, we roll back by 1 commit. If we are on the main branch, `HEAD~1` points to `770994`. And if we are on `fairytaleUniverse`, HEAD~1 points to `572f7b`
 
 ```sh
 > git checkout main
@@ -614,6 +745,12 @@ HEAD~1 selects the first parent, which the branch you were on when the merge was
 > git rev-parse HEAD^2
 8959e7f103ab1aa5efda740ba15b70200e5fb1d2
 ```
+
+---
+### Useful new commands
+1. Switch and Restore
+2. rebase --interactive
+3. worktree
 
 ## Reference:
 - [Git Will Finally Make Sense After This - LearnThatStack ](https://youtu.be/Ala6PHlYjmw?si=tKV1dADXO55Y2jJq)
