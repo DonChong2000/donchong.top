@@ -41,7 +41,7 @@ It creates a bunch of files in `./git`, and this initializes a git repo.
         ├── heads
         └── tags
 
-10 directories, 18 file
+10 directories, 18 files
 ```
 
 The file HEAD is our pointer, and the content `ref:refs/heads/main` means we are at the main branch.
@@ -60,7 +60,7 @@ Let's work on our repo, and submit our first commit.
 ```
 
 Our commit hash is 572f7b4c2808484e8078e09acccc073b810502f0
-And our main branch pointer also contain this hash
+And our main branch pointer also contains this hash
 ```sh
 > cat .git/refs/heads/main
 572f7b4c2808484e8078e09acccc073b810502f0
@@ -85,7 +85,7 @@ We can go back in time by checking out our first commit, `#572f7b`. This loads a
 > git checkout 572f7
 > cat .git/HEAD
 572f7b4c2808484e8078e09acccc073b810502f0
->cat .git/refs/heads/main
+> cat .git/refs/heads/main
 770994fdbb67ece2f7aac1f3461b9f780652d30e
 ```
 ![[Pasted image 20260124043705.png]]
@@ -197,11 +197,11 @@ chong@DONCHONG:[truncated]/git_test$ git log --graph --reflog
       This is our first commit
 ```
 
-## How Git store our files?
+## How Git stores our files?
 Git is a magical tool, allowing us to revisit any point in time in a blink. This is possible because Git stores a snapshot of the entire project every time we create a commit. But wouldn't saving the whole project each time consume an enormous amount of space? Let’s explore how Git efficiently saves our files.
 
 ### Snapshots
-Let's open up our latest commit `#9fe006` and see what's inside. We can find this snapshot inside `.git/objects/9f`, file name `e006ac0e277b191de7ec70f789ce60f8217bdd`. The first two character is the folder name, and the rest is the file name.
+Let's open up our latest commit `#9fe006` and see what's inside. We can find this snapshot inside `.git/objects/9f`, file name `e006ac0e277b191de7ec70f789ce60f8217bdd`. The first two character are the folder name, and the rest is the file name.
 
 This is a binary file, and we can read the content of this file with the `git cat-file` command. 
 If you are really interested in reading this file as is, you may take a look at this section: [[#How to read a object]].
@@ -340,7 +340,7 @@ Wait... It did not stash `cardboard.txt` , it is still in our working directory.
 > ls
 HelloGit.txt  SecondEdit.txt  cardboard.txt  fairy.txt
 ```
-Well, `git stash` alone will only stash tracked files, the files git ever seen before.  Let's pop that stash and try that again:
+Well, `git stash` alone will only stash tracked files, the files already in index.  Let's pop that stash and try that again:
 ```sh
 > git stash pop
 On branch main
@@ -362,7 +362,7 @@ stash@{0}: On main: thisIsCardboard
 ```
 
 #### Inside stash
-Git stores our latest stash in `.git/refs/stash`, and the whole stash stack in `.git/logs/refse/stash`. I wonder how git stores our things inside... It is a Git commit object, we have seen `#9fe006`, but there are two parents we never head of.
+Git stores our latest stash in `.git/refs/stash`, and the whole stash stack in `.git/logs/refs/stash`. I wonder how git stores our things inside... It is a Git commit object, we have seen `#9fe006`, but there are two parents we never head of.
 ```sh
 > cat .git/refs/stash
 b517b6ea949220437e7363aff64e375ef51c4b7
@@ -461,7 +461,7 @@ index 375d5c3..38805f6 100644
 +nyan
 ```
 
-#### Summery
+#### Summary
 Git stash puts your working files and staged files into a temporary commit. And you can stash multiple times to save multiple "ongoing progress".
 - `git stash`: stash your work, `-u` to include untracked files, `-m` to modify message.
 - Latest stash stored at `.git/refs/stash`, and the stash stack in `.git/logs/refse/stash`
@@ -608,7 +608,7 @@ git reset simply changes the pointer of the current branch; we can change it to 
 ```
 
 ![[Pasted image 20260131021134.png]]
-Now our main branch points to our the ghost commit. We can visualize it by running git log. I hope this further clarifies that branches are just a label, and we store all our work in the whole git family tree, not the "main branch".
+Now our main branch points to the ghost commit. We can visualize it by running git log. I hope this further clarifies that branches are just a label, and we store all our work in the whole git family tree, not the "main branch".
 
 ```sh
 > git log --graph --reflog
@@ -645,15 +645,15 @@ Now our main branch points to our the ghost commit. We can visualize it by runni
 ```
 
 
-#### Summery
+#### Summary
 1. `git reset` move our branch pointer. And keep/wipe staging and working directory accordingly.
 2. We can reset our branch to any commit we want, even branches we never reach before.
 
-| Mode              | Wipe Staging Area? | Wipe Working Diretory? | Wipe untracked? |
-| ----------------- | ------------------ | ---------------------- | --------------- |
-| --soft            | No                 | No                     | No              |
-| --mixed (default) | Yes                | No                     | No              |
-| --hard            | Yes                | Yes                    | No              |
+| Mode              | Wipe Staging Area? | Wipe Working Directory? | Wipe untracked? |
+| ----------------- | ------------------ | ----------------------- | --------------- |
+| --soft            | No                 | No                      | No              |
+| --mixed (default) | Yes                | No                      | No              |
+| --hard            | Yes                | Yes                     | No              |
 
 ### Rebase
 to add tmr.
@@ -674,7 +674,7 @@ to add tmr.
 	
 	For example, writing structured and clean commit messages is an important practice when using Git. You may want to check out [[https://www.conventionalcommits.org/zh-hant/v1.0.0/](https://www.conventionalcommits.org/zh-hant/v1.0.0/)] if you would like to learn more.
 ---
-### How to read a object
+### How to read an object
 We can use a python library `zlib` to read the content of this commit object. Here is a demo of reading the commit `#9fe006`. Our file is `e006ac0e277b191de7ec70f789ce60f8217bdd` inside the `9f` folder.
 
 ```sh
@@ -690,11 +690,11 @@ b"commit 328\x00tree 1adbed20c8b4756ceba562ecafe22677d1fcdf44\nparent 770994fdbb
 339
 ```
 
-It is the same as what we get from `git cat-file`,except the type is missing.
+It is the same as what we get from `git cat-file`, except the type is missing.
 we can use `git cat-file -t 9fe006a` to check the filetype of a object too.
 ```sh
 commit #filetype
-328 # 328 Bytes folloing the header
+328 # 328 Bytes following the header
 \x00 # a null byte, separate the header and content
 tree 1adbed20c8b4756ceba562ecafe22677d1fcdf44\n
 parent 770994fdbb67ece2f7aac1f3461b9f780652d30e\n
