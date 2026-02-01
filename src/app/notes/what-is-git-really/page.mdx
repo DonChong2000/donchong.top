@@ -473,6 +473,8 @@ Git stash puts your working files and staged files into a temporary commit. And 
 ## Re..Re..Re..Re..
 Reset, Revert, Restore, Rebase. Am I the only one get confused? Or Git deserves some git blame for naming? 
 
+<div className='w-full lg:w-1/2'>![[Pasted image 20260131170629.png]]</div>
+
 ### Reset
 `git reset` sets our branch pointer to any specific commit, and allows us to wipe or bring files in our working tree and staged area. 
 
@@ -481,7 +483,7 @@ Git reset have three different options --soft, --mixed, and --hard, which allows
 Let's see it in action:
 
 #### Preparation
-Here I put `SecondEdit.txt` on staging, and fairy.txt on working tree.
+Here I put `SecondEdit.txt` on staging, and `fairy.txt` on working tree.
 ```sh
 > git reset --hard head # make sure everything is clean
 > echo "at staging" > SecondEdit.txt
@@ -706,12 +708,122 @@ Already up to date.
 Git tells us we are already up to date! This happens because the merge history is preserved. The commit is already integrated into the main branch. We just undo the changes, not undoing the merge itself.
 
 ### Restore
-### Rebase
-to add tmr.
+`git restore` is Git's "newer" way to bring a file from a specific commit. This is to replace the double-duty `git checkout` command, and handle the "restoring files" function. All `git restore` does is "copy a file from a specific commit, and paste it to the working tree or the staging area".
 
+#### Preparation
+Here I put `SecondEdit.txt` on staging, and `fairy.txt` on working tree, just like what we did in [[#Reset]].
+```sh
+> git reset --hard 9fe006
+HEAD is now at 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
+> git stash apply --index
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   SecondEdit.txt
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   fairy.txt
+```
+#### Restoring from current commit
+Well, honestly Git already state it clear. We unstaged using `--staged`, and plain restore to discard changes. But let's see it in action.
+
+Here we unstaged `SecondEdit.txt` from index. **This copy base commit's `SecondEdit.txt` into staging area.**
+
+```sh
+> git restore --staged SecondEdit.txt
+> git status
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   SecondEdit.txt
+        modified:   fairy.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+What about the file in current working directory, will it be replaced? The working directory remain the same. This shows we are not copying the staged file into working directory, we are copying the base commit's file into staging area only. The staged version will be lost.
+```sh
+# I reset everything again.
+> echo 'at working directory' > SecondEdit.txt
+> cat SecondEdit.txt
+at working directory
+# This is the content of "SecondEdit.txt" in working diretory
+> git show :SecondEdit.txt
+at staging
+# This is the content of "SecondEdit.txt" in staging area
+
+> cat SecondEdit.txt
+at working directory
+> git show :SecondEdit.txt
+# empty
+```
+
+The plain `restore` will restore files from the staging area. Now we put different content in `SecondEdit.txt` at different area, and see which version `git restore` will copy from.
+```sh
+> git reset --hard 9fe006
+> cat SecondEdit.txt
+# empty at base commit
+> git stash apply --index
+> echo 'at working directory' > SecondEdit.txt
+
+# Base commit -> ""
+# Staging Area -> "at staging"
+# Working Directory -> "at working directory"
+```
+
+`git restore <file>` will copy files from staging area and replace the working directory file.
+```sh
+> git restore SecondEdit.txt
+> cat SecondEdit.txt
+at staging
+```
+
+To restore everything to head, we can either run `--staged` and plain two times, or:
+```sh
+> git restore --staged --worktree SecondEdit.txt #worktree is the default option
+> cat SecondEdit.txt
+> #empty
+```
+
+#### Restoring from another commit
+Remember in [[#Snapshots]], we create `robot.txt`? I want to bring it to here. We can find our lost `robot.txt` using `--reflog`, it's commit has is `0d6579`
+
+```sh
+> git log --oneline --reflog
+ae10c9e Revert "Merge branch 'fairytaleUniverse' into inAnotherUniverse"
+2cfacff Revert "This is second edit"
+60fecf8 (refs/stash) WIP on main: 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
+31b73fe index on main: 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
+0d6579d adding robot # This is what we are looking for
+d74b3a4 ghost is created
+9fe006a (HEAD -> main, inAnotherUniverse) Merge branch 'fairytaleUniverse' into inAnotherUniverse
+8959e7f (fairytaleUniverse) Creating fairy
+770994f This is second edit
+572f7b4 This is our first commit
+
+```
+
+Now, we can use `git restore` to bring the robot back from a dangling commit.
+```sh
+> git reset --hard 9fe006
+> git restore --source=0d6579 robot.txt
+> cat robot.txt
+beepbeep
+```
 ### Summary
 
+#### `git reset` move a branch pointer.
+| Mode | Wipe Staging Area? | Wipe Working Directory? | Wipe untracked? |
+| ----------------- | ------------------ | ----------------------- | --------------- |
+| --soft | No | No | No |
+| --mixed (default) | Yes | No | No |
+| --hard | Yes | Yes | No |
 
+**`git revert`** do the opposite of a commit.
+- 
 ## Appendix
 ---
 ### Lies that I made
