@@ -822,8 +822,78 @@ beepbeep
 | --mixed (default) | Yes | No | No |
 | --hard | Yes | Yes | No |
 
-**`git revert`** do the opposite of a commit.
-- 
+#### `git revert` do the opposite of a commit.
+- You need to specify a parent using `-m` while reverting a merge.
+- You undo the changes, not the merge. The merge still exist, therefore you cannot merge it again, not the easy way.
+
+#### `git restore` copy files from a specific commit.
+- `--staged`: copy from base commit to staging area (index).
+- `--worktree(default)`: copy from staging area to working area.
+- `--staged --worktree`: do both, copy base commit to staging area and working area.
+- `--source=<hash>`: choose the source to restore from.
+
+## Rebase
+Rebase is another method to "merge" two branches. In [[#Merging]], we merged the main branch and the fairytale branch. Now let's merge the same two commits using rebase. 
+
+### Basic
+Here we rebase our fairytale `#8959e7` on the `#770994`. It creates a new commit `5b4c18` with the message "Creating fairy" (same as 8959e7). What Git does it, starting from `#770994`, re-do the commits of the fairytale branch (`8959e7`). Since 
+```sh
+> git switch main # git switch is just git checkout with another name
+Already on 'main'
+> git reset --hard head~1
+HEAD is now at 770994f This is second edit
+> git switch fairytaleUniverse
+Switched to branch 'fairytaleUniverse'
+> git rebase main
+Successfully rebased and updated refs/heads/fairytaleUniverse.
+> git log --oneline
+d047347 (HEAD -> fairytaleUniverse) Creating fairy
+770994f (main) This is second edit
+572f7b4 This is our first commit
+```
+![[Pasted image 20260201195946.png]]
+This the is the content of `#d04734`, the only difference to `8959e7` is the parent changed from `#572f7b...` to `#770994...`. Which is exactly what rebase does, transplanting commit onto another parent. And because the content of the commit changed (the parent), the hash also changed.
+```sh
+> git cat-file -p d04734
+tree 1adbed20c8b4756ceba562ecafe22677d1fcdf44
+parent 770994fdbb67ece2f7aac1f3461b9f780652d30e
+author don@winUbuntu <donchong2000@gmail.com> 1769318731 -0700
+committer don@winUbuntu <donchong2000@gmail.com> 1770000932 -0700
+
+Creating fairy
+```
+### patch-id
+But then I wonder, is there anything stopping us from rebasing `#8959e7` on main multiple times? I mean, there is no record of its original commit.
+
+Even though the commit hashes are different, the actual changes are identical. Git can detect this by comparing **patch ID*, a hash computed from the content of the changes. So even if the commit hashes and commit messages differ, Git can still recognize that the commits represent the same change.
+```sh
+> git rebase 8959e7
+warning: skipped previously applied commit d047347
+# Git knows we submitted before
+
+> git show 8959e7 | git patch-id
+c1c228d6e9cee776018113a09f771347d6d434b4 8959e7f103ab1aa5efda740ba15b70200e5fb1d2
+> git show d04734 | git patch-id
+c1c228d6e9cee776018113a09f771347d6d434b4 d047347c67574a7f5f830203bdc5da6a00cbaf29
+```
+
+After combining all changes, we shall point our main to the latest commit `#d04734`. We merge `fairytaleUniverse`into `main`, this will not create a merge commit, as it will only fast forward.
+```sh
+> git switch main
+Switched to branch 'main'
+> git merge fairytaleUniverse
+Updating 770994f..79afc96
+Fast-forward
+ fairy.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 fairy.txt
+```
+
+### btw (most importantly)
+> **Do not rebase commits that exist outside your repository and that people may have based work on.**
+> If you follow that guideline, you’ll be fine. If you don’t, people will hate you, and you’ll be scorned by friends and family.
+> -- From the official Git tutorial
+
 ## Appendix
 ---
 ### Lies that I made
@@ -923,3 +993,4 @@ HEAD~1 selects the first parent, which the branch you were on when the merge was
 - [Reading git objects - Curious git](https://matthew-brett.github.io/curious-git/reading_git_objects.html)
 - https://stackoverflow.com/questions/4084921/what-does-the-git-index-contain-exactly
 - https://stackoverflow.com/a/66309040
+- https://git-scm.com/book/en/v2/Git-Branching-Rebasing
