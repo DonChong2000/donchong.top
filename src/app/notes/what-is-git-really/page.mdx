@@ -8,7 +8,7 @@ export const metadata = {
 };
 
 # What is Git really?
-I have been using git for many years. But honestly, I have no idea how it works, let alone what it actually is. And I stumbled across an extremely good Git explanation video that makes me want to tear Git apart and understand what every command does, not just casting Git magic spells. I am not only going to write about Git commands, but also about how those commands work. So having some basic knowledge will help a lot in reading this blog.
+I have been using Git for many years. But honestly, I have no idea how it works, let alone what it actually is. And I stumbled across an extremely good Git explanation video that makes me want to tear Git apart and understand what every command does, not just casting Git magic spells. I am not only going to write about Git commands, but also about how those commands work. So having some basic knowledge will help a lot in reading this blog.
 
 ## Data Structure of Git
 - Git is a tree, a one-way family tree. [¹](#Lies that I made)
@@ -121,7 +121,7 @@ Although we have created a branch, `HEAD` is still at commit `#572f7b4` rather t
   main
 ```
 
-We can find all these branch pointers in git_test\.git\refs\heads, and all they store is just a commit hash.
+We can find all these branch pointers in `.git/refs/heads`, and all they store is just a commit hash.
 
 ```sh
 > ls .git/refs/heads/
@@ -147,14 +147,12 @@ Now I create a commit on fairytaleUniverse, and at this moment, the tree branche
 Let's finish our first section by merging `fairytaleUniverse` into `inAnotherUniverse`, and see what will happen. This will create a new commit `9fe006`, and `inAnotherUniverse` now points at it.
 ```sh
 > git checkout inAnotherUniverse
-> git pull # Always make sure you are on the latest version.
 > git merge fairytaleUniverse
 ```
 ![[Pasted image 20260128014502.png]]
 ***
 Now we are ahead of main. What if we merge `inAnotherUniverse` and `main`, will it create a new commit? It fast-forwards and does not create a new commit. It changes the main pointer from `#770994` to `#9fe006`
 ```sh
-> git pull
 > git merge main # Good practice: merge main into the sub-branch and resolve conflicts here.
 Already up to date.
 > git checkout main
@@ -167,7 +165,7 @@ Fast-forward
 ```
 ![[Pasted image 20260128014437.png]]
 *** 
-Finally, let me introduce a very useful command `git log --graph --reflog`. This will show logs in git visually. And we can use it to verify if the graphs I drew above are correct.
+Finally, let me introduce a very useful command `git log --graph --reflog`. This will show logs in Git visually. And we can use it to verify if the graphs I drew above are correct.
 ```sh
 > git log --graph --reflog
 *   commit 9fe006ac0e277b191de7ec70f789ce60f8217bdd (HEAD -> main, inAnotherUniverse)
@@ -701,7 +699,7 @@ As a result, `fairy.txt` is removed. Later, if I try to merge that branch back i
 > git merge 8959e7
 Already up to date.
 ```
-Git tells us we are already up to date because the merge history is preserved. The commit is already integrated into the main branch. We just undo the changes, not undoing the merge itself.
+Git tells us we are already up to date because the merge history is preserved. Reverting a merge commit will invert the changes, not the merge itself, which is why Git thinks the branch is already merged if you try to merge it again later.
 ### Restore
 `git restore` is Git's "newer" way to bring a file from a specific commit (default HEAD). This is to replace the double-duty `git checkout` command, and handle the "restoring files" function. All `git restore` does is "copy a file from a specific commit, and paste it to the working tree or the staging area".
 #### Preparation
@@ -911,7 +909,7 @@ Fast-forward
 	Again, I want to focus on the internal git mechanism, not how to use git. It will make this already lengthy article even more unreadable. Maybe I will add another post for them in the future.
 ---
 ### How to read an object
-We can use a Python library `zlib` to read it's content of this commit object. Here is a demo of reading the commit `#9fe006`. Our file is `e006ac0e277b191de7ec70f789ce60f8217bdd` inside the `9f` folder.
+We can use a Python library `zlib` to read its content of this commit object. Here is a demo of reading the commit `#9fe006`. Our file is `e006ac0e277b191de7ec70f789ce60f8217bdd` inside the `9f` folder.
 
 ```sh
 [truncated]\.git\objects\9f>python3 # we run python in REPL for demo
@@ -965,7 +963,6 @@ A more precise answer would be: it moves my current branch pointer to `HEAD~1`. 
 572f7b4c2808484e8078e09acccc073b810502f0
 
 ```
-
 ![[Pasted image 20260125192357.png]]
 What if we got two parents?
 HEAD~1 selects the first parent, which is the branch you were on when the merge was run. We can move between parents using `HEAD^n`.
@@ -981,14 +978,12 @@ HEAD~1 selects the first parent, which is the branch you were on when the merge 
 > git rev-parse HEAD^2
 8959e7f103ab1aa5efda740ba15b70200e5fb1d2
 ```
----
-### Useful new commands
-1. Switch and Restore
-2. rebase --interactive
-3. worktree
+### Flowchart File
+This is the flowchart I made on draw.io:
+[Download](https://filedn.com/lvpQyX5dxsK7TR0Vaa6Pr1k/Permanent/git_graph.drawio)
 ## Reference:
 - [Git Will Finally Make Sense After This - LearnThatStack ](https://youtu.be/Ala6PHlYjmw?si=tKV1dADXO55Y2jJq)
 - [Reading git objects - Curious git](https://matthew-brett.github.io/curious-git/reading_git_objects.html)
 - [Pro Git - 3.6 Git Branching - Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing)
 - [StackOverflow - what does the git index contain exactly](https://stackoverflow.com/questions/4084921/what-does-the-git-index-contain-exactly)
-- [StackOverflow - What is `git restore` and how is it different from `git reset`?](https://stackoverflow.com/questions/58003030/what-is-git-restore-and-how-is-it-different-from-git-reset)
+- [StackOverflow - What is git restore and how is it different from git reset?](https://stackoverflow.com/questions/58003030/what-is-git-restore-and-how-is-it-different-from-git-reset)
