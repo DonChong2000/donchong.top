@@ -8,10 +8,10 @@ export const metadata = {
 };
 
 # What is Git really?
-I have been using git for many years. But honestly, I have no idea how it works, let alone what it actually is. And I stumbled across an extremely good Git explanation video, that makes me want to tear Git apart and understand what every command does, not just casting Git magic. I am not only going to write about Git commands, but also about how those commands work. So having some basic knowledge will help a lot in reading this blog.
+I have been using git for many years. But honestly, I have no idea how it works, let alone what it actually is. And I stumbled across an extremely good Git explanation video that makes me want to tear Git apart and understand what every command does, not just casting Git magic spells. I am not only going to write about Git commands, but also about how those commands work. So having some basic knowledge will help a lot in reading this blog.
 
 ## Data Structure of Git
-- Git is a tree, a one-way family tree.
+- Git is a tree, a one-way family tree. [¹](#Lies that I made)
 - Commits are snapshots of the project.
 - Branches are pointers to a commit.
 - HEAD is the pointer we are looking at.
@@ -23,7 +23,7 @@ Let's `git init` and explain everything on the way.
 Initialized empty Git repository in C:/blabla/.git/
 ```
 
-It creates a bunch of files in `.git`, and this initializes a git repo. 
+It creates a bunch of files in `.git`, and this initializes a Git repo. 
 ```sh
 .
 └── .git
@@ -44,7 +44,7 @@ It creates a bunch of files in `.git`, and this initializes a git repo.
 10 directories, 18 files
 ```
 
-The file HEAD is our pointer, and the content `ref:refs/heads/main` means we are at the main branch.
+The HEAD file is our pointer, and the content `ref:refs/heads/main` means we are on the main branch.
 ```sh
 > cat .git/HEAD
 ref: refs/heads/main
@@ -59,8 +59,8 @@ Let's work on our repo, and submit our first commit.
 > ...
 ```
 
-Our commit hash is 572f7b4c2808484e8078e09acccc073b810502f0
-And our main branch pointer also contains this hash
+Our commit hash is 572f7b4c2808484e8078e09acccc073b810502f0.
+And our main branch pointer also contains this hash.
 ```sh
 > cat .git/refs/heads/main
 572f7b4c2808484e8078e09acccc073b810502f0
@@ -91,7 +91,7 @@ We can go back in time by checking out our first commit, `#572f7b`. This loads a
 ![[Pasted image 20260124043705.png]]
 ***
 ### Branching
-Let's try branching off from the main branch. Creating a new branch will create a pointer named "inAnotherUniverse", and nothing more than that, no snapshots, no copies, no new node.
+Let's try branching off from the main branch. Creating a new branch will create a pointer named "inAnotherUniverse", and nothing more than that, no snapshots, no copies, no new nodes.
 
 "inAnotherUniverse" stores #770994, which points to the latest commit, also the same as the main branch, where we are branching off from.
 ```sh
@@ -111,7 +111,7 @@ Actually, we can branch from any commit we want.
 572f7b4c2808484e8078e09acccc073b810502f0
 ```
 ![[Pasted image 20260124221946.png]]
-Although we have created a branch, the `HEAD` pointer is still at commit `#572f7b4` rather than `fairytaleUniverse`. We are currently in a **detached HEAD state**, meaning `HEAD` is not pointing to any branch. Any commits made from this state will be **unreachable** since there are no pointers to reference those commits. Git’s garbage collection will permanently delete them, usually after 30 days.
+Although we have created a branch, `HEAD` is still at commit `#572f7b4` rather than `fairytaleUniverse`. We are currently in a **detached HEAD state**, meaning `HEAD` is not pointing to any branch. Commits made from this state are not referenced by any branch, but they are still recoverable via `reflog` for a while. If you don’t create a branch or tag for them, they may eventually be pruned by garbage collection based on your reflog/GC settings (the exact timing is configurable and varies by setup).
 
 ```sh
 > git branch
@@ -144,16 +144,15 @@ Now I create a commit on fairytaleUniverse, and at this moment, the tree branche
 ![[Pasted image 20260124225944.png]]
 
 ### Merging
-Let's finish our first section by merging `in Another Universe` and `fairytale Universe`, and see what will happen. This will create a new commit `9fe006`, and it is the head of our main branch. 
+Let's finish our first section by merging `fairytaleUniverse` into `inAnotherUniverse`, and see what will happen. This will create a new commit `9fe006`, and `inAnotherUniverse` now points at it.
 ```sh
 > git checkout inAnotherUniverse
 > git pull # Always make sure you are on the latest version.
 > git merge fairytaleUniverse
 ```
 ![[Pasted image 20260128014502.png]]
-
 ***
-Now we are ahead of main. What if we merge `inAnotherUniverse` and `main`, will it create a new commit? It fast-forwards and does not create a new commit. It changes the main pointer from `#572f7b` to `#770994`
+Now we are ahead of main. What if we merge `inAnotherUniverse` and `main`, will it create a new commit? It fast-forwards and does not create a new commit. It changes the main pointer from `#770994` to `#9fe006`
 ```sh
 > git pull
 > git merge main # Good practice: merge main into the sub-branch and resolve conflicts here.
@@ -170,7 +169,7 @@ Fast-forward
 *** 
 Finally, let me introduce a very useful command `git log --graph --reflog`. This will show logs in git visually. And we can use it to verify if the graphs I drew above are correct.
 ```sh
-chong@DONCHONG:[truncated]/git_test$ git log --graph --reflog
+> git log --graph --reflog
 *   commit 9fe006ac0e277b191de7ec70f789ce60f8217bdd (HEAD -> main, inAnotherUniverse)
 |\  Merge: 770994f 8959e7f
 | | Author: don@winUbuntu <donchong2000@gmail.com>
@@ -203,7 +202,7 @@ Git is a magical tool, allowing us to revisit any point in time in a blink. This
 ### Snapshots
 Let's open up our latest commit `#9fe006` and see what's inside. We can find this snapshot inside `.git/objects/9f`, file name `e006ac0e277b191de7ec70f789ce60f8217bdd`. The first two characters are the folder name, and the rest is the file name.
 
-This is a binary file, and we can read the content of this file with the `git cat-file` command. 
+This is a binary file, and we can read its content with the `git cat-file` command. 
 If you are really interested in reading this file as-is, you may take a look at this section: [[#How to read an object]].
 
 ```sh
@@ -255,11 +254,8 @@ beepbeep
 ```
 
 Git stores files with the same content in the same blob. Which means all unmodified files use the previous blob and the same hash to be stored. And only the modified files will be saved as a new blob. 
-
-
-
 ### Staging Area
-Before we create a commit, Git keeps track of your changes in three places:
+Before we create a commit, Git save your work in three places:
 - Working Directory: The files in your project folder that you can see and edit.
 - Staging Area: The changes to include in the next commit.
 - Stash Area: This is a temporary place to save unfinished changes.
@@ -267,7 +263,7 @@ Before we create a commit, Git keeps track of your changes in three places:
 
 Here, I will show you what actually happened when you stage a file. We will use `cuteCat.txt` as an example. 
 
-First, we create `cute Cat.txt`, right now it is in the working directory. Then we run: `git add cuteCat.txt`. This stages `cuteCat.txt` and will be included in the next commit.
+First, we create `cuteCat.txt`, right now it is in the working directory. Then we run: `git add cuteCat.txt`. This stages `cuteCat.txt`, which will be included in the next commit.
 
 ```sh
 > echo meow > cuteCat.txt
@@ -280,7 +276,7 @@ Changes to be committed:
 ```
 
 But what exactly does "staging" a file mean? There are actually two things happening:
-1. Create a blob for changed files
+1. Create a blob for the changed file
 2. Update the staging area to include the hash of the changed file.
 
 **Creating blob for changed files**
@@ -304,7 +300,7 @@ meow
 ```
 
 **The actual "Staging Area"**
-The "staging area" is actually just a file `.git/index` saved as a binary in a [specific way](https://stackoverflow.com/questions/4084921/what-does-the-git-index-contain-exactly). But if we open it up with a hex editor, we can still find our "cuteCat.txt" and its blob hash. The content is similar to `git ls-files --stage`.
+The "staging area" is actually just a file `.git/index` saved as a binary in a [specific binary](https://stackoverflow.com/questions/4084921/what-does-the-git-index-contain-exactly). But if we open it up with a hex editor, we can still find our "cuteCat.txt" and its blob hash. The content is similar to `git ls-files --stage`.
 
 ```sh
 > git ls-files --stage
@@ -318,7 +314,7 @@ The "staging area" is actually just a file `.git/index` saved as a binary in a [
 Finally, let's verify our staging area is indeed a file that contains hashes of every file, like a tree object we see in a commit. We delete the index file and reset everything, and see what's in our staging area.
 ```sh
 > rm .git/index
-> git reset head --hard
+> git reset HEAD --hard
 HEAD is now at 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
 > git ls-files --stage
 100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0       HelloGit.txt
@@ -328,10 +324,10 @@ HEAD is now at 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
 ![[Pasted image 20260130215643.png]]
 
 ### Stash
-Stash is a place to temporarily hold your tracked files in working directory and staging files, in a stack (LIFO) manner. Right now the cute cat is in the staging area, let's create a `cardboard.txt` in working tree and stash them as a demo:
+Stash is a place to temporarily hold your tracked files in the working directory and staged files, in a stack (LIFO) manner. Right now the cute cat is in the staging area, let's create a `cardboard.txt` in working tree and stash them as a demo:
 
 ```sh
-> touch cardboard.xtx
+> touch cardboard.txt
 > git stash
 Saved working directory and index state WIP on main: 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
 ```
@@ -340,7 +336,7 @@ Wait... It did not stash `cardboard.txt` , it is still in our working directory.
 > ls
 HelloGit.txt  SecondEdit.txt  cardboard.txt  fairy.txt
 ```
-Well, `git stash` alone will only stash tracked files, the files already in index.  Let's pop that stash and try that again:
+Well, `git stash` alone will only stash tracked files, where `cardboard` is untracked.  Let's pop that stash and try that again:
 ```sh
 > git stash pop
 On branch main
@@ -353,7 +349,7 @@ Untracked files:
         cardboard.txt
 ```
 
-If you want to stash it, we need to add `-u` for newly created files, or `-a` for ignored files. Also, we can use `-m` to modify the message, so we can tell which stash we are looking for.
+If we want to stash it, we need to add `-u` for newly created files, or `-a` for ignored files. Also, we can use `-m` to modify the message, so we can tell which stash we are looking for.
 ```sh
 > git stash -a -m thisIsCardboard
 Saved working directory and index state On main: thisIsCardboard
@@ -362,7 +358,7 @@ stash@{0}: On main: thisIsCardboard
 ```
 
 #### Inside stash
-Git stores the latest stash in `.git/refs/stash`, and the whole stash stack in `.git/logs/refs/stash`. I wonder how git stores our things inside... It is a Git commit object, we have seen `#9fe006`, but there are two parents we never heard of.
+Git stores the latest stash in `.git/refs/stash`, and the whole stash stack in `.git/logs/refs/stash`. I wonder how git stores our things inside... It is a Git commit object. We have seen `#9fe006`, but there are two parents we never heard of.
 ```sh
 > cat .git/refs/stash
 b517b6ea949220437e7363aff64e375ef51c4b7
@@ -377,7 +373,7 @@ author don@winUbuntu <donchong2000@gmail.com> 1769834356 -0700
 committer don@winUbuntu <donchong2000@gmail.com> 1769834356 -0700
 ```
 
-Let's crack them open and see what's inside:
+Let's crack them open and see what's inside.
 The first one has a message of "index on main", which is the staging area we just investigated, and the other file is "untracked files", which is our working directory. And from looking into their tree object, they are indeed what we are looking for.
 ```sh
 > git cat-file -p 65d0d0cb1d36bb117549d3fe8c0f04f17c2d0e5e
@@ -401,14 +397,14 @@ committer don@winUbuntu <donchong2000@gmail.com> 1769834356 -0700
 
 untracked files on main: 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
 
-$ git cat-file -p bf81bb1e72f595d92b2c73a89f6a465052981560
+> git cat-file -p bf81bb1e72f595d92b2c73a89f6a465052981560
 100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391    cardboard.txt
 ```
 
 ![[Pasted image 20260130220153.png]]
 
 #### Default stash behavior
-By default, git stash pop restores your working tree, but does not restore the changes that were originally staged.  
+By default, `git stash pop` restores your working tree, but does not restore the changes that were originally staged.  
 
 To demonstrate, I make sure everything is clean by making a `git reset`. Put V1 "meow" into staging and V2 "nyan" into the working tree. 
 
@@ -440,7 +436,7 @@ index 0000000..38805f6
 @@ -0,0 +1 @@
 +nyan
 ```
-To make sure Git restores your files as-is, you can run `git stash pop --index`, and git will place them back in the original place. Btw, Git stores your working directory in the tree of the stash commit object, and the staged one in the parent (index) tree .
+To make sure Git restores your files as-is, you can run `git stash pop --index`, and git will place them back in the original place. Git stores your working directory in the tree of the stash commit object, and the staged one in the parent (index) tree.
 ```sh
 > git stash pop --index
 On branch main
@@ -471,21 +467,21 @@ Git stash puts your working files and staged files into a temporary commit. And 
 	- parent (untracked): files Git has never seen
 - `git stash pop` will drop your original staging changes, use `--index` to preserve it.
 ## Re..Re..Re..Re..
-Reset, Revert, Restore, Rebase. Am I the only one get confused? Or Git deserves some git blame for naming? 
+Reset, revert, restore, rebase. Am I the only one who gets confused? Or Git deserves some git blame for naming? 
 
 <div className='w-full lg:w-1/2'>![[Pasted image 20260131170629.png]]</div>
 
 ### Reset
 `git reset` sets our branch pointer to any specific commit, and allows us to wipe or bring files in our working tree and staged area. 
 
-Git reset have three different options --soft, --mixed, and --hard, which allows us to keep unstaged files or staged files in different ways.
+`git reset` has three different options --soft, --mixed, and --hard, which allows us to keep unstaged files or staged files in different ways.
 
 Let's see it in action:
 
 #### Preparation
 Here I put `SecondEdit.txt` on staging, and `fairy.txt` on working tree.
 ```sh
-> git reset --hard head # make sure everything is clean
+> git reset --hard HEAD # make sure everything is clean
 > echo "at staging" > SecondEdit.txt
 > git add SecondEdit.txt
 > echo "at working tree" > fairy.txt
@@ -512,7 +508,7 @@ Changes not staged for commit:
 #### Reset to current base commit
 `--soft` will keep both staged and unstaged changes, only moving the branch pointer, in this case, it resets nothing.
 ```sh
-> git reset --soft head
+> git reset --soft HEAD
 > git status
 On branch main
 Changes to be committed:
@@ -521,9 +517,9 @@ Changes not staged for commit:
         modified:   fairy.txt
 ```
 
-`--mixed` reset our staging area (index). Note both files are updated in working directory, so they are now both now not staged.
+`--mixed` reset our staging area (index). Note both files are updated in working directory, so they are now both not staged.
 ```sh
-> git reset --mixed head
+> git reset --mixed HEAD
 Unstaged changes after reset:
 M       SecondEdit.txt
 M       fairy.txt
@@ -538,15 +534,15 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 Here I restore our initial state before trying `--hard` option.
 ```sh
-> git reset --hard head
+> git reset --hard HEAD
 > git stash apply --index
 ```
 
 `--hard` will wipe both working directory and staging area. 
 ```sh
-> git reset --hard head
+> git reset --hard HEAD
 HEAD is now at 9fe006a Merge branch 'fairytaleUniverse' into inAnotherUniverse
-chong@DONCHONG:/mnt/c/Users/chong/Desktop/public/git_test$ git status
+> git status
 On branch main
 nothing to commit, working tree clean
 ```
@@ -554,7 +550,7 @@ nothing to commit, working tree clean
 #### Reset to previous commit
 Now we try to do the same and see if we can bring staging area and working directory to previous commit.
 
-Then we do `git reset --soft`. This keeps both "staging area" and "working tree" unchanged. Since `fairy.txt` is in the staging area (index) we kept, it is now in the staging area as a new file.
+Then we run `git reset --soft`. This keeps both "staging area" and "working tree" unchanged. Since `fairy.txt` is in the staging area (index) we kept, it is now in the staging area as a new file.
 ```sh
 # skipped the part I reset everything
 > git reset --soft HEAD~1
@@ -649,8 +645,8 @@ Now our main branch points to the ghost commit. We can visualize it by running g
 
 
 #### Summary
-1. `git reset` move our branch pointer. And keep/wipe staging and working directory accordingly.
-2. We can reset our branch to any commit we want, even branches we never reach before.
+1. `git reset` moves our branch pointer. And keep/wipe staging and working directory accordingly.
+2. We can reset our branch to any commit we want, even branches we have never reached before.
 
 | Mode              | Wipe Staging Area? | Wipe Working Directory? | Wipe untracked? |
 | ----------------- | ------------------ | ----------------------- | --------------- |
@@ -688,13 +684,13 @@ index e69de29..0000000
 Reverting a merge is a bit different; here we try to revert `#9fe006`, and it failed.
 ```sh
 > git reset --hard HEAD~1 # back to #9fe006 for clean demo
-> git revert head
+> git revert HEAD
 error: commit 9fe006ac0e277b191de7ec70f789ce60f8217bdd is a merge but no -m option was given.
 fatal: revert failed
 ```
 We need to provide which branch we want to revert to, using the `-m` parameter followed by parent number. Here we choose our first parent (`770994`) as our main branch.
 ```sh
-> git revert -m 1 head # revert to the first parent.
+> git revert -m 1 HEAD # revert to the first parent.
 [main ae10c9e] Revert "Merge branch 'fairytaleUniverse' into inAnotherUniverse"
  1 file changed, 0 insertions(+), 0 deletions(-)
  delete mode 100644 fairy.txt
@@ -705,11 +701,9 @@ As a result, `fairy.txt` is removed. Later, if I try to merge that branch back i
 > git merge 8959e7
 Already up to date.
 ```
-Git tells us we are already up to date! This happens because the merge history is preserved. The commit is already integrated into the main branch. We just undo the changes, not undoing the merge itself.
-
+Git tells us we are already up to date because the merge history is preserved. The commit is already integrated into the main branch. We just undo the changes, not undoing the merge itself.
 ### Restore
-`git restore` is Git's "newer" way to bring a file from a specific commit. This is to replace the double-duty `git checkout` command, and handle the "restoring files" function. All `git restore` does is "copy a file from a specific commit, and paste it to the working tree or the staging area".
-
+`git restore` is Git's "newer" way to bring a file from a specific commit (default HEAD). This is to replace the double-duty `git checkout` command, and handle the "restoring files" function. All `git restore` does is "copy a file from a specific commit, and paste it to the working tree or the staging area".
 #### Preparation
 Here I put `SecondEdit.txt` on staging, and `fairy.txt` on working tree, just like what we did in [[#Reset]].
 ```sh
@@ -727,7 +721,7 @@ Changes not staged for commit:
         modified:   fairy.txt
 ```
 #### Restoring from current commit
-Well, honestly Git already states it clearly. We unstaged using `--staged`, and plain restore to discard changes. But let's see it in action.
+Well, honestly Git already states it clearly. We unstaged using `--staged`, and plain `git restore` to discard changes. But let's see it in action.
 
 Here we unstaged `SecondEdit.txt` from index. **This copies the base commit's `SecondEdit.txt` into staging area.**
 
@@ -744,7 +738,7 @@ Changes not staged for commit:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-What about the file in current working directory, will it be replaced? The working directory remains the same. This shows we are not copying the staged file into working directory, we are copying the base commit's file into staging area only. The staged version will be lost.
+What about the file in current working directory, will it be replaced? The working directory remains the same. This shows we are not copying the staged file into working directory, we are copying the base commit's file into staging area only. The staged version will be overwritten.
 ```sh
 # I reset everything again.
 > echo 'at working directory' > SecondEdit.txt
@@ -755,13 +749,16 @@ at working directory
 at staging
 # This is the content of "SecondEdit.txt" in staging area
 
+> git stash
+> git stash pop
+
 > cat SecondEdit.txt
 at working directory
 > git show :SecondEdit.txt
 # empty
 ```
 
-The plain `restore` will restore files from the staging area. Now we put different content in `SecondEdit.txt` at different area, and see which version `git restore` will copy from.
+The plain `restore` will restore files from the staging area to working directory. Now we put different content in `SecondEdit.txt` at different area, and see which version `git restore` will copy from.
 ```sh
 > git reset --hard 9fe006
 > cat SecondEdit.txt
@@ -781,7 +778,7 @@ The plain `restore` will restore files from the staging area. Now we put differe
 at staging
 ```
 
-To restore everything to head, we can either run `--staged` and plain two times, or:
+To restore everything to HEAD, we can either run `--staged` and plain two times, or:
 ```sh
 > git restore --staged --worktree SecondEdit.txt #worktree is the default option
 > cat SecondEdit.txt
@@ -833,10 +830,10 @@ beepbeep
 - `--source=<hash>`: choose the source to restore from.
 
 ## Rebase
-Rebase is another method to "merge" two branches. In [[#Merging]], we merged the main branch and the fairytale branch. Now let's merge the same two commits using rebase. 
+Rebase is another method to combine two branches. In [[#Merging]], we merged the main branch and the fairytale branch. Now let's combine the same two branches using rebase. 
 
 ### Basic
-Here we rebase our fairytale `#8959e7` on the `#770994`. It creates a new commit `5b4c18` with the message "Creating fairy" (same as 8959e7). What Git does is, starting from `#770994`, redo the commits of the fairytale branch (`8959e7`). Since 
+Here we rebase our fairytale `#8959e7` onto `#770994`. It creates a new commit `d047` with the message "Creating fairy" (same as 8959e7). What Git does is, starting from `#770994`, redo the commits of the fairytale branch (`8959e7`). Since 
 ```sh
 > git switch main # git switch is just git checkout with another name
 Already on 'main'
@@ -865,11 +862,11 @@ Creating fairy
 ### Patch-id
 But then I wonder, is there anything stopping us from rebasing `#8959e7` on main multiple times? I mean, there is no record of its original commit.
 
-Even though the commit hashes are different, the actual changes are identical. Git can detect this by comparing **patch ID*, a hash computed from the content of the changes. So even if the commit hashes and commit messages differ, Git can still recognize that the commits represent the same change.
+Even though the commit hashes are different, the actual changes are identical. Git can detect this by comparing their patch ID, a hash computed from the content of the changes. So even if the commit hashes and commit messages differ, Git can still recognize that the commits represent the same change.
 ```sh
 > git rebase 8959e7
 warning: skipped previously applied commit d047347
-# Git knows we submitted before
+# Git knows we submitted this before
 
 > git show 8959e7 | git patch-id
 c1c228d6e9cee776018113a09f771347d6d434b4 8959e7f103ab1aa5efda740ba15b70200e5fb1d2
@@ -877,19 +874,19 @@ c1c228d6e9cee776018113a09f771347d6d434b4 8959e7f103ab1aa5efda740ba15b70200e5fb1d
 c1c228d6e9cee776018113a09f771347d6d434b4 d047347c67574a7f5f830203bdc5da6a00cbaf29
 ```
 
-After combining all changes, we shall point our main to the latest commit `#d04734`. We merge `fairytaleUniverse`into `main`, this will not create a merge commit, as it will only fast forward.
+After combining all changes, we can point main to the latest commit `#d04734`. We merge `fairytaleUniverse` into `main`, this will not create a merge commit, as it will only fast forward.
 ```sh
 > git switch main
 Switched to branch 'main'
 > git merge fairytaleUniverse
-Updating 770994f..79afc96
+Updating 770994f..d047347
 Fast-forward
  fairy.txt | 0
  1 file changed, 0 insertions(+), 0 deletions(-)
  create mode 100644 fairy.txt
 ```
 
-### btw (The most important)
+### Most important
 > **Do not rebase commits that exist outside your repository and that people may have based work on.**
 > If you follow that guideline, you’ll be fine. If you don’t, people will hate you, and you’ll be scorned by friends and family.
 > -- From the official Git tutorial
@@ -900,9 +897,9 @@ Fast-forward
 
 1. **Git is a DAG, not a family tree.** 
 
-	A family tree is inaccurate because: Commits can have one, two, more than two parents, and you can merge any two commit together, even two commits in the same history. A DAG means:
-	- Directed: It has one direction, child cannot point at parents.
-	- Acyclic: There is no loops.
+	A family tree is inaccurate because: Commits can have one, two, more than two parents, and you can merge any two commits together, even two commits in the same history. A DAG means:
+	- Directed: It has one direction, children cannot point at parents.
+	- Acyclic: There are no loops.
 	- Graph: Like a tree, but allows more interconnections like merging multiple commits together.
 2. I did not mention the remote part.
 
@@ -914,7 +911,7 @@ Fast-forward
 	Again, I want to focus on the internal git mechanism, not how to use git. It will make this already lengthy article even more unreadable. Maybe I will add another post for them in the future.
 ---
 ### How to read an object
-We can use a python library `zlib` to read the content of this commit object. Here is a demo of reading the commit `#9fe006`. Our file is `e006ac0e277b191de7ec70f789ce60f8217bdd` inside the `9f` folder.
+We can use a Python library `zlib` to read it's content of this commit object. Here is a demo of reading the commit `#9fe006`. Our file is `e006ac0e277b191de7ec70f789ce60f8217bdd` inside the `9f` folder.
 
 ```sh
 [truncated]\.git\objects\9f>python3 # we run python in REPL for demo
@@ -929,7 +926,7 @@ b"commit 328\x00tree 1adbed20c8b4756ceba562ecafe22677d1fcdf44\nparent 770994fdbb
 339
 ```
 
-It is the same as what we get from `git cat-file`, except the type is missing.
+It is the same as what we get from `git cat-file`, except the object type is missing.
 we can use `git cat-file -t 9fe006a` to check the filetype of an object too.
 ```sh
 commit #filetype
@@ -971,7 +968,7 @@ A more precise answer would be: it moves my current branch pointer to `HEAD~1`. 
 
 ![[Pasted image 20260125192357.png]]
 What if we got two parents?
-HEAD~1 selects the first parent, which the branch you were on when the merge was run. We can move between parents using HEAD^n.
+HEAD~1 selects the first parent, which is the branch you were on when the merge was run. We can move between parents using `HEAD^n`.
 ```sh
 > git checkout 9fe006
 > git rev-parse HEAD
@@ -984,17 +981,14 @@ HEAD~1 selects the first parent, which the branch you were on when the merge was
 > git rev-parse HEAD^2
 8959e7f103ab1aa5efda740ba15b70200e5fb1d2
 ```
-
 ---
 ### Useful new commands
 1. Switch and Restore
 2. rebase --interactive
 3. worktree
-
 ## Reference:
 - [Git Will Finally Make Sense After This - LearnThatStack ](https://youtu.be/Ala6PHlYjmw?si=tKV1dADXO55Y2jJq)
 - [Reading git objects - Curious git](https://matthew-brett.github.io/curious-git/reading_git_objects.html)
-- https://stackoverflow.com/questions/4084921/what-does-the-git-index-contain-exactly
-- https://stackoverflow.com/a/66309040
-- https://git-scm.com/book/en/v2/Git-Branching-Rebasing
-
+- [Pro Git - 3.6 Git Branching - Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing)
+- [StackOverflow - what does the git index contain exactly](https://stackoverflow.com/questions/4084921/what-does-the-git-index-contain-exactly)
+- [StackOverflow - What is `git restore` and how is it different from `git reset`?](https://stackoverflow.com/questions/58003030/what-is-git-restore-and-how-is-it-different-from-git-reset)
