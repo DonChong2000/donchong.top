@@ -7,7 +7,7 @@ export const metadata = {
     'This page describes the design and development choices behind my personal website.',
 }
 
-# DonChong.Top
+# Why am I building this site?
 
 I built this site to deepen my understanding of modern frontend technologies. My previous experience with front-end development was still rooted in the jQuery era, so this project became a way to explore today’s tools and best practices.
 
@@ -512,8 +512,95 @@ After realizing Obsidian doesn’t use standard MDX syntax, I found I had more f
 
 ---
 # Host and Network
+## Multi-services in one host
+To run multiple web services on the same host while sharing port 80 or 443, we need a component to route incoming requests to the right service.
 
+Nginx is a great tool for this. In fact, in 2015, GitHub Pages hosted over half a million sites using a single Nginx map file, as described in GitHub’s post [Rearchitecting GitHub Pages](https://github.blog/news-insights/rearchitecting-github-pages/).
 
+By installing Nginx and configuring it, we can let Nginx forward user's request base on the subdomain name.
+```sh
+# For the site that USED to be on port 80
+server {
+    listen 80;
+    server_name www.donchong.top;
+    location / {
+        proxy_pass http://127.0.0.1:3000; # The new home for your old app
+    }
+}
+# For your new app
+server {
+    listen 80;
+    server_name askme.donchong.top;
+
+    location / {
+        proxy_pass http://127.0.0.1:3001;
+    }
+}
+```
+## SSL/TLS (HTTPS support)
+Nowadays, everything runs on HTTPS, and only phishing sites run on HTTP. Though Cloudflare's proxy put my site on HTTPS already, here is how to do it the right way.
+
+Back in the days, we needed to apply for a certificate, and usually pay for it. But now we can deploy our cert for free using Certbot. This will Generate an SSL certificate for my site. 
+
+```
+sudo apt install certbot python3-certbot-nginx -y
+sudo certbot --nginx -d donchong.top -d www.donchong.top -d askme.donchong.top
+```
+Finally, I forward all port 80 requests to 443, and add a cert to the nginx config. Now my site has its own SSL certificate, and no longer relies on Cloudflare's proxy for SSL.
+
+```sh
+# --- 1. REDIRECT HTTP TO HTTPS ---
+server {
+    listen 80;
+    listen [::]:80;
+    server_name donchong.top www.donchong.top askme.donchong.top;
+
+    return 301 https://$host$request_uri;
+}
+
+# --- 2. MAIN SITE (Port 3000) ---
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name donchong.top www.donchong.top;
+
+    # SSL Certificates
+    ssl_certificate /etc/letsencrypt/live/donchong.top/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/donchong.top/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+# --- 3. SUBDOMAIN (Port 3001) ---
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name askme.donchong.top;
+
+    # SSL Certificates
+    ssl_certificate /etc/letsencrypt/live/donchong.top/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/donchong.top/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:3001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+```
 # Bugs
 
 - Large Image are not supported
