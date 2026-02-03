@@ -3,7 +3,7 @@ import { getImageMap } from '@/lib/imgMap'
 export const img = getImageMap(import.meta.url)
 import { Recipes } from '@/components/Recipes'
 import { HeroPattern } from '@/components/HeroPattern'
-import {DetailOverlay} from '@/components/DetailOverlay'
+import { DetailOverlay } from '@/components/DetailOverlay'
 import Gallery from '@/components/Gallery'
 
 export const metadata = {
@@ -40,6 +40,25 @@ This blog is where I share my projects, hobbies, and the little things that catc
     imageSrc: '/homepage/timelapseMachine.jpg',
     imageAlt: 'Record changes with moving camera',
     href: '/projects/timelapse-machine',
+  }
+]} />
+
+## Notes
+<DetailOverlay callouts={
+[
+  {
+    name: 'What is git really?',
+    description: 'Exploring git from concept to real bytes.',
+    imageSrc: '/homepage/git_note.png',
+    imageAlt: 'Exploring git from concept to real bytes.',
+    href: '/notes/what-is-git-really',
+  },
+  {
+    name: 'LeetCode - Grind 75',
+    description: 'Me grinding LeetCode.',
+    imageSrc: '/homepage/leetcode.png',
+    imageAlt: 'LeetCode - Grind 75',
+    href: '/notes/the-leetcode-grind',
   }
 ]} />
 
