@@ -441,6 +441,7 @@ export const navigation: Array<NavGroup> = [
         title: 'Comparing ASR Solutions',
         href: '/notes/comparing-asr-solutions',
       },
+      { title: 'React2Sehll (CVE-2025-55182)', href: '/notes/react2shell' },
     ],
   },
   {

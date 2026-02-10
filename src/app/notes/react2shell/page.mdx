@@ -1,0 +1,97 @@
+import Image from 'next/image';
+import { getImageMap } from '@/lib/imgMap';
+export const img = getImageMap(import.meta.url);
+
+export const metadata = {
+    title: 'React2Shell',
+    description: 'Record of React2Shell (CVE-2025-55182)',
+};
+
+# React2Shell (CVE-2025-55182)
+Record of an incident tied to React2Shell (CVSS 10). The server was compromised while running an affected version (15.5.2).
+![[Pasted image 20251208170951.png]]
+## Observations
+
+### Dashboard
+
+#### 100% CPU usage
+From Oracle Monitor, CPU usage was at 100%. A process that started on Dec 05 was consuming all CPU resources for mining. CPU utilization was pinned at 100% across the visible window. Memory stayed around the low 20% range.
+
+![[Pasted image 20251208173026.png]]
+
+### Process inspection
+I checked the process and terminated it. The process list showed a suspicious binary (the name looked randomized) consuming roughly 385% CPU and running since Dec 05.
+
+![[Pasted image 20251208172829.png]]
+
+After terminating the process, CPU dropped sharply from 100% to near 0%, and memory stepped down from ~22% to ~12%. A longer time range showed that the process didn’t restart itself.
+
+![[Pasted image 20251208173326.png]]
+
+![[Pasted image 20251208180947.png]]
+
+Back on Dec 05, the CPU load stayed high.
+![[Pasted image 20251208173434.png]]
+
+### Digging deeper
+I found a folder named `runnv` in `/tmp`, which others have reported as related to this incident.
+
+`/tmp/runnv` existed with write permissions and was created on Dec 06 at 12:38 under the `ubuntu` user.
+
+![[Pasted image 20251208175321.png]]
+
+A remote file listing showed `config.json` and a large `xmrig` binary (~3.4 MB), consistent with crypto-miner artifacts.
+
+![[Pasted image 20251208185710.png]]
+
+### Logs
+There were multiple login attempts with different usernames. I’m not sure whether they were directly related to React2Shell, but this is common for public servers.
+
+![[Pasted image 20251208174329.png]]
+
+There were unrecognized systemd services. systemd repeatedly tried to start `alive.service` and `lived.service`, but failed to execute because the files are deleted somehow.
+
+![[Pasted image 20251208174852.png]]
+
+The service repeatedly executed `runnv/alive.sh`. `alive.service` ran as root and executed `/tmp/runnv/alive.sh`, with `Restart=always` every 5 seconds.
+
+![[Pasted image 20251208175007.png]]
+
+## Conclusion
+This system is no longer safe to use. Reinstallation is required.
+
+## Patch
+### Updating NextJS
+Security tooling flagged a vulnerable Next.js version and recommended upgrading to `15.5.7` (from `15.5.2`).
+![[Pasted image 20251208170951.png]]
+#### Set up early alerts
+I set up an email alert if CPU usage is high for a minute. 
+![[Pasted image 20251208195111.png]]
+
+
+## What to do next time
+
+### Prevention
+The only realistic path is to track CVEs and minimize the blast radius.
+
+#### Keep up to date
+- Restart and update the project daily, or add a webhook to trigger CI when updates are available.
+- Questions:
+  - What if the vulnerability is in Linux itself, Docker, or Node.js?
+  - What if the vulnerability exists in the latest version, not the old ones?
+
+
+### Recovery plan
+Honestly, unless we are disconnected from the internet, getting compromised is inevitable. So we should think about how to recover from it instead.
+
+#### Localize the problem
+- Run the server in Docker. This does not add security, but it can help contain damage.
+#### Recovery by Docker
+- Dockerize services so reconfiguration is fast and repeatable.
+
+![[Pasted image 20260210042008.png]]
+
+## References
+- https://www.reddit.com/r/nextjs/comments/1pgiaj3/i_got_hacked_and_traced_how_much_money_hacker/
+- https://www.ravi.cool/post/fucking-55182.html#%E8%AE%B0%E4%B8%80%E6%AC%A1CVE-2025-55182%E5%85%A5%E4%BE%B5%E5%A4%84%E7%BD%AE
+- https://vercel.com/kb/bulletin/react2shell
