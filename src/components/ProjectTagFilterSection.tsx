@@ -1,7 +1,7 @@
 import { ProjectTagFilterClient } from '@/components/ProjectTagFilterClient';
 import { getTagIndex, type TagPage } from '@/lib/tags';
 
-const INCLUDED_PREFIXES = ['/projects/', '/notes/'];
+const INCLUDED_PREFIXES = ['/projects/', '/notes/', '/hobbies/'];
 
 function isIncludedUrl(url: string) {
   return INCLUDED_PREFIXES.some((prefix) => url.startsWith(prefix));
