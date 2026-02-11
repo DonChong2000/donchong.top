@@ -6,7 +6,10 @@ export type TagPage = {
   description?: string;
   priority?: number;
   tags: string[];
+  thumbnail?: string;
 };
+
+const DEFAULT_THUMBNAIL = '/homepage/icon.png';
 
 function normalizeTag(tag: string) {
   return tag.toString().trim().toLowerCase();
@@ -38,6 +41,7 @@ async function loadTagPages(): Promise<TagPage[]> {
         description: metadata.description,
         priority: metadata.priority ?? 0,
         tags,
+        thumbnail: metadata.thumbnail ?? DEFAULT_THUMBNAIL,
       } as TagPage;
     }),
   );

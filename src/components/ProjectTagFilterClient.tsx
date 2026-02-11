@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import clsx from 'clsx';
@@ -11,6 +12,7 @@ type TagPage = {
   title: string;
   description?: string;
   tags: string[];
+  thumbnail?: string;
 };
 
 type ProjectTagFilterClientProps = {
@@ -86,16 +88,31 @@ export function ProjectTagFilterClient({
               href={page.url}
               className="group block rounded-2xl border border-zinc-900/5 bg-white/50 p-4 transition hover:border-zinc-900/10 dark:border-white/10 dark:bg-white/5"
             >
-              <div className="text-sm font-semibold text-zinc-900 dark:text-white">
-                {page.title}
-              </div>
-              {page.description && (
-                <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-                  {page.description}
-                </p>
-              )}
-              <div className="mt-3 text-xs text-zinc-500 dark:text-zinc-500">
-                {page.url}
+              <div className="flex gap-4">
+                {page.thumbnail && (
+                  <div className="relative h-16 w-28 shrink-0 overflow-hidden rounded-xl bg-zinc-100 dark:bg-white/10">
+                    <Image
+                      src={page.thumbnail}
+                      alt={page.title}
+                      fill
+                      sizes="112px"
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <div className="text-sm font-semibold text-zinc-900 dark:text-white">
+                    {page.title}
+                  </div>
+                  {page.description && (
+                    <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                      {page.description}
+                    </p>
+                  )}
+                  <div className="mt-3 text-xs text-zinc-500 dark:text-zinc-500">
+                    {page.url}
+                  </div>
+                </div>
               </div>
             </Link>
           </li>
