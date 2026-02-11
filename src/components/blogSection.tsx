@@ -4,11 +4,10 @@ const posts = [
   {
     id: 1,
     title: 'DonChong.Top',
-    href: '/this-site',
+    href: '/projects/this-site',
     description:
       'This site is my portfolio and a platform for sharing my work. It’s a full-stack project spanning front-end and back-end development, networking, cloud hosting, and CI/CD. Here, I document the technical details and design decisions behind its development.',
-    imageUrl:
-      '/homepage/icon-trim.png',
+    imageUrl: '/homepage/icon-trim.png',
     date: 'Jul 17, 2025',
     datetime: '2025-07-17',
     category: { title: 'Marketing', href: '#' },
@@ -19,11 +18,10 @@ const posts = [
     href: '/projects/drowning-detection-rescue-system',
     description:
       'My final-year project is a system design for pool safety. It detects drowning incidents using a wearable device, pinpoints the location using computer vision, and deploys a robotic float for active rescue.',
-    imageUrl:
-      '/homepage/fyp_croped.png',
+    imageUrl: '/homepage/fyp_croped.png',
     date: 'Apr 20, 2022',
     datetime: '2022-04-20',
-    category: { title: 'Marketing', href: '#' }, 
+    category: { title: 'Marketing', href: '#' },
   },
   {
     id: 3,
@@ -31,11 +29,10 @@ const posts = [
     href: '/projects/timelapse-machine',
     description:
       'A robot that captures motion timelapses — condensing hours of activity into smooth, dynamic short clips using a moving camera. Developed in C++ on the STM32 platform.',
-    imageUrl:
-      '/homepage/timelapseMachine.jpg',
+    imageUrl: '/homepage/timelapseMachine.jpg',
     date: 'Dec 1, 2020',
     datetime: '2020-12-01',
-    category: { title: 'Marketing', href: '#' }, 
+    category: { title: 'Marketing', href: '#' },
   },
   {
     id: 4,
@@ -43,11 +40,10 @@ const posts = [
     href: '/projects/bill-ai',
     description:
       'A reliable receipt extractor converts a receipt picture into a spreadsheet table. This helped us with our bookkeeping for over a year, anywhere, anytime.',
-    imageUrl:
-      '/homepage/bill-ai2.png',
+    imageUrl: '/homepage/bill-ai2.png',
     date: 'Nov 08, 2024',
     datetime: '2024-11-08',
-    category: { title: 'Marketing', href: '#' }, 
+    category: { title: 'Marketing', href: '#' },
   },
   {
     id: 5,
@@ -55,11 +51,10 @@ const posts = [
     href: '/projects/site-status',
     description:
       'A simple monitor site for my personal website and other services. Along with the Minecraft server starting function.',
-    imageUrl:
-      '/homepage/status2.png',
+    imageUrl: '/homepage/status2.png',
     date: 'Aug 27, 2024',
     datetime: '2020-03-16',
-    category: { title: 'Marketing', href: '#' }, 
+    category: { title: 'Marketing', href: '#' },
   },
   {
     id: 6,
@@ -67,11 +62,10 @@ const posts = [
     href: '/projects/transcriber',
     description:
       'A free tool that accepts any media input — including YouTube links, direct video or audio URLs, or Discord attachments — and generates subtitles from it.',
-    imageUrl:
-      '/homepage/transcriber2.png',
+    imageUrl: '/homepage/transcriber2.png',
     date: 'May 30, 2025',
     datetime: '2025-05-30',
-    category: { title: 'Marketing', href: '#' }, 
+    category: { title: 'Marketing', href: '#' },
   },
 ];
 
@@ -82,7 +76,10 @@ export default function BlogSection() {
         <div className="mx-auto max-w-2xl lg:max-w-4xl">
           <div className="mt-16 space-y-20 lg:mt-20 lg:space-y-20">
             {posts.map((post) => (
-              <article key={post.id} className="relative isolate flex flex-col gap-8 lg:flex-row">
+              <article
+                key={post.id}
+                className="relative isolate flex flex-col gap-8 lg:flex-row"
+              >
                 <div className="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0">
                   <Image
                     alt=""
@@ -90,11 +87,14 @@ export default function BlogSection() {
                     fill
                     className="absolute inset-0 h-full w-full rounded-2xl object-cover"
                   />
-                  <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-charcoal-900/10 dark:ring-white/10" />
+                  <div className="absolute inset-0 rounded-2xl ring-1 ring-charcoal-900/10 ring-inset dark:ring-white/10" />
                 </div>
                 <div>
                   <div className="flex items-center gap-x-4 text-xs">
-                    <time dateTime={post.datetime} className="text-gray-500 dark:text-gray-400">
+                    <time
+                      dateTime={post.datetime}
+                      className="text-gray-500 dark:text-gray-400"
+                    >
                       {post.date}
                     </time>
                     {/* <a
@@ -105,13 +105,15 @@ export default function BlogSection() {
                     </a> */}
                   </div>
                   <div className="group relative max-w-xl">
-                    <h3 className="mt-3 text-lg font-semibold leading-6 text-charcoal-460 group-hover:text-charcoal-600 dark:text-timberwolf-400 dark:group-hover:text-timberwolf-100">
+                    <h3 className="mt-3 text-lg leading-6 font-semibold text-charcoal-460 group-hover:text-charcoal-600 dark:text-timberwolf-400 dark:group-hover:text-timberwolf-100">
                       <a href={post.href}>
                         <span className="absolute inset-0" />
                         {post.title}
                       </a>
                     </h3>
-                    <p className="mt-5 text-sm leading-6 text-charcoal-700 dark:text-charcoal-100">{post.description}</p>
+                    <p className="mt-5 text-sm leading-6 text-charcoal-700 dark:text-charcoal-100">
+                      {post.description}
+                    </p>
                   </div>
                 </div>
               </article>

@@ -1,68 +1,73 @@
-import Image from 'next/image'
-import { getImageMap } from '@/lib/imgMap'
-export const img = getImageMap(import.meta.url)
-import { Recipes } from '@/components/Recipes'
-import { HeroPattern } from '@/components/HeroPattern'
-import { DetailOverlay } from '@/components/DetailOverlay'
-import Gallery from '@/components/Gallery'
+import Image from 'next/image';
+import { getImageMap } from '@/lib/imgMap';
+export const img = getImageMap(import.meta.url);
+import { Recipes } from '@/components/Recipes';
+import { HeroPattern } from '@/components/HeroPattern';
+import { DetailOverlay } from '@/components/DetailOverlay';
+import Gallery from '@/components/Gallery';
 
 export const metadata = {
   title: 'DonChong.top',
-  description:
-    `This blog is where I share my projects, hobbies, and the little things that catch my eye. I'll be trying to take a "less is more" approach, refining and distilling the notes I've written for myself, and sharing the joy of the journey and the learning process. I hope you enjoy it.`,
-}
-
+  description: `This blog is where I share my projects, hobbies, and the little things that catch my eye. I'll be trying to take a "less is more" approach, refining and distilling the notes I've written for myself, and sharing the joy of the journey and the learning process. I hope you enjoy it.`,
+};
 
 {/* <HeroPattern /> */}
+
 # Welcome to my blog
+
 This blog is where I share my projects, hobbies, and the little things that catch my eye. I'll be trying to take a "less is more" approach, refining and distilling the notes I've written for myself, and sharing the joy of the journey and the learning process. I hope you enjoy it.
 
 ## Projects
-<DetailOverlay callouts={
-[
-  {
-    name: 'This Site',
-    description: 'How I built this site',
-    imageSrc: '/homepage/icon-trim.png',
-    imageAlt: 'How I built this site',
-    href: '/this-site',
-  },
-  {
-    name: 'Final Year Project',
-    description: 'Swimming Pool Drown Detection and Rescue System',
-    imageSrc: '/homepage/fyp_croped.png',
-    imageAlt: 'Swimming Pool Drown Detection and Rescue System ',
-    href: '/projects/drowning-detection-rescue-system',
-  },
-  {
-    name: 'Timelapse Machine',
-    description: 'Record changes with moving camera',
-    imageSrc: '/homepage/timelapseMachine.jpg',
-    imageAlt: 'Record changes with moving camera',
-    href: '/projects/timelapse-machine',
-  }
-]} />
+
+<DetailOverlay
+  callouts={[
+    {
+      name: 'This Site',
+      description: 'How I built this site',
+      imageSrc: '/homepage/icon-trim.png',
+      imageAlt: 'How I built this site',
+      href: '/projects/this-site',
+    },
+    {
+      name: 'Final Year Project',
+      description: 'Swimming Pool Drown Detection and Rescue System',
+      imageSrc: '/homepage/fyp_croped.png',
+      imageAlt: 'Swimming Pool Drown Detection and Rescue System ',
+      href: '/projects/drowning-detection-rescue-system',
+    },
+    {
+      name: 'Timelapse Machine',
+      description: 'Record changes with moving camera',
+      imageSrc: '/homepage/timelapseMachine.jpg',
+      imageAlt: 'Record changes with moving camera',
+      href: '/projects/timelapse-machine',
+    },
+  ]}
+/>
 
 ## Notes
-<DetailOverlay callouts={
-[
-  {
-    name: 'What is git really?',
-    description: 'Exploring git from concept to real bytes.',
-    imageSrc: '/homepage/git_note.png',
-    imageAlt: 'Exploring git from concept to real bytes.',
-    href: '/notes/what-is-git-really',
-  },
-  {
-    name: 'LeetCode - Grind 75',
-    description: 'Me grinding LeetCode.',
-    imageSrc: '/homepage/leetcode.png',
-    imageAlt: 'LeetCode - Grind 75',
-    href: '/notes/the-leetcode-grind',
-  }
-]} />
+
+<DetailOverlay
+  callouts={[
+    {
+      name: 'What is git really?',
+      description: 'Exploring git from concept to real bytes.',
+      imageSrc: '/homepage/git_note.png',
+      imageAlt: 'Exploring git from concept to real bytes.',
+      href: '/notes/what-is-git-really',
+    },
+    {
+      name: 'LeetCode - Grind 75',
+      description: 'Me grinding LeetCode.',
+      imageSrc: '/homepage/leetcode.png',
+      imageAlt: 'LeetCode - Grind 75',
+      href: '/notes/the-leetcode-grind',
+    },
+  ]}
+/>
 
 {/* ## My Favorite Recipes
+
 <Gallery /> */}
 ## Gameplays
 <DetailOverlay callouts={
@@ -72,19 +77,18 @@ This blog is where I share my projects, hobbies, and the little things that catc
     description: 'Ongoing marathon of the hardest modpack',
     imageSrc: '/2025-08-10_22.41.03.png',
     imageAlt: 'Ongoing marathon of the hardest modpack',
-    href: '/gtnh',
+    href: '/hobbies/gtnh',
   },
   {
     name: 'Factorio',
     description: 'Base tour of my K2SE journey',
     imageSrc: '/homepage/Screenshot2025-10-30210553.png',
     imageAlt: 'Base tour of my K2SE journey',
-    href: 'factorio',
+    href: '/hobbies/factorio',
   }
 ]} />
-
-
 
 {/* <Projects />
 
 <Recipes /> */}
+

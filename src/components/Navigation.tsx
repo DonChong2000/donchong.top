@@ -403,7 +403,7 @@ export const navigation: Array<NavGroup> = [
     links: [
       { title: 'Overview', href: '/projects-overview' },
       // { title: 'Chat-CV', href: '/chat-cv' },
-      { title: 'DonChong.Top', href: '/this-site' },
+      { title: 'DonChong.Top', href: '/projects/this-site' },
       {
         title: 'Drowning Detection & Rescue System',
         href: '/projects/drowning-detection-rescue-system',
@@ -447,8 +447,8 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Hobbies',
     links: [
-      { title: 'GTNH', href: '/gtnh' },
-      { title: 'Factorio', href: '/factorio' },
+      { title: 'GTNH', href: '/hobbies/gtnh' },
+      { title: 'Factorio', href: '/hobbies/factorio' },
       { title: "Don's Cookbook", href: '/dons-cookbook' },
       //   children: [
       //     { title: 'Recipe1', href: '/cookbook/1', id: 'Recipe1' },
