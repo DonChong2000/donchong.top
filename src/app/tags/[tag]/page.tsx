@@ -13,16 +13,22 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { tag: string };
+  params: Promise<{ tag: string }>;
 }) {
+  const { tag } = await params;
   return {
-    title: `#${params.tag}`,
-    description: `Pages tagged with #${params.tag}.`,
+    title: `#${tag}`,
+    description: `Pages tagged with #${tag}.`,
   };
 }
 
-export default async function TagPage({ params }: { params: { tag: string } }) {
-  const pages = await getPagesByTag(params.tag);
+export default async function TagPage({
+  params,
+}: {
+  params: Promise<{ tag: string }>;
+}) {
+  const { tag } = await params;
+  const pages = await getPagesByTag(tag);
 
   if (pages.length === 0) {
     notFound();
@@ -32,9 +38,9 @@ export default async function TagPage({ params }: { params: { tag: string } }) {
     <article className="flex h-full flex-col pt-16 pb-10">
       <Prose className="flex-auto">
         <h1 className="flex flex-wrap items-center gap-3">
-          Tag <Tag variant="medium" color="zinc">{`#${params.tag}`}</Tag>
+          Tag <Tag variant="medium" color="zinc">{`#${tag}`}</Tag>
         </h1>
-        <p>Pages tagged with {`#${params.tag}`}</p>
+        <p>Pages tagged with {`#${tag}`}</p>
         <ul className="not-prose mt-8 space-y-4">
           {pages.map((page) => (
             <li key={page.url}>
