@@ -40,6 +40,7 @@
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.0",
     "remark-mdx": "^3.0.0",
+    "sharp": "^0.33.1",
     "shiki": "^0.14.7",
     "simple-functional-loader": "^1.2.1",
     "tailwindcss": "^4.0.6",
@@ -54,7 +55,6 @@
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.0.4",
     "prettier": "^3.3.2",
-    "prettier-plugin-tailwindcss": "^0.6.10",
-    "sharp": "0.33.1"
+    "prettier-plugin-tailwindcss": "^0.6.10"
   }
 }
