@@ -8,6 +8,7 @@ import { Prose } from '@/components/Prose';
 export const a = Link;
 export { Button } from '@/components/Button';
 export { CodeGroup, Code as code, Pre as pre } from '@/components/Code';
+export { TagLink } from '@/components/TagLink';
 
 export function wrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -71,8 +72,8 @@ export function Col({
   children,
   sticky = false,
 }: {
-  children: React.ReactNode
-  sticky?: boolean
+  children: React.ReactNode;
+  sticky?: boolean;
 }) {
   return (
     <div
@@ -112,9 +113,9 @@ export function Property({
   children,
   type,
 }: {
-  name: string
-  children: React.ReactNode
-  type?: string
+  name: string;
+  children: React.ReactNode;
+  type?: string;
 }) {
   return (
     <li className="m-0 px-0 py-4 first:pt-0 last:pb-0">

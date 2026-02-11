@@ -54,7 +54,10 @@ function rehypeSlugify() {
   return (tree) => {
     let slugify = slugifyWithCounter();
     visit(tree, 'element', (node) => {
-      if ((node.tagName === 'h2' || node.tagName === 'h3') && !node.properties.id) {
+      if (
+        (node.tagName === 'h2' || node.tagName === 'h3') &&
+        !node.properties.id
+      ) {
         node.properties.id = slugify(toString(node));
       }
     });
@@ -62,8 +65,8 @@ function rehypeSlugify() {
 }
 
 function rehypeAddMDXExports(getExports) {
-  return (tree) => {
-    let exports = Object.entries(getExports(tree));
+  return (tree, file) => {
+    let exports = Object.entries(getExports(tree, file));
 
     for (let [name, value] of exports) {
       for (let node of tree.children) {
@@ -96,7 +99,10 @@ function getSections(node, parentId = null) {
   let currentH2Id = parentId;
 
   for (let child of node.children ?? []) {
-    if (child.type === 'element' && (child.tagName === 'h2' || child.tagName === 'h3')) {
+    if (
+      child.type === 'element' &&
+      (child.tagName === 'h2' || child.tagName === 'h3')
+    ) {
       const level = parseInt(child.tagName.replace('h', ''));
       let sectionData = `{
         title: ${JSON.stringify(toString(child))},
@@ -108,7 +114,10 @@ function getSections(node, parentId = null) {
       if (level === 2) {
         currentH2Id = child.properties.id;
       } else if (level === 3 && currentH2Id) {
-        sectionData = sectionData.replace('}', `, parentId: ${JSON.stringify(currentH2Id)}}`);
+        sectionData = sectionData.replace(
+          '}',
+          `, parentId: ${JSON.stringify(currentH2Id)}}`,
+        );
       }
       sections.push(sectionData);
     } else if (child.children) {
@@ -126,8 +135,9 @@ export const rehypePlugins = [
   rehypeSlugify,
   [
     rehypeAddMDXExports,
-    (tree) => ({
+    (tree, file) => ({
       sections: `[${getSections(tree).join()}]`,
+      tags: JSON.stringify(file?.data?.tags ?? []),
     }),
   ],
 ];
