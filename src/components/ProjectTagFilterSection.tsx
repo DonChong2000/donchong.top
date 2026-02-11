@@ -8,7 +8,7 @@ function isIncludedUrl(url: string) {
 }
 
 function sortPages(pages: TagPage[]) {
-  return pages.slice().sort((a, b) => a.title.localeCompare(b.title));
+  return pages.slice().sort((a, b) => ((b.priority ?? 0) !== (a.priority ?? 0) ? (b.priority ?? 0) - (a.priority ?? 0) : a.title.localeCompare(b.title)));
 }
 
 export async function ProjectTagFilterSection() {

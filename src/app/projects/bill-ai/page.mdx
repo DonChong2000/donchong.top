@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { getImageMap } from '@/lib/imgMap';
 export const img = getImageMap(import.meta.url);
 export const metadata = {
+  priority: 0,
   title: 'Bill-ai',
   description:
     'Bill-ai is an OCR-powered receipt extractor I built to automate our roommate expense tracking, converting receipt images into spreadsheet-ready data for easier bookkeeping and future spending analysis.',

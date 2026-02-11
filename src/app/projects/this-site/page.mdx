@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { getImageMap } from '@/lib/imgMap'
 export const img = getImageMap(import.meta.url)
 export const metadata = {
+  priority: 0,
   title: 'About This Site',
   description:
     'This page describes the design and development choices behind my personal website.',

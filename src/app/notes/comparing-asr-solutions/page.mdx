@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { getImageMap } from '@/lib/imgMap';
 export const img = getImageMap(import.meta.url);
 export const metadata = {
+  priority: 0,
   title: 'Comparing ASR Solutions',
   description: 'This page compares different ASR solutions on the market.',
 };

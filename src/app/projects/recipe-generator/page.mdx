@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { getImageMap } from '@/lib/imgMap';
 export const img = getImageMap(import.meta.url);
 export const metadata = {
+  priority: 0,
   title: 'Recipe Generator',
   description:
     'The **Recipe Generator** is a GenAI tool that generates a recipe from a video. It works even if the video does not have subtitles, and it can process non-YouTube videos as well.',

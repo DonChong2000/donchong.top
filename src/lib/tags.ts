@@ -4,6 +4,7 @@ export type TagPage = {
   url: string;
   title: string;
   description?: string;
+  priority?: number;
   tags: string[];
 };
 
@@ -35,6 +36,7 @@ async function loadTagPages(): Promise<TagPage[]> {
         url,
         title: metadata.title ?? fallbackTitle,
         description: metadata.description,
+        priority: metadata.priority ?? 0,
         tags,
       } as TagPage;
     }),
