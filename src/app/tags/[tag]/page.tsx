@@ -37,10 +37,24 @@ export default async function TagPage({
   return (
     <article className="flex h-full flex-col pt-16 pb-10">
       <Prose className="flex-auto">
-        <h1 className="flex flex-wrap items-center gap-3">
-          Tag <Tag variant="medium" color="zinc">{`#${tag}`}</Tag>
-        </h1>
-        <p>Pages tagged with {`#${tag}`}</p>
+        {/* <h1 className="flex flex-wrap items-center gap-3">Tag:</h1>
+        <p>
+          <span className="inline-flex items-baseline">
+            <Tag variant="medium" color="zinc">{`#${tag}`}</Tag>
+          </span>
+        </p>*/}
+
+        {/* <div className="">
+          Tag:<Tag variant="medium" color="zinc">{`#${tag}`}</Tag>
+        </div> */}
+
+        {/* <h1 className="flex flex-wrap items-end gap-2 leading-normal">
+          <span className="leading-none">Tag:</span>
+          <Tag variant="medium" color="zinc">{`#${tag}`}</Tag>
+        </h1> */}
+
+        <h1>#{tag}</h1>
+
         <ul className="not-prose mt-8 space-y-4">
           {pages.map((page) => (
             <li key={page.url}>
