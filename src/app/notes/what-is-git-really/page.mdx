@@ -15,7 +15,7 @@ I have been using Git for many years. But honestly, I have no idea how it works,
 
 ## Data Structure of Git
 
-- Git is a tree, a one-way family tree. [¹](#Lies that I made)
+- Git is a tree, a one-way family tree. [¹](#lies-that-i-made)
 - Commits are snapshots of the project.
 - Branches are pointers to a commit.
 - HEAD is the pointer we are looking at.
@@ -114,7 +114,7 @@ We can go back in time by checking out our first commit, `#572f7b`. This loads a
 
 Let's try branching off from the main branch. Creating a new branch will create a pointer named "inAnotherUniverse", and nothing more than that, no snapshots, no copies, no new nodes.
 
-"inAnotherUniverse" stores #770994, which points to the latest commit, also the same as the main branch, where we are branching off from.
+"inAnotherUniverse" stores `#770994`, which points to the latest commit, also the same as the main branch, where we are branching off from.
 
 ```sh
 > git checkout main
@@ -241,7 +241,7 @@ Git is a magical tool, allowing us to revisit any point in time in a blink. This
 Let's open up our latest commit `#9fe006` and see what's inside. We can find this snapshot inside `.git/objects/9f`, file name `e006ac0e277b191de7ec70f789ce60f8217bdd`. The first two characters are the folder name, and the rest is the file name.
 
 This is a binary file, and we can read its content with the `git cat-file` command.
-If you are really interested in reading this file as-is, you may take a look at this section: [[#How to read an object]].
+If you are really interested in reading this file as-is, you may take a look at this section: [How to read an object](#how-to-read-an-object).
 
 ```sh
 > git cat-file -p 9fe006ac0e277b191de7ec70f789ce60f8217bdd
@@ -675,7 +675,7 @@ On branch main
 nothing to commit, working tree clean
 ```
 
-To read more on how `HEAD~1` works, take a look at [[#More on HEAD pointer]].
+To read more on how `HEAD~1` works, take a look at [More on HEAD pointer](#more-on-head-pointer).
 
 #### Reset to anywhere
 
@@ -810,7 +810,7 @@ Git tells us we are already up to date because the merge history is preserved. R
 
 #### Preparation
 
-Here I put `SecondEdit.txt` on staging, and `fairy.txt` on working tree, just like what we did in [[#Reset]].
+Here I put `SecondEdit.txt` on staging, and `fairy.txt` on working tree, just like what we did in [Reset](#reset).
 
 ```sh
 > git reset --hard 9fe006
@@ -899,7 +899,7 @@ To restore everything to HEAD, we can either run `--staged` and plain two times,
 
 #### Restoring from another commit
 
-Remember in [[#Snapshots]], we create `robot.txt`? I want to bring it to here. We can find our lost `robot.txt` using `--reflog`; its commit hash is `0d6579`
+Remember in [Snapshots](#Snapshots), we create `robot.txt`? I want to bring it to here. We can find our lost `robot.txt` using `--reflog`; its commit hash is `0d6579`
 
 ```sh
 > git log --oneline --reflog
@@ -949,7 +949,7 @@ beepbeep
 
 ## Rebase
 
-Rebase is another method to combine two branches. In [[#Merging]], we merged the main branch and the fairytale branch. Now let's combine the same two branches using rebase.
+Rebase is another method to combine two branches. In [#Merging](#merging), we merged the main branch and the fairytale branch. Now let's combine the same two branches using rebase.
 
 ### Basic
 
