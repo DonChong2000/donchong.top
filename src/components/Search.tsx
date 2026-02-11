@@ -24,14 +24,14 @@ import clsx from 'clsx';
 import { navigation } from '@/components/Navigation';
 import { type Result } from '@/mdx/search.mjs';
 
-type EmptyObject = Record<string, never>
+type EmptyObject = Record<string, never>;
 
 type Autocomplete = AutocompleteApi<
   Result,
   React.SyntheticEvent,
   React.MouseEvent,
   React.KeyboardEvent
->
+>;
 
 function useAutocomplete({ close }: { close: () => void }) {
   let id = useId();
@@ -75,12 +75,22 @@ function useAutocomplete({ close }: { close: () => void }) {
         navigate,
       },
       getSources({ query }) {
-        return import('@/mdx/search.mjs').then(({ search }) => {
+        return import('@/mdx/search.mjs').then(({ search, searchTags }) => {
           return [
             {
               sourceId: 'documentation',
               getItems() {
                 return search(query, { limit: 5 });
+              },
+              getItemUrl({ item }) {
+                return item.url;
+              },
+              onSelect: navigate,
+            },
+            {
+              sourceId: 'tags',
+              getItems() {
+                return searchTags(query, { limit: 5 });
               },
               getItemUrl({ item }) {
                 return item.url;
@@ -167,11 +177,11 @@ function SearchResult({
   collection,
   query,
 }: {
-  result: Result
-  resultIndex: number
-  autocomplete: Autocomplete
-  collection: AutocompleteCollection<Result>
-  query: string
+  result: Result;
+  resultIndex: number;
+  autocomplete: Autocomplete;
+  collection: AutocompleteCollection<Result>;
+  query: string;
 }) {
   let id = useId();
 
@@ -230,13 +240,27 @@ function SearchResult({
 function SearchResults({
   autocomplete,
   query,
-  collection,
+  collections,
 }: {
-  autocomplete: Autocomplete
-  query: string
-  collection: AutocompleteCollection<Result>
+  autocomplete: Autocomplete;
+  query: string;
+  collections: AutocompleteCollection<Result>[];
 }) {
-  if (collection.items.length === 0) {
+  let items: {
+    result: Result;
+    collection: AutocompleteCollection<Result>;
+    resultIndex: number;
+  }[] = [];
+  let resultIndex = 0;
+
+  for (let collection of collections) {
+    for (let result of collection.items) {
+      items.push({ result, collection, resultIndex });
+      resultIndex += 1;
+    }
+  }
+
+  if (items.length === 0) {
     return (
       <div className="p-6 text-center">
         <NoResultsIcon className="mx-auto h-5 w-5 stroke-zinc-900 dark:stroke-zinc-600" />
@@ -253,7 +277,7 @@ function SearchResults({
 
   return (
     <ul {...autocomplete.getListProps()}>
-      {collection.items.map((result, resultIndex) => (
+      {items.map(({ result, collection, resultIndex }) => (
         <SearchResult
           key={result.url}
           result={result}
@@ -270,9 +294,9 @@ function SearchResults({
 const SearchInput = forwardRef<
   React.ElementRef<'input'>,
   {
-    autocomplete: Autocomplete
-    autocompleteState: AutocompleteState<Result> | EmptyObject
-    onClose: () => void
+    autocomplete: Autocomplete;
+    autocompleteState: AutocompleteState<Result> | EmptyObject;
+    onClose: () => void;
   }
 >(function SearchInput({ autocomplete, autocompleteState, onClose }, inputRef) {
   let inputProps = autocomplete.getInputProps({ inputElement: null });
@@ -320,9 +344,9 @@ function SearchDialog({
   setOpen,
   className,
 }: {
-  open: boolean
-  setOpen: (open: boolean) => void
-  className?: string
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  className?: string;
 }) {
   let formRef = useRef<React.ElementRef<'form'>>(null);
   let panelRef = useRef<React.ElementRef<'div'>>(null);
@@ -375,7 +399,7 @@ function SearchDialog({
       <div className="fixed inset-0 overflow-y-auto px-4 py-4 sm:px-6 sm:py-20 md:py-32 lg:px-8 lg:py-[15vh]">
         <DialogPanel
           transition
-          className="mx-auto transform-gpu overflow-hidden rounded-lg bg-zinc-50 ring-1 shadow-xl ring-zinc-900/7.5 data-closed:scale-95 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:max-w-xl dark:bg-zinc-900 dark:ring-zinc-800"
+          className="mx-auto transform-gpu overflow-hidden rounded-lg bg-zinc-50 shadow-xl ring-1 ring-zinc-900/7.5 data-closed:scale-95 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:max-w-xl dark:bg-zinc-900 dark:ring-zinc-800"
         >
           <div {...autocomplete.getRootProps({})}>
             <form
@@ -399,7 +423,7 @@ function SearchDialog({
                   <SearchResults
                     autocomplete={autocomplete}
                     query={autocompleteState.query}
-                    collection={autocompleteState.collections[0]}
+                    collections={autocompleteState.collections ?? []}
                   />
                 )}
               </div>
