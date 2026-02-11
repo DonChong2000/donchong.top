@@ -1,22 +1,33 @@
-import Image from 'next/image'
-import { YouTubeEmbed } from '@next/third-parties/google'
+import Image from 'next/image';
+import { YouTubeEmbed } from '@next/third-parties/google';
 
 export const metadata = {
   title: 'Status',
   description:
     'status.donchong.top is my simple cloudflare worker site that shows the status of my personal website and services, and also provides a button to start my Minecraft server when I want to play with my friends.',
-}
+};
 
 # status.donchong.top
+
+#cloudflare #workers #monitoring #status
 
 > If you want to monitor your site and services, use <a href="#simple-solution">UptimeRobot</a>.
 
 ## What is this?
-[status.donchong.top](https://status.donchong.top/) is my simple cloudflare worker site that shows the status of my personal website and services, 
+
+[status.donchong.top](https://status.donchong.top/) is my simple cloudflare worker site that shows the status of my personal website and services,
 and also provides a button to start my Minecraft server when I want to play with my friends.
-<Image src='/Pasted image 20250829184022.png' width={904} height={675} alt='status.donchong.top screenshot' className='w-full h-auto'/>
+
+<Image
+  src="/Pasted image 20250829184022.png"
+  width={904}
+  height={675}
+  alt="status.donchong.top screenshot"
+  className="h-auto w-full"
+/>
 
 ## Setting up Cloudflare Worker
+
 I want a site that never goes down, mainly to show my site and service status. For that, I plan to use Cloudflare Workers.
 Before building the real thing, I decided to test the idea using [Bill-AI](/bill-ai). That project is just a static site that converts a JSON object into a table I can copy into Excel. My goal is to replace it with a worker as a test run.
 
@@ -26,28 +37,50 @@ I followed [this guide](https://developers.cloudflare.com/workers/configuration/
 
 At first, `npx wrangler deploy` didn’t work, so I tried `npx wrangler publish` instead.
 
-<Image src='/Pasted%20image%2020240817022358.png' width={296} height={49} alt='Wrangler Deploy Error' className='w-full h-auto'/>
-At of 2025-08-29, this problem is solved.~~The issue came from the default Wrangler install being outdated. Running `npx wrangler --version`, you will get `0.0.30` for some reason which is a very old version. To update it, simply run `npm install wrangler@latest`~~
+<Image
+  src="/Pasted%20image%2020240817022358.png"
+  width={296}
+  height={49}
+  alt="Wrangler Deploy Error"
+  className="h-auto w-full"
+/>
+At of 2025-08-29, this problem is solved.~~The issue came from the default
+Wrangler install being outdated. Running `npx wrangler --version`, you will get
+`0.0.30` for some reason which is a very old version. To update it, simply run
+`npm install wrangler@latest`~~
 
-Many Cloudflare's example are using old syntax, which cause a lot of troubles. Check the  [Migration Guide](https://developers.cloudflare.com/workers/reference/migrate-to-module-workers/) to see how to update your code if you have the same problem. This is also mentioned in a [GitHub Issue](https://github.com/cloudflare/workerd/issues/854).
+Many Cloudflare's example are using old syntax, which cause a lot of troubles. Check the [Migration Guide](https://developers.cloudflare.com/workers/reference/migrate-to-module-workers/) to see how to update your code if you have the same problem. This is also mentioned in a [GitHub Issue](https://github.com/cloudflare/workerd/issues/854).
 
 Then I set up a custom domain in the settings:
 
-<Image src='/Pasted%20image%2020240817025503.png' width={685} height={482} alt='Custom Domain Setup' className='w-full h-auto'/>
+<Image
+  src="/Pasted%20image%2020240817025503.png"
+  width={685}
+  height={482}
+  alt="Custom Domain Setup"
+  className="h-auto w-full"
+/>
 
 After I updated the prompt in my Bill-ai project and flushed DNS caches, now [Bill-AI](/projects/bill-ai) is online!
-* Chrome: [chrome://net-internals/#dns](https://www.cyberciti.biz/faq/google-chrome-clear-or-flush-the-dns-cache/)
-* Windows Command: `ipconfig /flushdns`
 
-<Image src='/Pasted%20image%2020240817025747.png' width={572} height={344} alt='Site Online' className='w-full h-auto'/>
+- Chrome: [chrome://net-internals/#dns](https://www.cyberciti.biz/faq/google-chrome-clear-or-flush-the-dns-cache/)
+- Windows Command: `ipconfig /flushdns`
+
+<Image
+  src="/Pasted%20image%2020240817025747.png"
+  width={572}
+  height={344}
+  alt="Site Online"
+  className="h-auto w-full"
+/>
 
 ## Ping my sites
 
 By referencing [this article](https://paulgalow.com/how-to-check-for-internet-connectivity-node/), its very easy to check for internet connectivity in Node.js.
 
 ```js
-const { createConnection } = require("net");
-function checkTCP(host = "mc.donchong.top", port = 25566) {
+const { createConnection } = require('net');
+function checkTCP(host = 'mc.donchong.top', port = 25566) {
   return new Promise((resolve, reject) => {
     const client = createConnection({ host, port }, () => {
       console.log(`TCP connection established on port ${port}`);
@@ -55,12 +88,12 @@ function checkTCP(host = "mc.donchong.top", port = 25566) {
       resolve();
     });
     client.setTimeout(1000);
-    client.on("timeout", err => {
+    client.on('timeout', (err) => {
       console.error(`TCP connection on port ${port} timed out`);
       client.destroy();
       reject(err);
     });
-    client.on("error", err => {
+    client.on('error', (err) => {
       console.error(`Error trying to connect via TCP on port ${port}`);
       reject(err);
     });
@@ -75,12 +108,14 @@ checkTCP()
 ```
 
 ## Ping my Minecraft servers
+
 Although the above website method also works for minecraft servers, I wish to get more informations about their status and player activity.
 
 A Minecraft Server Status API provided by https://mcstatus.io/ provide just the everything I need.
 Simply by sending a get request to
 `https://api.mcstatus.io/v2/status/java/gtnh.donchong.top`
-I can get a lot of informations like online, players, software version, mods, even SRV Record. 
+I can get a lot of informations like online, players, software version, mods, even SRV Record.
+
 ```json
 {
   "online": true,
@@ -108,7 +143,8 @@ I can get a lot of informations like online, players, software version, mods, ev
   "motd": {
     "raw": "GT:New Horizons 2.6.1",
     "clean": "GT:New Horizons 2.6.1",
-    "html": "<span><span>GT:New Horizons 2.6.1</span></span>"  },
+    "html": "<span><span>GT:New Horizons 2.6.1</span></span>"
+  },
   "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaX (...10.6 kB)",
   "software": null,
   "plugins": [],
@@ -120,33 +156,36 @@ I can get a lot of informations like online, players, software version, mods, ev
 ```
 
 ## Starting my Minecraft server
+
 > This function is currently shutdown, as we are not playing it now.
 
 When I played TFG Modpack with friends, food would spoil if the server stayed up 24/7, so I needed a way for them to start it only when they wanted to play.
+
 <YouTubeEmbed videoid="oYu1vo3FuxU" />
 
-As I am learning Cloudflare and following the theory of ['the more you f**k around, the more you know'](https://youtu.be/WntjAM2wqF8?si=Vtj28V_ewgpCKsQh). 
-  I went for an **unnecessarily over-engineered** approach. This part is just for fun at this point,
-  the code here are more of a proof of concept and for experimentation.
+As I am learning Cloudflare and following the theory of ['the more you f\*\*k around, the more you know'](https://youtu.be/WntjAM2wqF8?si=Vtj28V_ewgpCKsQh).
+I went for an **unnecessarily over-engineered** approach. This part is just for fun at this point,
+the code here are more of a proof of concept and for experimentation.
 
 First, When I click the start button on my site, it will send a request PUT request to a my api.donchong.top worker.
+
 ```js
 export async function onRequest(context) {
-    try{
-        const fetchpromuse = await fetch(`https://api.donchong.top/v1/tfg`, {
-            method: 'PUT',
-          })
-        const json = await fetchpromuse.json();
-        return new Response(JSON.stringify(json));
-    }catch(e){
-        // if (e === 'error code: 521') return new Response({error: 'error code: 521, My Oracle server is down!'});
-        return new Response(JSON.stringify(`error: ${e.message}`));
-    }
+  try {
+    const fetchpromuse = await fetch(`https://api.donchong.top/v1/tfg`, {
+      method: 'PUT',
+    });
+    const json = await fetchpromuse.json();
+    return new Response(JSON.stringify(json));
+  } catch (e) {
+    // if (e === 'error code: 521') return new Response({error: 'error code: 521, My Oracle server is down!'});
+    return new Response(JSON.stringify(`error: ${e.message}`));
+  }
 }
-
 ```
 
 Then the api.donchong.top worker will forward the request to my Oracle Cloud Server.
+
 ```js
     async PUT(path,request) {
         try{
@@ -170,34 +209,49 @@ Then the api.donchong.top worker will forward the request to my Oracle Cloud Ser
 ```
 
 Finally, my Oracle Cloud Server runs an express server that will receive the request and start the Minecraft server
+
 ```js
 app.put('/tfg', (req, res) => {
-    res.setHeader('content-type', 'application/json');
-    if(isTFGRunning){
-        return res.status(409).json({"success":"false", 'message': 'TFG server has started or is starting.'});
-    } 
-    const tfgDirectory = path.resolve(__dirname, '/home/ubuntu/Minecraft/TerraFirmaGreg/');
-    const tfgServer = spawn('sh', ['nodeStart.sh'], { cwd: tfgDirectory });
-    isTFGRunning = true;
-    tfgServer.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
-    });
-    tfgServer.on('close', (code) => {
-        isTFGRunning = false;
-        console.log(`Shell script exited with code ${code}`);
-    });
-    res.json({"success":"true",'message': 'TFG server is starting!'})
+  res.setHeader('content-type', 'application/json');
+  if (isTFGRunning) {
+    return res
+      .status(409)
+      .json({
+        success: 'false',
+        message: 'TFG server has started or is starting.',
+      });
+  }
+  const tfgDirectory = path.resolve(
+    __dirname,
+    '/home/ubuntu/Minecraft/TerraFirmaGreg/',
+  );
+  const tfgServer = spawn('sh', ['nodeStart.sh'], { cwd: tfgDirectory });
+  isTFGRunning = true;
+  tfgServer.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+  tfgServer.on('close', (code) => {
+    isTFGRunning = false;
+    console.log(`Shell script exited with code ${code}`);
+  });
+  res.json({ success: 'true', message: 'TFG server is starting!' });
 });
 ```
 
-
 ## Simple solution
+
 After all the wheel reinventing, I met UptimeRobot, a free service that can monitor your site and services, and alert you when they are down, and give you a nice history dashboard. I believe this is all you need for most of the time.
 
 It can monitor:
+
 - HTTP / Websites
 - Ping for a specific IP address
 - Port (like a Minecraft server port)
 - Keywords (check if a specific keyword exist in the website)
 
-<Image src='/Pasted image 20250829050647.png' width={1300} height={1029} alt='Wrangler Deploy Error' />
+<Image
+  src="/Pasted image 20250829050647.png"
+  width={1300}
+  height={1029}
+  alt="Wrangler Deploy Error"
+/>

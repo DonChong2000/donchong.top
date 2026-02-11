@@ -1,46 +1,54 @@
-import { YouTubeEmbed } from '@next/third-parties/google'
-import Image from 'next/image'
-import { getImageMap } from '@/lib/imgMap'
-export const img = getImageMap(import.meta.url)
+import { YouTubeEmbed } from '@next/third-parties/google';
+import Image from 'next/image';
+import { getImageMap } from '@/lib/imgMap';
+export const img = getImageMap(import.meta.url);
 export const metadata = {
   title: 'Recipe Generator',
   description:
     'The **Recipe Generator** is a GenAI tool that generates a recipe from a video. It works even if the video does not have subtitles, and it can process non-YouTube videos as well.',
-}
+};
 
 # Recipe Generator
+
+#asr #chatbot #cloudflare
+
 I cook a lot. And I found it inconvenient to follow a cooking tutorial video while I'm actually cooking. So, I tried to summarize the footage using Gemini, ChatGPT, and Perplexity. They either made up parts of the recipe, used a different one from the internet, or failed because the video didn't have subtitles. Therefore, I created one myself.
 
 [Here](#) is a comparison of my bot and other available AIs.
+
 ## What it does
 
 The Recipe Generator is a custom bot I built to run in my personal **"Notes" Discord server**. You can [join the server here](https://discord.gg/7EAegdaShK) to try it out.
+
 <YouTubeEmbed videoid="BCEItLcKF9I" />
-<br/>
+<br />
 
 When you submit a YouTube link, the bot processes the video and returns a recipe in a **consistently structured format**. The summary always includes all the **critical information**:
 
-* **Portion size**
-* **Cook time**
-* **Ingredients**, which are neatly sectioned and automatically converted into **SI units**.
+- **Portion size**
+- **Cook time**
+- **Ingredients**, which are neatly sectioned and automatically converted into **SI units**.
 
 To ensure the generated recipe is as **accurate and complete** as possible, the bot performs a few extra steps:
-* For videos that lack subtitles, it uses **Cloudflare AI services** to transcribe the audio.
-* It also pulls and utilizes any relevant information from the video description.
-* Crucially, the bot is prompted to **not hallucinate** or invent missing information.
 
+- For videos that lack subtitles, it uses **Cloudflare AI services** to transcribe the audio.
+- It also pulls and utilizes any relevant information from the video description.
+- Crucially, the bot is prompted to **not hallucinate** or invent missing information.
 
 ## How it works
 
 I tried to "Vibe Code" the program, but apparently it's not as easy as just prompting for what I want. I ended up having to iterate on the prompt, fixing all kinds of hallucinations and giving explicit instructions, and eventually got it working. Anyway, here is how it works:
 
 It consists of two parts:
+
 1. A Discord bot that parses the link, obtains the transcript and video description, then generates a recipe using the given information.
 2. Transcriber, used to generate a transcript when there is no subtitle in the video.
 
 ## Discord bot
+
 The discord bot based on my previous step of this project "Transcriber" back in 30 May 2025.
 The bot already have the basic functions, and I ask Gemini CLI to modify it.
+
 ```
 Task: Edit bot2.js
 
@@ -58,29 +66,36 @@ and the prompt as follow:
 ```
 
 ## Transcriber
+
 The transcriber does the following:
-* Fetch existing YouTube transcripts (if available).
-* Generate transcriptions from any YouTube, video, or audio link — including Discord attachments.
-* Transcribe in parallel, achieving 2–6× faster speeds.
-* Completely free to use.
+
+- Fetch existing YouTube transcripts (if available).
+- Generate transcriptions from any YouTube, video, or audio link — including Discord attachments.
+- Transcribe in parallel, achieving 2–6× faster speeds.
+- Completely free to use.
 
 ### Converting audio to text
+
 I've [tested and compared](/projects/comparing-asr-solutions) most of the speech to text (ASR) options available, including self hosted, Azure, OpenAI, and third party services.
 
 For my transcriber, I chose [Cloudflare's whisper-large-v3-turbo](https://developers.cloudflare.com/workers-ai/models/whisper-large-v3-turbo/). Cloudflare provides a free quota of 10,000 neurons, which is roughly equivalent to 4.5 hours of transcription.
 
 ### Parallel transcribing
+
 By dividing the audio into segments and transcribing them in parallel, the transcription process becomes significantly faster. In the example below, this approach **reduced the total processing time by 60%** (55 seconds). Cloudflare supports up to 16 concurrent requests and this example uses 6, which means it will be even faster when processing longer audio.
 
 However, splitting audio introduces overhead, and excessive segmentation can reduce transcription coherence. To balance performance and accuracy, a **minimum chunk length of 150 seconds** is set.
 
 #### No splitting:
+
 ![[Pasted image 20251018193655.png]]
+
 #### Spited:
+
 ![[Pasted image 20251018193658.png]]
 
-
 ### Spec Coding
+
 After multiple times of iterations, I come up with the following prompts that can generate the program in one go. This prompt also explains how this program works.
 
 ```
@@ -133,27 +148,31 @@ ref:https://developers.cloudflare.com/workers-ai/models/whisper-large-v3-turbo/
 ```
 
 ### Library fails
-It was very discouraging that the application broke without me doing anything wrong. 
+
+It was very discouraging that the application broke without me doing anything wrong.
+
 - Since Google doesn't want people to crawl their data for AI use, many YouTube-related packages often fail or need frequent updates
-	![[Pasted image 20251018182043.png]]
+  ![[Pasted image 20251018182043.png]]
 - And ytdl-core is dead
-	![[Pasted image 20251107183453.png]]
+  ![[Pasted image 20251107183453.png]]
 - So as fluent-ffmpeg
-	![[Pasted image 20251107190455.png]]
+  ![[Pasted image 20251107190455.png]]
 
 #### Solution
+
 If I were doing traditional coding, three libraries failing like this would mean a complete rewrite of the program, and I might already give up.
 
 Fortunately, I took spec coding approach, which means that by changing some prompts, asking AI to use a more reliable library `youtube-dl-exec`, and using native `ffmpeg`, my program can get going again.
 
 ## The prompt
+
 I used [OpenAI's GPT-5 Prompt Optimizer](https://platform.openai.com/chat/edit?models=gpt-5&optimize=true) to help construct this prompt, and here are some explanations about it:
 
 1. **Keep the recipe within 2000 characters**: Discord messages are limited to 2000 characters. Exceed this limit, and the recipe will be sent as a Markdown file instead.
 
 2. **If any required information is missing, write N/A**: LLMs often hallucinate, and the worst scenario is that I cannot differentiate real and fake information. Explicitly ask it to put N/A, so that LLMs won't make it up.
 
-3. **Begin with a concise checklist (3-7 bullets) of what you will do (Adviced by the optimizer)**:  It is a Chain of Thought (CoT) approach, it helps the LLM break down the problem.
+3. **Begin with a concise checklist (3-7 bullets) of what you will do (Adviced by the optimizer)**: It is a Chain of Thought (CoT) approach, it helps the LLM break down the problem.
 
 4. **An Example**: This is one shot prompting, that help LLM understand where those `{varialbe}` should be filled.
 
@@ -181,7 +200,7 @@ const getPrompt = (cleanTranscript, videoDescription) => `
 ## Ingredients
 - Create a section for each ingredient part (e.g., 'Main Ingredient', 'Sauce', 'Garnish'), following the order in the source.
 - For each part, list each ingredient in the format:
-  
+
   {PART NAME}:
   - {Item}, ({Prep State: e.g., Diced/Minced, or N/A}): {Amount in SI unit or as described}
 
@@ -193,7 +212,7 @@ const getPrompt = (cleanTranscript, videoDescription) => `
 - Do not limit to only two steps—include every step from the source.
 - Groups step together. One Step can contain multiple sub-steps.
 - For each step, use the following format:
-  
+
   ## Step {step_number}:
   - {List instruction in bullet points, bolding keywords}
 

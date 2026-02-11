@@ -1,27 +1,30 @@
-import Image from 'next/image'
-import { getImageMap } from '@/lib/imgMap'
-export const img = getImageMap(import.meta.url)
+import Image from 'next/image';
+import { getImageMap } from '@/lib/imgMap';
+export const img = getImageMap(import.meta.url);
 export const metadata = {
   title: 'Bill-ai',
   description:
     'Bill-ai is an OCR-powered receipt extractor I built to automate our roommate expense tracking, converting receipt images into spreadsheet-ready data for easier bookkeeping and future spending analysis.',
-}
+};
 
 # Bill-AI - Receipt Extractor
+
+#ai #azure #automation #nodejs #chatbot
 
 Since I live with roommates, we keep track of our shared expenses through bookkeeping. It helps us see what we’ve spent money on and compare the prices of items over time. However, manually recording every item is time-consuming, so I built a **receipt extractor** that uses OCR to process our receipts automatically.
 
 Here is how it works:
-1. Upload the image of the receipt to my Discord server.  
+
+1. Upload the image of the receipt to my Discord server.
 2. Bill-ai will OCR the receipt and return a link.
-  ![[Pasted image 20251015205237.png]]
+   ![[Pasted image 20251015205237.png]]
 3. Click on the link, and copy the data
-  ![[Pasted image 20251015205240.png]]
+   ![[Pasted image 20251015205240.png]]
 4. Paste the data into our spreadsheet, and check if the sum is correct.
-  <div className='w-1/2'>![[Pasted image 20251015205242.png]]</div>
-  
-  
+   <div className="w-1/2">![[Pasted image 20251015205242.png]]</div>
+
 Discord is used as the platform because it has the following advantages:
+
 1. It keeps everything in record, I don't have to save it.
 2. It has accounts inherently; I can tell who bought the item easily.
 3. Discord has PC and mobile versions, convenient for taking a picture when we are shopping and editing a spreadsheet on a computer.
@@ -31,6 +34,7 @@ We’ve been using it for over a year now, and it’s been working great. We’v
 ![[Pasted image 20251015205602.png]]
 
 ---
+
 ## Starting Point: Forked from My Discord AI
 
 This project start with a Discord chatbot named Bill, designed for ledgering and receipt processing.
@@ -62,17 +66,18 @@ User ID to Name:
 Since **GPT-4o** and **GPT-4o mini** now support image input through the Assistant API, I wanted to experiment with it even if it might not be part of the final product.
 
 The attachments on Discord could be accessed through a URL, which is what the GPT-4o API takes, therefore, the implementation is quite simple:
+
 ```js
 if (message.attachments.size) {
-  const attachmentURLs = message.attachments.map(info => info.url);
+  const attachmentURLs = message.attachments.map((info) => info.url);
   console.log(attachmentURLs[0]);
   content = [
-    { type: "text", text: content },
+    { type: 'text', text: content },
     {
-      type: "image_url",
+      type: 'image_url',
       image_url: {
-        "url": attachmentURLs[0],
-        "detail": "high"
+        url: attachmentURLs[0],
+        detail: 'high',
       },
     },
   ];
@@ -84,10 +89,12 @@ Thanks to multimodal in GPT-40 and GPT-4o mini, simply by feeding in the image a
 ```
 http://40.233.83.154:8080/?bill=%7B%22items%22:[%7B%22item%22:%22Dairyland%20Milk%22,%22price%22:6.1,%22amount%22:1%7D,%7B%22item%22:%22Recycling%20Fee%22,%22price%22:0.05,%22amount%22:1%7D,%7B%22item%22:%22Pet%20Dep%22,%22price%22:0.25,%22amount%22:1%7D]%7D
 ```
+
 ![[Pasted image 20251015214134.png]]
 ![[Pasted image 20251015214138.png]]
 After several tests, GPT started mixing old data with new requests, and my API bill starts to skyrocket.
 To reduce cost and improve reliability, I decided to use a more dedicated solution for receipt extraction.
+
 ## Integrating Azure Document Intelligence
 
 Document Intelligence offers OCR services for receipt extraction up to 500 images free per month. I decided to pair it with ChatGPT with a tool called Function. (At this point, having ChatGPT involved is just for fun lol)
@@ -98,32 +105,39 @@ By following this sample: [Azure Sample: analyzeReceiptByModelId.js](https://git
 Although Document Intelligence also support sending images by links, Discord media links don’t work with Azure (likely due to URL encoding or access restrictions). Most photos also exceed the **4MB limit** of the free tier, so we need to **download and do some pre-processing to the images**.
 ![[Pasted image 20251015214219.png]]
 ![[Pasted image 20251015214221.png]]
+
 ### Image Pre-Processing
+
 [**Sharp**](https://www.npmjs.com/package/sharp) is a powerful and easy-to-use image processing library. It might be overkill for my use case, but it works great.
 ![[Pasted image 20251015214232.png]]
 To reduce file size, instead of lowering the resolution, I chose to convert images to **grayscale**. Since color doesn’t add much useful information for OCR, this approach significantly reduces file size without sacrificing image quality. The text and edges remain sharp and readable, resulting in better overall recognition accuracy.
 ![[Pasted image 20251015214236.png]]
+
 ## Wrapping up
 
 ### Zero Downtime
+
 Occasionally, the bot crashes, so I looked into better process management.
 I found **[PM2](https://www.npmjs.com/package/pm2)**, a Node.js process manager that supports **zero-downtime restarts**.
 Perfect chance to test it out by crashing the bot deliberately.
+
 ### Solving the crash
+
 The crashes occur because a single thread can only process one message at a time.
 Submitting a new message before the previous run finishes causes this error from OpenAI API:
 
-~~~
+```
 “You can’t add a new run as run_123456789 is active.”
-~~~
+```
 
 Cancelling and restarting works temporarily, but doing this too often locks the thread in a **“cancelling” state**, preventing new runs for a while.
 
 To fix this, I implemented a simple lock.
 If a new message arrives before the previous one finishes, the bot replies with:
+
 > “You’re a little too quick there.”
 
-This way only one images will process at a time, preventing it from crashing. 
+This way only one images will process at a time, preventing it from crashing.
 ![[Pasted image 20251015214243.png]]
 
 With the process now finalized, Bill-AI is running 24/7 and restarts itself automatically upon any unexpected error. I also configured it to auto-start whenever the host machine reboots, all managed by PM2. This setup makes the entire system basically maintenance-free.

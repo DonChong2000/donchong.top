@@ -3,11 +3,14 @@ import { getImageMap } from '@/lib/imgMap';
 export const img = getImageMap(import.meta.url);
 
 export const metadata = {
-    title: 'The LeetCode Grind',
-    description: 'A technical retrospective on completing the Grind 75 curriculum in TypeScript, featuring performance tips for JavaScript data structures and summaries of core algorithmic patterns.',
+  title: 'The LeetCode Grind',
+  description:
+    'A technical retrospective on completing the Grind 75 curriculum in TypeScript, featuring performance tips for JavaScript data structures and summaries of core algorithmic patterns.',
 };
 
 # The LeetCode Grind
+
+#leetcode #typescript
 
 This page documents my process of grinding LeetCode and the lessons learned from it.
 
@@ -122,6 +125,7 @@ for (let i = head; i < arr.length; i++) {
 We can wrap all these into a class, but in the context of LeetCode, this is more than enough. If we need to solve a bigger question, I would prefer using a real library instead.
 
 #### `splice()` and `slice()`
+
 In some questions like [224. Basic Calculator](https://leetcode.com/problems/basic-calculator/), we need to work on the array recursively (at least in my approach). These two operations create a new array and will lead to run time exceeded error. Instead, using the old school two pointers to indicate start and end, and a pass by reference of the array would do the trick in O(1).
 
 ### DFS / BFS
@@ -213,23 +217,23 @@ I stumbled across an interesting comment under the LRU cache question. And the k
 
 1. Is Map in JavaScript deterministic (follow insertion order)?
 2. Is insert/delete operations in Map O(1)
-    <div className="w-full lg:w-1/2 ">
-        ![[Pasted image 20260122195649.png]]
-    </div>
+   <div className="w-full lg:w-1/2">![[Pasted image 20260122195649.png]]</div>
 
 **Answer:**
+
 1. A map in JavaScript is deterministic. Which means the order of the elements follows the insertion order. You can find this from ECMA 24.1.3.5. The same also applies to Set.
 
-    ![[Pasted image 20260122200931.png]]
+   ![[Pasted image 20260122200931.png]]
 
 2. Both Insert or Delete are O(1) operations, regardless of the size. I used a benchmark script to verify the O(1) characteristics.
 
-    Note: 16777216 items is the design maximum of the V8 engine.
-    https://stackoverflow.com/questions/54452896/maximum-number-of-entries-in-node-js-map
-    ![[Pasted image 20260122204235.png]]
-    ![[Pasted image 20260122204018.png]]
+   Note: 16777216 items is the design maximum of the V8 engine.
+   https://stackoverflow.com/questions/54452896/maximum-number-of-entries-in-node-js-map
+   ![[Pasted image 20260122204235.png]]
+   ![[Pasted image 20260122204018.png]]
 
 #### Back Tracking
+
 Honestly, I don't think I have enough backtracking knowledge to write insight on it, haha.
 
 Backtracking is simply returning to the previous step when there is no path.

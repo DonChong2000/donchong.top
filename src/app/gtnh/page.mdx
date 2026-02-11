@@ -1,28 +1,31 @@
-import Image from 'next/image'
-import { getImageMap } from '@/lib/imgMap'
-export const img = getImageMap(import.meta.url)
-import {ScrollingCards} from '@/components/ScrollingCards'
+import Image from 'next/image';
+import { getImageMap } from '@/lib/imgMap';
+export const img = getImageMap(import.meta.url);
+import { ScrollingCards } from '@/components/ScrollingCards';
 
 export const metadata = {
   title: 'GTNH',
-  description:
-    'This page documents my GTNH gameplay journey.',
-}
+  description: 'This page documents my GTNH gameplay journey.',
+};
 
 # GregTech: New Horizons Playthrough
+
+#minecraft #gtnh #docker #automation
+
 GregTech: New Horizons (GTNH) is an expert-level Minecraft modpack, widely regarded as the most difficult in the game. With its immense tech progression and complex crafting chains, completing it can take years.
 
 I have been playing GTNH since 2021. As of 2025-10-08, I have played for 3000 hours, and I would like to share my journey so far.
 
 Since I began keeping notes in the IV Age, I’ll briefly summarize the earlier stages first.
-<ScrollingCards className="hidden xl:flex justify-center"/>
+
+<ScrollingCards className="hidden justify-center xl:flex" />
 
 ---
 
 ## The Beginning
 
 Like most Minecraft survival worlds, the journey began in a humble dirt house.  
-![[2025-08-10_22.06.00.png]] 
+![[2025-08-10_22.06.00.png]]
 
 GTNH started with three players: Tom, Sergio, and me.  
 ![[2025-08-10_22.06.22.png]]
@@ -68,16 +71,15 @@ From the IV tier onward, the difficulty ramps up sharply. This is the point wher
 ### Power Generation
 
 #### Generators
+
 Originally, the base was powered by cetane-boosted diesel, but crop production could not scale as easily as benzene. Currently, a Large Gas Turbine handles normal loads, while the LCE is switched on when extra power is needed.  
 ![[2025-08-10_23.51.56.png]]
 
 #### Benzene Production
 
 - 11×11 EnderIO Tree Farm
-    
 - Coke Oven → Fluid Extractor → 3× Distillation Towers
-    
-- Output: 1,200 L/s benzene (HSS-E Tight LGT burns 260 L/s)  
+- Output: 1,200 L/s benzene (HSS-E Tight LGT burns 260 L/s)
 
 ![[Pasted image 20250630154824.png]]  
 ![[Pasted image 20250630154955.png]]
@@ -97,16 +99,20 @@ An entire floor of the TSMC building is dedicated to Platinum Line processing.
 ![[Pasted image 20250811000055.png]]
 
 #### Platinum & Separation
-![[Platium&Separation.png]]  
+
+![[Platium&Separation.png]]
 
 #### Palladium
-![[Palladium.png]]  
+
+![[Palladium.png]]
 
 #### Osmium
-![[Osmium.png]]  
+
+![[Osmium.png]]
 
 #### Iridium
-![[Iridium.png]]  
+
+![[Iridium.png]]
 
 ---
 
@@ -114,16 +120,19 @@ An entire floor of the TSMC building is dedicated to Platinum Line processing.
 
 After watching a video on architecture, I decided to rebuild the “04” (The Fourth Industrial Center).
 
-#### Concept 
+#### Concept
+
 I drew inspiration from the Seagram Building—the “mother of all modern buildings” and a hallmark of the _Less is More_ philosophy. It eliminates unnecessary decoration, highlighting the beauty of structure and materials.
 
 #### Original “04”
+
 ![[2025-05-27_15.49.00.png]]
 
-#### New “04”  
+#### New “04”
+
 ![[Pasted image 20250630155824.png]]
 
-#### Seagram Building 
+#### Seagram Building
 
 ![[Pasted image 20250812201622.png]]
 _P.S._ The new “04” was built in Creative mode to push myself toward better design—otherwise, I’d remain a high-tech caveman.

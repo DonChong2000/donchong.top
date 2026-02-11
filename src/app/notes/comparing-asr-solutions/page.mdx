@@ -1,17 +1,19 @@
-import Image from 'next/image'
-import { getImageMap } from '@/lib/imgMap'
-export const img = getImageMap(import.meta.url)
+import Image from 'next/image';
+import { getImageMap } from '@/lib/imgMap';
+export const img = getImageMap(import.meta.url);
 export const metadata = {
   title: 'Comparing ASR Solutions',
-  description:
-    'This page compares different ASR solutions on the market.',
-}
-
+  description: 'This page compares different ASR solutions on the market.',
+};
 
 # Comparing ASR Solutions
+
+#asr #stt #ai #cloudflare
+
 Date: 2025-06-10
 
 To create a cost-effective transcription project, I researched the common Automatic Speech Recognition (ASR) solutions available on the market. They are:
+
 - [Whisper API](https://platform.openai.com/docs/guides/speech-to-text) from OpenAI
 - [gpt-4o-mini-transcribe](https://platform.openai.com/docs/models/gpt-4o-mini-transcribe) and [gpt-4o-transcribe](https://platform.openai.com/docs/models/gpt-4o-transcribe) from OpenAI
 - [Microsoft Azure STT services](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/speech-to-text)
@@ -22,58 +24,56 @@ To create a cost-effective transcription project, I researched the common Automa
 
 ## Price
 
-| **Service**                       | **Cost per Minute (USD)** | **Notes**                                     |
-| --------------------------------- | ------------------------- | --------------------------------------------- |
-| Selfhost                          | $0.00                     | Free, hardware cost not included              |
-| Cloudflare whisper-large-v3-turbo | $0.00051                  | Free for ~4.5 hours/day (10,000 neurons)      |
-| lemonfox.ai                       | $0.00278                  |                                               |
-| Azure                             | $0.003                    | Free for 5 audio hours/month                  |
-| gpt-4o-mini-transcribe            | $0.003                    |                                               |
-| gpt-4o-transcribe                 | $0.006                    |                                               |
-| OpenAI Whisper1                   | $0.006                    |                                               |
-
+| **Service**                       | **Cost per Minute (USD)** | **Notes**                                |
+| --------------------------------- | ------------------------- | ---------------------------------------- |
+| Selfhost                          | $0.00                     | Free, hardware cost not included         |
+| Cloudflare whisper-large-v3-turbo | $0.00051                  | Free for ~4.5 hours/day (10,000 neurons) |
+| lemonfox.ai                       | $0.00278                  |                                          |
+| Azure                             | $0.003                    | Free for 5 audio hours/month             |
+| gpt-4o-mini-transcribe            | $0.003                    |                                          |
+| gpt-4o-transcribe                 | $0.006                    |                                          |
+| OpenAI Whisper1                   | $0.006                    |                                          |
 
 ---
+
 ## Quality
 
 In order to compare the quality and speed of the solution, I ran this [sample auido](https://youtu.be/WObAS2tXj5s?si=ItmJZdjkDSOCRG2M) (2:57) in postman for all the solutions, and the results are [here](comparing-asr-solutions/sample1).
 
 > I chose this sample audio because I encountered trouble with Cloudflare's Whisper-V3. It usually performs the same or a bit worse than other V3 models.
 
-
 Reason:
+
 1. Test ability to recognize language (Yue and Zh)
 2. Test robustness, the speech is not very clear and the model can make corrections to it.
 
 All transcription are done on Postman, to ensure same environment across all services.
 
+| Rank | Rank                                        | ASR Service | Quality                                                                                                  | Comments |
+| ---- | ------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------- | -------- |
+| 0    | OpenAI - gpt-4o-mini-transcribe with prompt | Excellent   | ✅ Minor Error (2)<br/>❌ Output Cantonese                                                               |
+| 2    | OpenAI - gpt-4o-mini-transcribe             | Excellent   | ❌ No punctuation, not even space<br/>❌ Minor errors (2)<br/>✅ Output Cantonese                        |
+| 1    | OpenAI - gpt-4o-transcribe                  | Excellent   | ❌ Doesn't output original language<br/>✅ Have punctuation<br/>❌ Minor Error(4)                        |
+| 3    | Azure Transcriptions                        | Very Good   | ❌ Simplified Chinese Only <br/>❌ Minor Error(4)<br/>✅ Have punctuation                                |
+| 3    | LemonFox                                    | Very Good   | ❌ No punctuation<br/>❌ Written Chinese<br/>❌ Minor Error (4)                                          |
+| 4    | OpenAI - Whisper-1                          | Good        | ❌ No punctuation<br/>❌ Minor error(4)                                                                  |
+| 5    | Self-hosted, large, faster-whisper          | Good        | ❌ No punctuation<br/>❌ Hallucination<br/>❌ similar to Whisper-1, minor error in different places<br/> |
+| 6    | Self-hosted, base, faster-whisper           | Fair        | ❌ More errors from word with similar pronunciation                                                      |
+| 7    | Cloudflare - whisper-large-v3-turbo         | Poor        | ❌ Simplifies Chinese<br/>❌ No punctuation<br/>❌ Some what non-sense                                   |
+| 8    | Cloudflare - whisper                        | Unusable    | ❌ nonsensical and garbled, Inf loop of "我們去飲品"<br/>❌ 2MB limit                                    | \*/}     |
 
-
-{/* | Rank | ASR Service                                 | Quality   | Comments                                                                               |
-| ---- | ------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------- |
-| 0    | OpenAI - gpt-4o-mini-transcribe with prompt | Excellent | ✅ Minor Error (2)<br/>❌ Output Cantonese                                                             |
-| 2    | OpenAI - gpt-4o-mini-transcribe             | Excellent | ❌ No punctuation, not even space<br/>❌ Minor errors (2)<br/>✅ Output Cantonese                        |
-| 1    | OpenAI - gpt-4o-transcribe                  | Excellent | ❌ Doesn't output original language<br/>✅ Have punctuation<br/>❌ Minor Error(4)                       |
-| 3    | Azure Transcriptions                        | Very Good | ❌ Simplified Chinese Only <br/>❌ Minor Error(4)<br/>✅ Have punctuation                               |
-| 3    | LemonFox                                    | Very Good | ❌ No punctuation<br/>❌ Written Chinese<br/>❌ Minor Error (4)                                         |
-| 4    | OpenAI - Whisper-1                          | Good      | ❌ No punctuation<br/>❌ Minor error(4)                                                                |
-| 5    | Self-hosted, large, faster-whisper          | Good      | ❌ No punctuation<br/>❌ Hallucination<br/>❌ similar to Whisper-1, minor error in different places<br/> |
-| 6    | Self-hosted, base, faster-whisper           | Fair      | ❌ More errors from word with similar pronunciation                                                   |
-| 7    | Cloudflare - whisper-large-v3-turbo         | Poor      | ❌ Simplifies Chinese<br/>❌ No punctuation<br/>❌ Some what non-sense                                  |
-| 8    | Cloudflare - whisper                        | Unusable  | ❌ nonsensical and garbled, Inf loop of "我們去飲品"<br/>❌ 2MB limit                                       | */}
-
-| Rank | ASR Service                                 | Quality   | Comments                                                                                              |
-| ---- | ------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------- |
-| 0    | OpenAI - gpt-4o-mini-transcribe with prompt | Excellent | ✅ Minor Error (2)<br/>❌ Output Cantonese                                                              |
-| 2    | OpenAI - gpt-4o-mini-transcribe             | Excellent | ✅ Output Cantonese<br/>❌ No punctuation, not even space<br/>❌ Minor errors (2)                        |
-| 1    | OpenAI - gpt-4o-transcribe                  | Excellent | ✅ Have punctuation<br/>❌ Doesn't output original language<br/>❌ Minor Error(4)                        |
-| 3    | Azure Transcriptions                        | Very Good | ✅ Have punctuation<br/>❌ Simplified Chinese Only <br/>❌ Minor Error(4)                                |
-| 3    | LemonFox                                    | Very Good | ❌ No punctuation<br/>❌ Written Chinese<br/>❌ Minor Error (4)                                          |
-| 4    | OpenAI - Whisper-1                          | Good      | ❌ No punctuation<br/>❌ Minor error(4)                                                                 |
+| Rank | ASR Service                                 | Quality   | Comments                                                                              |
+| ---- | ------------------------------------------- | --------- | ------------------------------------------------------------------------------------- |
+| 0    | OpenAI - gpt-4o-mini-transcribe with prompt | Excellent | ✅ Minor Error (2)<br/>❌ Output Cantonese                                            |
+| 2    | OpenAI - gpt-4o-mini-transcribe             | Excellent | ✅ Output Cantonese<br/>❌ No punctuation, not even space<br/>❌ Minor errors (2)     |
+| 1    | OpenAI - gpt-4o-transcribe                  | Excellent | ✅ Have punctuation<br/>❌ Doesn't output original language<br/>❌ Minor Error(4)     |
+| 3    | Azure Transcriptions                        | Very Good | ✅ Have punctuation<br/>❌ Simplified Chinese Only <br/>❌ Minor Error(4)             |
+| 3    | LemonFox                                    | Very Good | ❌ No punctuation<br/>❌ Written Chinese<br/>❌ Minor Error (4)                       |
+| 4    | OpenAI - Whisper-1                          | Good      | ❌ No punctuation<br/>❌ Minor error(4)                                               |
 | 5    | Self-hosted, large, faster-whisper          | Good      | ❌ No punctuation<br/>❌ Hallucination<br/>❌ similar to Whisper-1, minor errors<br/> |
-| 6    | Self-hosted, base, faster-whisper           | Fair      | ❌ More errors from word with similar pronunciation                                                    |
-| 7    | Cloudflare - whisper-large-v3-turbo         | Poor      | ❌ Simplifies Chinese<br/>❌ No punctuation<br/>❌ Some what non-sense                                   |
-| 8    | Cloudflare - whisper                        | Unusable  | ❌ nonsensical and garbled, Inf loop of "我們去飲品"<br/>❌ 2MB imit                                       |
+| 6    | Self-hosted, base, faster-whisper           | Fair      | ❌ More errors from word with similar pronunciation                                   |
+| 7    | Cloudflare - whisper-large-v3-turbo         | Poor      | ❌ Simplifies Chinese<br/>❌ No punctuation<br/>❌ Some what non-sense                |
+| 8    | Cloudflare - whisper                        | Unusable  | ❌ nonsensical and garbled, Inf loop of "我們去飲品"<br/>❌ 2MB imit                  |
 
 | Rank (by Speed) | ASR Service                         | Run Time  |
 | --------------- | ----------------------------------- | --------- |
@@ -88,6 +88,7 @@ All transcription are done on Postman, to ensure same environment across all ser
 | 9               | Self-hosted, large, faster-whisper  | 5m 13.62s |
 
 ## Speed
+
 Since the run time of previous samples are too close, I will run a 20mins sample to test the run time of each ASR services. The Sample I use is : [Will legal challenges end the trade war?](https://www.youtube.com/watch?v=kdOMVGO3lew&ab_channel=GoldmanSachs) (16:15)
 
 The results are in [Sample 2](comparing-asr-solutions/sample2).
@@ -106,18 +107,19 @@ The results are in [Sample 2](comparing-asr-solutions/sample2).
 
 ## Ease of Use / Functionality
 
-| Services   | Model                  | vtt/srt | WordTimeStamp | SizeLimit   | Other                                                |
-| ---------- | ---------------------- | ------- | ------------- | ----------- | ---------------------------------------------------- |
-| OpenAI     | gpt-4o-transcribe      | ✅       | ✅             | 25MB        | 1. Realtime transcription<br/>2. Auto Chunking by VAD |
-| OpenAI     | gpt-4o-mini-transcribe | ✅       | ✅             | 25MB        | 1. Realtime transcription<br/>2. Auto Chunking        |
-| OpenAI     | Whisper-1              | ✅       | ✅             | 25MB        | 1. Realtime transcription<br/>2. Auto Chunking        |
-| Azure      | N/A                    | ❌       | ✅             | 2hr / 250MB | speaker diarization                                  |
-| Cloudflare | whisper-large-v3-turbo | ✅       | ✅             | N/A         |                                                      |
-| Cloudflare | whisper                | ✅       | ✅             | 2MB Chunk   |                                                      |
-| Selfhost   | customizable           | ✅       | ✅             | N/A         |                                                      |
-| Lemonfox   | Whisper large-v3       | ✅       | ✅             | N/A         | speaker diarization                                  |
+| Services   | Model                  | vtt/srt | WordTimeStamp | SizeLimit   | Other                                                 |
+| ---------- | ---------------------- | ------- | ------------- | ----------- | ----------------------------------------------------- |
+| OpenAI     | gpt-4o-transcribe      | ✅      | ✅            | 25MB        | 1. Realtime transcription<br/>2. Auto Chunking by VAD |
+| OpenAI     | gpt-4o-mini-transcribe | ✅      | ✅            | 25MB        | 1. Realtime transcription<br/>2. Auto Chunking        |
+| OpenAI     | Whisper-1              | ✅      | ✅            | 25MB        | 1. Realtime transcription<br/>2. Auto Chunking        |
+| Azure      | N/A                    | ❌      | ✅            | 2hr / 250MB | speaker diarization                                   |
+| Cloudflare | whisper-large-v3-turbo | ✅      | ✅            | N/A         |                                                       |
+| Cloudflare | whisper                | ✅      | ✅            | 2MB Chunk   |                                                       |
+| Selfhost   | customizable           | ✅      | ✅            | N/A         |                                                       |
+| Lemonfox   | Whisper large-v3       | ✅      | ✅            | N/A         | speaker diarization                                   |
 
 ## Supported formats
+
 | Services   | Model                  | Supported Format                                                                           |
 | ---------- | ---------------------- | ------------------------------------------------------------------------------------------ |
 | OpenAI     | gpt-4o-transcribe      | flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.                                        |
@@ -130,7 +132,9 @@ The results are in [Sample 2](comparing-asr-solutions/sample2).
 | Lemonfox   | Whisper large-v3       | `mp3`, `wav`, `flac`, `aac`, `opus`, `ogg`, `m4a`, `mp4`, `mpeg`, `mov`, `webm`, and more. |
 
 ---
+
 # Quick Links
+
 - [Sample 1](comparing-asr-solutions/sample1)
 - [Sample 2](comparing-asr-solutions/sample2)
 - [Transcriber](/projects/recipe-generator)

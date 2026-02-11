@@ -1,24 +1,29 @@
-import Image from 'next/image'
-import { getImageMap } from '@/lib/imgMap'
-export const img = getImageMap(import.meta.url)
-import { YouTubeEmbed } from '@next/third-parties/google'
+import Image from 'next/image';
+import { getImageMap } from '@/lib/imgMap';
+export const img = getImageMap(import.meta.url);
+import { YouTubeEmbed } from '@next/third-parties/google';
 export const metadata = {
   title: 'Swimming Pool Drown Detection and Rescue System',
   description:
     'A brief summary of my FYP project - Swimming Pool Drown Detection and Rescue System',
-}
+};
 
 # Swimming Pool Drown Detection and Rescue System (FYP)
 
+#computer-vision #wearable #robotics #fullstack
+
 A system that detects drowning incidents using a wearable device, pinpoints the location with computer vision, and deploys a robotic float for active rescue. I contributed to the concept, research, WebApp, and integration of the computation, wearable, and robotic components, as well as assisting in wearable development.
 
-* Finalist, President's Cup 2022
-* Nominated for ASM Technology Award 2022
-
+- Finalist, President's Cup 2022
+- Nominated for ASM Technology Award 2022
 
 <YouTubeEmbed videoid="onkdku8L9Lc" />
-## Why LED and why 135ms
-Across the projects we examined, the most common challenges were positioning accuracy and signal attenuation. There are many ways to transfer data and determine a device’s position wirelessly. One of our teammates previously worked on a UWB positioning system, and we could also adopt a more advanced RTK-based method. So why do we stick with something as simple as LEDs? The answer becomes clear in the following figure:
+## Why LED and why 135ms Across the projects we examined, the most common
+challenges were positioning accuracy and signal attenuation. There are many ways
+to transfer data and determine a device’s position wirelessly. One of our
+teammates previously worked on a UWB positioning system, and we could also adopt
+a more advanced RTK-based method. So why do we stick with something as simple as
+LEDs? The answer becomes clear in the following figure:
 
 ![[Pasted image 20251019122046.png]]
 
@@ -29,19 +34,23 @@ Interestingly, the highest penetration frequency happens to be visible light—o
 We use a red–green blinking signal to indicate drowning. This simple approach makes it easy to implement, helps both computers and humans locate the signal quickly, and alerts nearby people effectively.
 
 ### The yellow frame problem
+
 We have tested 33ms,67ms,70ms,133ms blinking duration, and record them in 30fps. By analyzing each frame, some time red and green light will mix together and appears yellow.
 
 ![[Pasted image 20251019181303.png]]
 
 #### Yellow frames occurrence
+
 By plotting all frames into a hue histogram, we can visualize and quantify the occurrence of yellow frames. The two extremes represent red and yellow frames, while the values in between correspond to varying degrees of yellow. We found that using a frequency below the Nyquist limit (e.g., 33 ms) results in noticeably poorer performance, which improves as the frequency increases.
 ![[Pasted image 20251019210403.png]]
 
 #### Yellow Frame distribution
+
 By plotting the hue error over time, we can see when yellow frames occur. Each spike represents a yellow frame. Although 67 ms and 70 ms differ by only 3 ms, the 70 ms sample shows a much more even distribution of yellow frames. This is likely because 67 ms corresponds to about 15 Hz, a multiple of 30 fps, causing the yellow frames to cluster. The effect is even more apparent in the 133 ms sample.
 ![[Pasted image 20251020162936.png]]
 
 #### Results of 135ms
+
 In Experiment 1, 133 ms was the best performer. In Experiment 2, we found that adding a small offset of a few milliseconds helps prevent yellow frame clustering. Therefore, we selected 135 ms as our signal frequency, as it performs best in both tests.
 
 Looking back, I think testing a prime number like 137 would be interesting and likely produce even better results.
@@ -49,6 +58,6 @@ Looking back, I think testing a prime number like 137 would be interesting and l
 
 ## The full report
 
-* [FYP Final Report](https://filedn.com/lvpQyX5dxsK7TR0Vaa6Pr1k/Permanent/105_DES3_Final.pdf)
-* [FYP Progress Report](https://filedn.com/lvpQyX5dxsK7TR0Vaa6Pr1k/Permanent/105_DES3_Prog.pdf)
-* [FYP Proposal](https://filedn.com/lvpQyX5dxsK7TR0Vaa6Pr1k/Permanent/105_DES3_Prop.pdf)
+- [FYP Final Report](https://filedn.com/lvpQyX5dxsK7TR0Vaa6Pr1k/Permanent/105_DES3_Final.pdf)
+- [FYP Progress Report](https://filedn.com/lvpQyX5dxsK7TR0Vaa6Pr1k/Permanent/105_DES3_Prog.pdf)
+- [FYP Proposal](https://filedn.com/lvpQyX5dxsK7TR0Vaa6Pr1k/Permanent/105_DES3_Prop.pdf)

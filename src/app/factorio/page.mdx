@@ -1,64 +1,88 @@
-import Image from 'next/image'
-import { getImageMap } from '@/lib/imgMap'
-export const img = getImageMap(import.meta.url)
+import Image from 'next/image';
+import { getImageMap } from '@/lib/imgMap';
+export const img = getImageMap(import.meta.url);
 
 export const metadata = {
   title: 'Factorio',
-  description:
-    'This page is a record of my K2SE Factorio run.',
-}
+  description: 'This page is a record of my K2SE Factorio run.',
+};
 
 # Base Tour: The Pre-space exploration
-This is a record of our K2SE (Krastorio 2 Space Exploration) Nauvis stage, documenting the journey from chopping down the first tree to achieving rapid rocket launches. Given that half the game is space exploration, and we haven't even unlocked the requester chest yet, this is, technically, our starting base. 
+#automation
+
+This is a record of our K2SE (Krastorio 2 Space Exploration) Nauvis stage, documenting the journey from chopping down the first tree to achieving rapid rocket launches. Given that half the game is space exploration, and we haven't even unlocked the requester chest yet, this is, technically, our starting base.
 
 The K2SE modpack turns Factorio into a true marathon, forcing us to solve immense resource demands and complex logistical problems.
 ![[Screenshot 2025-10-27 215558.png]]
 
 ## Logistic
+
 The logistics challenge in K2SE isn't as simple as in standard Factorio runs. In a normal game, you can easily build a main supply area (Mall) using requester chests. But in K2SE, the requester chest is gated behind space exploration, and the amount of material needed to transport is far greater.
 
 #### Logistic Train Network (LTN)
+
 This is where the Logistic Train Network (LTN) becomes a substitute for advanced logistics robots. Essentially, we use LTN to manage all material movement. Our network comprises 302 stations and 33 trains, handling the production of every common item and managing all resource processing. Below, you can see the city block stations we dedicated to supplying the basic components for infrastructure like pipe work, electricity, and the railroad.
 
-<div className="flex justify-center w-full gap-5">
-  <Image src={img['Pasted image 20251028220441.png']} alt='Train Station that craft the common items' className='w-1/2' />
-  <Image src={img['Pasted image 20251028220537.png']} alt='Train Station that craft the common items' className='w-1/2'/>
+<div className="flex w-full justify-center gap-5">
+  <Image
+    src={img['Pasted image 20251028220441.png']}
+    alt="Train Station that craft the common items"
+    className="w-1/2"
+  />
+  <Image
+    src={img['Pasted image 20251028220537.png']}
+    alt="Train Station that craft the common items"
+    className="w-1/2"
+  />
 </div>
 
 The rocket sections take 10 different materials to craft. Using the LTN system, all these materials are easily allocated together by trains.
 ![[screenshot-tick-200635674 2.png]]
+
 #### Roboport
+
 While advanced robot logistics are still a future goal, this network remains crucial for building our base and delivering item requests. Our robot logistic infrastructure includes 2,212 Roboports, 22,494 construction robots, and 8,772 logistic robots, achieving 100% logistic coverage throughout the entire base.
 
 ![[Pasted image 20251102160957.png]]
 
 #### Personal Travel
+
 To travel across our mega base, we rely on our railway system. This method eliminates the need to memorize the location of every production line and makes travel hassle-free. We search for the station name, choose the stop, and then travel automatically while we manage or tweak our base through satellite view.
 
 The train serves a dual purpose: it’s not just for transport. The attached cargo wagons provide extra, mobile storage, keeping all the necessary building supplies packed and ready on the move.
 ![[Pasted image 20251102155936.png]]
+
 ## Resources
-In K2SE, we can obtain infinite resources through core mining. We can place a core mining drill on the core seam to obtain core fragments. However, "infinite" does not mean "free"; it consumes electricity, and the resources we can obtain per drill diminish as we build more. Currently, our base has 12 core mining drills spread across different locations. We also added the productivity module to the pulverizing process, maximizing the output of resources. Together, they produce about 1.3k/m of all basic materials. 
+
+In K2SE, we can obtain infinite resources through core mining. We can place a core mining drill on the core seam to obtain core fragments. However, "infinite" does not mean "free"; it consumes electricity, and the resources we can obtain per drill diminish as we build more. Currently, our base has 12 core mining drills spread across different locations. We also added the productivity module to the pulverizing process, maximizing the output of resources. Together, they produce about 1.3k/m of all basic materials.
 
 ![[Pasted image 20251102173653.png]]
 ![[Pasted image 20251102172735.png]]
 ![[screenshot-tick-200365010.png]]
+
 ## Item processing
+
 Our item processing follows a “city block” design, where each block is dedicated to a specific function. This modular approach is a classic strategy for building mega bases, as it simplifies replication and scaling of production lines.
 
 #### Smeltery
+
 It supports 3 trains to unload simultaneously, and we have several setups like this for smelting iron, copper, stone, glass and rare metal. Iron is our most mass-produced material; it requires three of those city blocks just to keep up with our needs.
 ![[screenshot-tick-200538066.png]]
 
 #### Circuit productions
+
 ![[screenshot-tick-200592076.png]]
 
 #### Science Production
+
 ![[screenshot-tick-200609698.png]]
 
 #### Rocket and Space Capsule
+
 ![[screenshot-tick-200635674 1.png]]
+
 ## Power Generation
+
 Our entire base runs on **100% solar energy**. We built 23,000 solar panels and 50,000 accumulators to meet our power needs day or night. The reason we chose solar power is because it’s maintenance-free, TPS-friendly, and easily scalable.
 ![[screenshot-tick-200198899.png]]
 
@@ -66,16 +90,20 @@ The solar panels generate **2.3 GW** during the day, which fills up the **490 GJ
 ![[Pasted image 20251027222751.png]]
 
 #### Why not nuclear
+
 While a few huge nuclear reactors could supply our energy needs, it’s not uncommon for our logistic network to fail. If that happens, our nuclear fuel supply would stop, causing a power outage and leaving our defenses open to biters. Solar power is dependable and autonomous, removing this critical point of failure.
 
 #### The ratio
+
 The optimal ratio is usually 25 solar panels to 21 accumulators, which is what we used initially. However, after hundreds of biter nests rushed our base, the power drained completely, causing an outage that allowed the biters to break through our defenses. Because of this, we added a huge extra energy buffer to prevent a similar failure from happening again.
+
 ## Defense: The Wall
 
 We build our defenses around **bottlenecks**, which minimizes the area we need to secure. We also push our base boundary much farther out than we need. This keeps our **pollution** from reaching biter nests, which significantly reduces the chance of them attacking us.
 ![[Pasted image 20251028202524.png]]
 
 #### Wall Design
+
 We experimented with different **wall and laser turret layouts**. A **maze-like wall design** works best for us. We deploy this design in the areas that see the most attacks. It causes only **minor damage** even against a large wave of Behemoth biters.
 ![[Pasted image 20251028203801.png]]
 
@@ -83,6 +111,8 @@ We experimented with different **wall and laser turret layouts**. A **maze-like 
 
 Our **4,200 laser turrets** draw **426 MW** of power constantly, which is nearly half of our total electricity production. It's a very **expensive** setup, but the advantages of **zero maintenance** and the turrets' **long attack range** are worth the price. We expect the high electricity cost to drop once we expand our base further and take control of the bottlenecks on the upper mainland.
 ![[Pasted image 20251028203854.png]]
+
 ## Future
+
 We’ve begun exploring new planets and harvesting different resources. We’re enjoying learning the new mechanics and are ready to tackle the challenges of **interplanetary logistics**. I’ll provide more updates on this run when we reach the next milestone.
 ![[Pasted image 20251102183226.png]]
