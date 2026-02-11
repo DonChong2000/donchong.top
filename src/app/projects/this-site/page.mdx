@@ -458,7 +458,7 @@ export const img = getImageMap(import.meta.url)
 <Image src={img['color.png']} alt="Logo" placeholder="blur" />
 ```
 
-#### Result
+##### Result
 
 * No need to specify `width` and `height` manually.
 * Native blur placeholders just work.
@@ -466,7 +466,9 @@ export const img = getImageMap(import.meta.url)
 
 ![[Pasted image 20251006054656.png]]
 
-#### Custom syntax `![[]]`
+
+## MDX-remark
+### Custom syntax `![[]]`
 
 The first thing I tried was modifying the MDX image component — only to realize that `![]()` can pass *only strings* as the `src` parameter. 
 
@@ -487,6 +489,14 @@ Now, my mdx is more clean and next/image's benefits still applies, but with the 
 
 After realizing Obsidian doesn’t use standard MDX syntax, I found I had more flexibility. I now convert all `![[imgsrc]]` references into my `next/Image` format with Remark, and it works perfectly.
 
+
+### Tags
+2026-02-11
+A tag function is added using remark. Now I can use tags like #fullstack to allow user to search and find posts about specific topics. 
+
+Also I renovated "project-overview" to make use of this function, now user can sort post using tags. The project card is also based on metadata instead of being written one by one.
+
+![[Pasted image 20260211151806.png]]
 # Back End
 
 ## Simple CI/CD with GitHub Actions
@@ -625,5 +635,3 @@ By adding `translate="no"` to the site’s anchor, Google Translate is prevented
 
 Adding `break-word` property and fixing minor layout mistake fixes the problem.
 	![[Pasted image 20251011231440.png]] 
-
-
