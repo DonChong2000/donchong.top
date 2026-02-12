@@ -20,6 +20,15 @@ function formatUrlFromFilename(filename: string) {
   return '/' + normalized.replace(/(^|\/)page\.mdx$/, '');
 }
 
+export function comparePages(a: TagPage, b: TagPage) {
+  const priorityDelta = (b.priority ?? 0) - (a.priority ?? 0);
+  if (priorityDelta !== 0) {
+    return priorityDelta;
+  }
+
+  return a.title.localeCompare(b.title);
+}
+
 async function loadTagPages(): Promise<TagPage[]> {
   const files = await glob('**/*.mdx', { cwd: 'src/app' });
 
@@ -63,7 +72,7 @@ export async function getTagIndex() {
   for (const [tag, entries] of index.entries()) {
     index.set(
       tag,
-      entries.sort((a, b) => a.title.localeCompare(b.title)),
+      entries.sort(comparePages),
     );
   }
 

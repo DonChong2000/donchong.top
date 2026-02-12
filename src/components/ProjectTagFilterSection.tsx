@@ -1,14 +1,10 @@
 import { ProjectTagFilterClient } from '@/components/ProjectTagFilterClient';
-import { getTagIndex, type TagPage } from '@/lib/tags';
+import { comparePages, getTagIndex, type TagPage } from '@/lib/tags';
 
 const INCLUDED_PREFIXES = ['/projects/', '/notes/', '/hobbies/'];
 
 function isIncludedUrl(url: string) {
   return INCLUDED_PREFIXES.some((prefix) => url.startsWith(prefix));
-}
-
-function sortPages(pages: TagPage[]) {
-  return pages.slice().sort((a, b) => ((b.priority ?? 0) !== (a.priority ?? 0) ? (b.priority ?? 0) - (a.priority ?? 0) : a.title.localeCompare(b.title)));
 }
 
 export async function ProjectTagFilterSection() {
@@ -22,16 +18,15 @@ export async function ProjectTagFilterSection() {
       continue;
     }
 
-    const sortedPages = sortPages(filteredPages);
-    pagesByTag[tag] = sortedPages;
+    pagesByTag[tag] = filteredPages;
 
-    for (const page of sortedPages) {
+    for (const page of filteredPages) {
       allPagesMap.set(page.url, page);
     }
   }
 
   const tags = Object.keys(pagesByTag).sort((a, b) => a.localeCompare(b));
-  const allPages = sortPages(Array.from(allPagesMap.values()));
+  const allPages = Array.from(allPagesMap.values()).sort(comparePages);
 
   return (
     <ProjectTagFilterClient
