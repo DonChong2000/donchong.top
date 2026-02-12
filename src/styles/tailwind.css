@@ -105,6 +105,10 @@
     --shiki-token-punctuation: var(--color-zinc-200);
   }
 
+  html {
+    scrollbar-gutter: stable;
+  }
+
   [inert] ::-webkit-scrollbar {
     display: none;
   }
