@@ -56,8 +56,9 @@ async function loadTagPages(): Promise<TagPage[]> {
   );
 }
 
-export async function getTagIndex() {
-  const pages = await loadTagPages();
+let tagIndexPromise: Promise<Map<string, TagPage[]>> | null = null;
+
+function buildTagIndex(pages: TagPage[]) {
   const index = new Map<string, TagPage[]>();
 
   for (const page of pages) {
@@ -70,13 +71,17 @@ export async function getTagIndex() {
   }
 
   for (const [tag, entries] of index.entries()) {
-    index.set(
-      tag,
-      entries.sort(comparePages),
-    );
+    index.set(tag, entries.sort(comparePages));
   }
 
   return index;
+}
+
+export async function getTagIndex() {
+  if (!tagIndexPromise) {
+    tagIndexPromise = loadTagPages().then(buildTagIndex);
+  }
+  return tagIndexPromise;
 }
 
 export async function getAllTags() {
