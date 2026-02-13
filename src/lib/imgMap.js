@@ -11,7 +11,11 @@ const allImages = require.context('../app', true, /images\/.*\.(png|jpe?g|svg|gi
  * @param {string} mdxUrl - Pass `import.meta.url` from the MDX file
  */
 export function getImageMap(mdxUrl) {
-  const match = mdxUrl.match(/\/app\/(.*)\/[^/]+$/);
+  const normalizedUrl = mdxUrl.replace(/\\/g, '/');
+  const match =
+    normalizedUrl.match(/\/\.next\/server\/app\/(.*)\/[^/]+$/) ||
+    normalizedUrl.match(/\/src\/app\/(.*)\/[^/]+$/) ||
+    normalizedUrl.match(/\/app\/(.*)\/[^/]+$/);
   const pagePath = match ? match[1] : null;
   if (!pagePath) {
     console.warn(`Could not determine page path from ${mdxUrl}`);
