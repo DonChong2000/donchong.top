@@ -70,12 +70,10 @@ function useInitialValue<T>(value: T, condition = true) {
 function TopLevelNavItem({
   href,
   children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) {
+  ...props
+}: React.ComponentPropsWithoutRef<'li'> & { href: string }) {
   return (
-    <li className="md:hidden">
+    <li {...props}>
       <Link
         href={href}
         className="block py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
@@ -401,7 +399,6 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Projects',
     links: [
-      { title: 'Overview', href: '/projects-overview' },
       // { title: 'Chat-CV', href: '/chat-cv' },
       { title: 'DonChong.Top', href: '/projects/this-site' },
       {
@@ -469,8 +466,10 @@ export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {
   return (
     <nav {...props}>
       <ul role="list">
-        <TopLevelNavItem href="/me">About Me</TopLevelNavItem>
-        {/* <TopLevelNavItem href="/contacts">Contacts</TopLevelNavItem> */}
+        <TopLevelNavItem href="/me" className="md:hidden">
+          About Me
+        </TopLevelNavItem>
+        <TopLevelNavItem href="/overview">Overview</TopLevelNavItem>
         {/* <TopLevelNavItem href="#">Documentation</TopLevelNavItem>
         <TopLevelNavItem href="#">Support</TopLevelNavItem> */}
         {navigation.map((group, groupIndex) => (
