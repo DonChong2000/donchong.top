@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p 3000",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest"
   },
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
@@ -51,9 +52,15 @@
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
     "@types/webpack-env": "^1.18.8",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.0.4",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.10"
   }
