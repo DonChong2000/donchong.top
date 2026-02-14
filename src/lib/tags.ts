@@ -9,7 +9,7 @@ export type TagPage = {
   thumbnail?: string;
 };
 
-const DEFAULT_THUMBNAIL = '/homepage/icon.png';
+const DEFAULT_THUMBNAIL = '/thumbnial/this-site.png';
 
 function normalizeTag(tag: string) {
   return tag.toString().trim().toLowerCase();

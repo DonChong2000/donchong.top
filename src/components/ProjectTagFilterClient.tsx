@@ -87,6 +87,7 @@ export function ProjectTagFilterClient({
               url={page.url}
               title={page.title}
               description={page.description}
+              tags={page.tags}
               thumbnail={page.thumbnail}
             />
           </li>
