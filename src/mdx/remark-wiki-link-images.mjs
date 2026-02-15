@@ -22,41 +22,59 @@ export const remarkWikiLinkImages = () => (tree) => {
         newNodes.push({ type: 'text', value: text.slice(lastIndex, match.index) });
       }
 
+      const cleanedName = imageName.split('?')[0].split('#')[0];
+      const extension = cleanedName.split('.').pop()?.toLowerCase();
+      const supportsBlur = ['png', 'jpg', 'jpeg', 'webp', 'avif'].includes(
+        extension,
+      );
+
+      const attributes = [
+        {
+          type: 'mdxJsxAttribute',
+          name: 'src',
+          value: {
+            type: 'mdxJsxAttributeValueExpression',
+            value: `img['${imageName}']`,
+            data: {
+              estree: {
+                type: 'Program',
+                body: [
+                  {
+                    type: 'ExpressionStatement',
+                    expression: {
+                      type: 'MemberExpression',
+                      object: { type: 'Identifier', name: 'img' },
+                      property: {
+                        type: 'Literal',
+                        value: imageName,
+                        raw: `'${imageName}'`,
+                      },
+                      computed: true,
+                      optional: false,
+                    },
+                  },
+                ],
+                sourceType: 'script',
+              },
+            },
+          },
+        },
+        { type: 'mdxJsxAttribute', name: 'alt', value: imageName },
+      ];
+
+      if (supportsBlur) {
+        attributes.push({
+          type: 'mdxJsxAttribute',
+          name: 'placeholder',
+          value: 'blur',
+        });
+      }
+
       // Add the image node
       newNodes.push({
         type: 'mdxJsxFlowElement',
         name: 'Image',
-        attributes: [
-          {
-            type: 'mdxJsxAttribute',
-            name: 'src',
-            value: {
-              type: 'mdxJsxAttributeValueExpression',
-              value: `img['${imageName}']`,
-              data: {
-                estree: {
-                  type: 'Program',
-                  body: [
-                    {
-                      type: 'ExpressionStatement',
-                      expression: {
-                        type: 'MemberExpression',
-                        object: { type: 'Identifier', name: 'img' },
-                        property: { type: 'Literal', value: imageName, raw: `'${imageName}'` },
-                        computed: true,
-                        optional: false,
-                      },
-                    },
-                  ],
-                  sourceType: 'script',
-                },
-              },
-            },
-          },
-          { type: 'mdxJsxAttribute', name: 'alt', value: imageName },
-          { type: 'mdxJsxAttribute', name: 'placeholder', value: 'blur' },
-          // { type: 'mdxJsxAttribute', name: 'blurDataURL', value: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' }, //Use this for debug.
-        ],
+        attributes,
         children: [],
       });
 
