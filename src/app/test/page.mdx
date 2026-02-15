@@ -1,6 +1,37 @@
 
 import Image from 'next/image'
 import { getImageMap } from '@/lib/imgMap'
+import { BellIcon } from '@/components/icons/BellIcon'
+import { BoltIcon } from '@/components/icons/BoltIcon'
+import { BookIcon } from '@/components/icons/BookIcon'
+import { CalendarIcon } from '@/components/icons/CalendarIcon'
+import { CartIcon } from '@/components/icons/CartIcon'
+import { ChatBubbleIcon } from '@/components/icons/ChatBubbleIcon'
+import { CheckIcon } from '@/components/icons/CheckIcon'
+import { ChevronDownIcon } from '@/components/icons/ChevronDownIcon'
+import { ChevronRightIcon } from '@/components/icons/ChevronRightIcon'
+import { ChevronRightLeftIcon } from '@/components/icons/ChevronRightLeftIcon'
+import { ClipboardIcon } from '@/components/icons/ClipboardIcon'
+import { CogIcon } from '@/components/icons/CogIcon'
+import { CopyIcon } from '@/components/icons/CopyIcon'
+import { DocumentIcon } from '@/components/icons/DocumentIcon'
+import { EnvelopeIcon } from '@/components/icons/EnvelopeIcon'
+import { FaceSmileIcon } from '@/components/icons/FaceSmileIcon'
+import { FolderIcon } from '@/components/icons/FolderIcon'
+import { LinkIcon } from '@/components/icons/LinkIcon'
+import { ListIcon } from '@/components/icons/ListIcon'
+import { MagnifyingGlassIcon } from '@/components/icons/MagnifyingGlassIcon'
+import { MapPinIcon } from '@/components/icons/MapPinIcon'
+import { NewspaperIcon } from '@/components/icons/NewspaperIcon'
+import { PackageIcon } from '@/components/icons/PackageIcon'
+import { PaperAirplaneIcon } from '@/components/icons/PaperAirplaneIcon'
+import { PaperClipIcon } from '@/components/icons/PaperClipIcon'
+import { ShapesIcon } from '@/components/icons/ShapesIcon'
+import { ShirtIcon } from '@/components/icons/ShirtIcon'
+import { SquaresPlusIcon } from '@/components/icons/SquaresPlusIcon'
+import { TagIcon } from '@/components/icons/TagIcon'
+import { UserIcon } from '@/components/icons/UserIcon'
+import { UsersIcon } from '@/components/icons/UsersIcon'
 export const img = getImageMap(import.meta.url)
 
 
@@ -10,9 +41,63 @@ export const metadata = {
   description: 'This is a test page.',
 }
 
+export const icons = [
+  { name: 'BellIcon', Icon: BellIcon },
+  { name: 'BoltIcon', Icon: BoltIcon },
+  { name: 'BookIcon', Icon: BookIcon },
+  { name: 'CalendarIcon', Icon: CalendarIcon },
+  { name: 'CartIcon', Icon: CartIcon },
+  { name: 'ChatBubbleIcon', Icon: ChatBubbleIcon },
+  { name: 'CheckIcon', Icon: CheckIcon },
+  { name: 'ChevronDownIcon', Icon: ChevronDownIcon },
+  { name: 'ChevronRightIcon', Icon: ChevronRightIcon },
+  { name: 'ChevronRightLeftIcon', Icon: ChevronRightLeftIcon },
+  { name: 'ClipboardIcon', Icon: ClipboardIcon },
+  { name: 'CogIcon', Icon: CogIcon },
+  { name: 'CopyIcon', Icon: CopyIcon },
+  { name: 'DocumentIcon', Icon: DocumentIcon },
+  { name: 'EnvelopeIcon', Icon: EnvelopeIcon },
+  { name: 'FaceSmileIcon', Icon: FaceSmileIcon },
+  { name: 'FolderIcon', Icon: FolderIcon },
+  { name: 'LinkIcon', Icon: LinkIcon },
+  { name: 'ListIcon', Icon: ListIcon },
+  { name: 'MagnifyingGlassIcon', Icon: MagnifyingGlassIcon },
+  { name: 'MapPinIcon', Icon: MapPinIcon },
+  { name: 'NewspaperIcon', Icon: NewspaperIcon },
+  { name: 'PackageIcon', Icon: PackageIcon },
+  { name: 'PaperAirplaneIcon', Icon: PaperAirplaneIcon },
+  { name: 'PaperClipIcon', Icon: PaperClipIcon },
+  { name: 'ShapesIcon', Icon: ShapesIcon },
+  { name: 'ShirtIcon', Icon: ShirtIcon },
+  { name: 'SquaresPlusIcon', Icon: SquaresPlusIcon },
+  { name: 'TagIcon', Icon: TagIcon },
+  { name: 'UserIcon', Icon: UserIcon },
+  { name: 'UsersIcon', Icon: UsersIcon },
+]
+
 
 # Test
-#ok
 
+## Tag
+#tag
+
+## Next_image blur placeholder test
 ![[color_inspire.jpg]]
-![[go.svg]]
+
+## Icons
+
+<div className="not-prose mt-8">
+  <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+    {icons.map(({ name, Icon }) => (
+      <div
+        key={name}
+        className="flex flex-col items-center gap-2 rounded-xl border border-zinc-200/60 bg-white/70 p-4 text-center shadow-sm ring-1 ring-transparent transition hover:-translate-y-0.5 hover:border-zinc-300 hover:bg-white dark:border-zinc-800/70 dark:bg-zinc-900/60 dark:hover:border-zinc-700"
+      >
+        <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-zinc-50 text-zinc-700 ring-1 ring-zinc-200/70 dark:bg-zinc-900 dark:text-zinc-100 dark:ring-zinc-800">
+          <Icon className="h-6 w-6 fill-zinc-500/10 stroke-zinc-700 dark:fill-white/10 dark:stroke-zinc-100" />
+        </span>
+        <span className="text-xs font-medium text-zinc-800 dark:text-zinc-100">{name}</span>
+      </div>
+    ))}
+  </div>
+</div>
