@@ -13,6 +13,7 @@ import { Tag } from '@/components/Tag';
 import { remToPx } from '@/lib/remToPx';
 import { ChevronDownIcon } from './icons/ChevronDownIcon';
 import { ChevronRightIcon } from './icons/ChevronRightIcon';
+import { NewspaperIcon } from './icons/NewspaperIcon';
 
 interface NavGroup {
   title: string;
@@ -69,15 +70,23 @@ function useInitialValue<T>(value: T, condition = true) {
 
 function TopLevelNavItem({
   href,
+  icon,
   children,
   ...props
-}: React.ComponentPropsWithoutRef<'li'> & { href: string }) {
+}: React.ComponentPropsWithoutRef<'li'> & {
+  href: string;
+  icon?: React.ReactNode;
+}) {
   return (
     <li {...props}>
       <Link
         href={href}
-        className="block py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+        className={clsx(
+          'py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white',
+          icon ? 'flex items-center gap-2' : 'block',
+        )}
       >
+        {icon}
         {children}
       </Link>
     </li>
@@ -469,14 +478,19 @@ export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {
         <TopLevelNavItem href="/me" className="md:hidden">
           About Me
         </TopLevelNavItem>
-        <TopLevelNavItem href="/overview">Overview</TopLevelNavItem>
+        <TopLevelNavItem
+          href="/overview"
+          icon={<NewspaperIcon className="h-4 w-4" />}
+        >
+          Overview
+        </TopLevelNavItem>
         {/* <TopLevelNavItem href="#">Documentation</TopLevelNavItem>
         <TopLevelNavItem href="#">Support</TopLevelNavItem> */}
         {navigation.map((group, groupIndex) => (
           <NavigationGroup
             key={group.title}
             group={group}
-            className={groupIndex === 0 ? 'md:mt-0' : ''}
+            className={groupIndex === 0 ? 'mt-8' : ''}
           />
         ))}
         {/* <li className="sticky bottom-0 z-10 mt-6 min-[416px]:hidden">
