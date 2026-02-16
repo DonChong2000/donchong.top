@@ -8,6 +8,7 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Logo } from '@/components/Logo';
 import { Navigation } from '@/components/Navigation';
+import { MessageTab } from '@/components/MessageTab';
 import {
   type Section,
   SectionProvider,
@@ -55,6 +56,7 @@ export function Layout({
             <TableOfContents />
           </div>
         </div>
+        <MessageTab />
       </div>
     </SectionProvider>
   );
