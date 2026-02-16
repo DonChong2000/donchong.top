@@ -8,14 +8,22 @@ export async function POST(req: Request) {
     );
   }
 
-  const { messages } = (await req.json()) as {
+  const { messages, detailMode } = (await req.json()) as {
     messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
+    detailMode?: boolean;
   };
+
+  const normalizedDetailMode = Boolean(detailMode);
+  const detailPrompt =
+    'You are in detail mode. Provide thorough, well-structured responses with useful context and clear next steps.';
+  const modelMessages = normalizedDetailMode
+    ? [{ role: 'system' as const, content: detailPrompt }, ...messages]
+    : messages;
 
   const result = await streamText({
     model: 'google/gemini-2.5-flash-lite',
-    messages,
-    maxOutputTokens: 256,
+    messages: modelMessages,
+    maxOutputTokens: normalizedDetailMode ? 512 : 64,
   });
 
   return result.toTextStreamResponse();
