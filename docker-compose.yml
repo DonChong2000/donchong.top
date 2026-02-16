@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/donchong/donchong-top:${IMAGE_TAG:-latest}
+    image: ${IMAGE_NAME:-ghcr.io/donchong2000/donchong-top}:${IMAGE_TAG:-latest}
     container_name: tailwindui-protocol
     restart: unless-stopped
     env_file:
