@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { ChatBubbleIcon } from '@/components/icons/ChatBubbleIcon';
+import { ChatBubbleSolidIcon } from '@/components/icons/ChatBubbleSolidIcon';
 import { PaperAirplaneIcon } from '@/components/icons/PaperAirplaneIcon';
 
 type ChatMessage = {
@@ -122,9 +122,9 @@ export function MessageTab() {
   return (
     <div className="fixed right-6 bottom-6 z-50 flex flex-col items-end gap-3">
       {isOpen && (
-        <div className="flex w-[min(92vw,360px)] flex-col overflow-hidden rounded-3xl border border-zinc-900/10 bg-white shadow-2xl backdrop-blur dark:border-white/10 dark:bg-charcoal-850">
+        <div className="flex w-[min(92vw,360px)] flex-col overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-2xl backdrop-blur dark:border-white/10 dark:bg-charcoal-700 dark:shadow-zinc-500/15">
           <div className="flex items-center justify-between border-b border-zinc-900/10 px-4 py-3 text-sm font-semibold text-zinc-900 dark:border-white/10 dark:text-white">
-            <span>Message</span>
+            <span>Ask me:</span>
             <button
               type="button"
               onClick={() => setIsOpen(false)}
@@ -140,8 +140,8 @@ export function MessageTab() {
           >
             {messages.length === 0 && (
               <div className="rounded-2xl border border-zinc-900/10 bg-zinc-50 px-4 py-3 text-zinc-600 dark:border-white/10 dark:bg-charcoal-800 dark:text-zinc-300">
-                Start a conversation. Ask about projects, notes, or anything
-                else.
+                Ask about projects, notes, experience or dive into Don’s
+                thoughts on AI.
               </div>
             )}
             {messages.map((message) => (
@@ -149,7 +149,7 @@ export function MessageTab() {
                 key={message.id}
                 className={`w-fit max-w-[85%] rounded-2xl px-4 py-2 leading-relaxed ${
                   message.role === 'user'
-                    ? 'ml-auto bg-zinc-900 text-white dark:bg-white dark:text-charcoal-900'
+                    ? 'ml-auto bg-zinc-700 text-white dark:bg-timberwolf-100 dark:text-charcoal-900'
                     : 'bg-zinc-100 text-zinc-700 dark:bg-charcoal-800 dark:text-zinc-200'
                 }`}
               >
@@ -176,7 +176,7 @@ export function MessageTab() {
             <button
               type="submit"
               disabled={isLoading || input.trim().length === 0}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-900 text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-white dark:text-charcoal-900 dark:hover:bg-zinc-200"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-700 text-white transition hover:bg-zinc-600 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-timberwolf-100 dark:text-charcoal-900 dark:hover:bg-timberwolf-400"
               aria-label="Send message"
             >
               <PaperAirplaneIcon className="h-4 w-4 stroke-current" />
@@ -187,12 +187,12 @@ export function MessageTab() {
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="group flex items-center gap-2 rounded-full border border-zinc-900/10 bg-zinc-900 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-zinc-800 dark:border-white/10 dark:bg-white dark:text-charcoal-900 dark:hover:bg-zinc-200"
+        className="group flex items-center gap-2 rounded-full border border-zinc-900/10 bg-charcoal-500/95 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-charcoal-700/95 dark:border-white/10 dark:bg-timberwolf-100/95 dark:text-charcoal-900 dark:hover:bg-zinc-200/95"
         aria-expanded={isOpen}
         aria-label="Toggle message panel"
       >
-        <ChatBubbleIcon className="h-5 w-5 stroke-current" />
-        <span className="hidden sm:inline">Message</span>
+        <ChatBubbleSolidIcon className="h-5 w-5 text-white dark:text-charcoal-600" />
+        <span className="hidden sm:inline">Ask me</span>
       </button>
     </div>
   );
