@@ -1,8 +1,6 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/donchong/donchong-top:${IMAGE_TAG:-latest}
     container_name: tailwindui-protocol
     restart: unless-stopped
     env_file:
