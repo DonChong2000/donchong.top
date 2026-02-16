@@ -111,9 +111,7 @@ export function MessageTab() {
           : 'Something went wrong. Please try again.';
       setMessages((prev) =>
         prev.map((entry) =>
-          entry.id === assistantId
-            ? { ...entry, content: message }
-            : entry,
+          entry.id === assistantId ? { ...entry, content: message } : entry,
         ),
       );
     } finally {
@@ -122,7 +120,7 @@ export function MessageTab() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+    <div className="fixed right-6 bottom-6 z-50 flex flex-col items-end gap-3">
       {isOpen && (
         <div className="flex w-[min(92vw,360px)] flex-col overflow-hidden rounded-3xl border border-zinc-900/10 bg-white shadow-2xl backdrop-blur dark:border-white/10 dark:bg-charcoal-850">
           <div className="flex items-center justify-between border-b border-zinc-900/10 px-4 py-3 text-sm font-semibold text-zinc-900 dark:border-white/10 dark:text-white">
@@ -142,7 +140,8 @@ export function MessageTab() {
           >
             {messages.length === 0 && (
               <div className="rounded-2xl border border-zinc-900/10 bg-zinc-50 px-4 py-3 text-zinc-600 dark:border-white/10 dark:bg-charcoal-800 dark:text-zinc-300">
-                Start a conversation. Ask about projects, notes, or anything else.
+                Start a conversation. Ask about projects, notes, or anything
+                else.
               </div>
             )}
             {messages.map((message) => (
@@ -172,7 +171,7 @@ export function MessageTab() {
               value={input}
               onChange={(event) => setInput(event.target.value)}
               placeholder="Type a message"
-              className="flex-1 rounded-full border border-zinc-900/10 bg-white px-4 py-2 text-sm text-zinc-700 outline-none transition focus:border-zinc-900/30 dark:border-white/10 dark:bg-charcoal-900 dark:text-zinc-200 dark:focus:border-white/30"
+              className="flex-1 rounded-full border border-zinc-900/10 bg-white px-4 py-2 text-sm text-zinc-700 transition outline-none focus:border-zinc-900/30 dark:border-white/10 dark:bg-charcoal-900 dark:text-zinc-200 dark:focus:border-white/30"
             />
             <button
               type="submit"
