@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { ChatBubbleSolidIcon } from '@/components/icons/ChatBubbleSolidIcon';
-import { PaperAirplaneIcon } from '@/components/icons/PaperAirplaneIcon';
 
 type ChatMessage = {
   id: string;
@@ -18,6 +17,7 @@ export function MessageTab() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingFrame, setLoadingFrame] = useState(0);
   const messagesRef = useRef<ChatMessage[]>([]);
 
   useEffect(() => {
@@ -50,6 +50,19 @@ export function MessageTab() {
       behavior: 'smooth',
     });
   }, [messages, isLoading]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setLoadingFrame(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setLoadingFrame((prev) => (prev + 1) % 2);
+    }, 200);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isLoading]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -123,7 +136,7 @@ export function MessageTab() {
     <div className="fixed right-6 bottom-6 z-50 flex flex-col items-end gap-3">
       {isOpen && (
         <div className="flex w-[min(92vw,360px)] flex-col overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-2xl backdrop-blur dark:border-white/10 dark:bg-charcoal-700 dark:shadow-zinc-500/15">
-          <div className="flex items-center justify-between border-b border-zinc-900/10 px-4 py-3 text-sm font-semibold text-zinc-900 dark:border-white/10 dark:text-white">
+          <div className="flex items-center justify-between border-b border-zinc-900/10 px-4 py-3 text-sm font-semibold text-zinc-500 dark:border-white/10 dark:text-white">
             <span>Ask me:</span>
             <button
               type="button"
@@ -136,7 +149,7 @@ export function MessageTab() {
           </div>
           <div
             ref={listRef}
-            className="flex max-h-[50vh] flex-1 flex-col gap-3 overflow-y-auto px-4 py-4 text-sm"
+            className="subtle-scrollbar flex max-h-[50vh] flex-1 flex-col gap-3 overflow-y-auto px-4 py-4 text-sm"
           >
             {messages.length === 0 && (
               <div className="rounded-2xl border border-zinc-900/10 bg-zinc-50 px-4 py-3 text-zinc-600 dark:border-white/10 dark:bg-charcoal-800 dark:text-zinc-300">
@@ -150,50 +163,55 @@ export function MessageTab() {
                 className={`w-fit max-w-[85%] rounded-2xl px-4 py-2 leading-relaxed ${
                   message.role === 'user'
                     ? 'ml-auto bg-zinc-700 text-white dark:bg-timberwolf-100 dark:text-charcoal-900'
-                    : 'bg-zinc-100 text-zinc-700 dark:bg-charcoal-800 dark:text-zinc-200'
+                    : 'bg-timberwolf-100 text-zinc-700 dark:bg-charcoal-800 dark:text-zinc-200'
                 }`}
               >
                 {message.content}
               </div>
             ))}
             {isLoading && (
-              <div className="w-fit max-w-[85%] rounded-2xl bg-zinc-100 px-4 py-2 text-zinc-500 dark:bg-charcoal-800 dark:text-zinc-300">
-                Thinking...
+              <div className="w-fit max-w-[85%] rounded-2xl py-2 text-zinc-500 dark:text-zinc-300">
+                {loadingFrame === 0 ? '🐋...' : '🐬...'}
               </div>
             )}
           </div>
           <form
             onSubmit={handleSubmit}
-            className="flex items-center gap-2 border-t border-zinc-900/10 px-4 py-3 dark:border-white/10"
+            className="border-t border-zinc-900/10 px-4 py-3 dark:border-white/10"
           >
-            <input
-              ref={inputRef}
-              value={input}
-              onChange={(event) => setInput(event.target.value)}
-              placeholder="Type a message"
-              className="flex-1 rounded-full border border-zinc-900/10 bg-white px-4 py-2 text-sm text-zinc-700 transition outline-none focus:border-zinc-900/30 dark:border-white/10 dark:bg-charcoal-900 dark:text-zinc-200 dark:focus:border-white/30"
-            />
-            <button
-              type="submit"
-              disabled={isLoading || input.trim().length === 0}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-700 text-white transition hover:bg-zinc-600 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-timberwolf-100 dark:text-charcoal-900 dark:hover:bg-timberwolf-400"
-              aria-label="Send message"
-            >
-              <PaperAirplaneIcon className="h-4 w-4 stroke-current" />
-            </button>
+            <div className="relative">
+              <input
+                ref={inputRef}
+                value={input}
+                onChange={(event) => setInput(event.target.value)}
+                placeholder="Type a message..."
+                className="w-full rounded-md bg-zinc-50 px-3 py-2 pr-16 font-mono text-sm text-zinc-800 transition outline-none focus:bg-white disabled:cursor-not-allowed disabled:opacity-60 dark:bg-charcoal-750 dark:text-zinc-100 dark:focus:bg-charcoal-700"
+                disabled={isLoading}
+              />
+              <button
+                type="submit"
+                disabled={isLoading || input.trim().length === 0}
+                className="absolute top-1/2 right-2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-semibold tracking-wide text-zinc-500 uppercase transition hover:text-zinc-600 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:text-zinc-200"
+                aria-label="Send message"
+              >
+                Enter
+              </button>
+            </div>
           </form>
         </div>
       )}
-      <button
-        type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
-        className="group flex items-center gap-2 rounded-full border border-zinc-900/10 bg-charcoal-500/95 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-charcoal-700/95 dark:border-white/10 dark:bg-timberwolf-100/95 dark:text-charcoal-900 dark:hover:bg-zinc-200/95"
-        aria-expanded={isOpen}
-        aria-label="Toggle message panel"
-      >
-        <ChatBubbleSolidIcon className="h-5 w-5 text-white dark:text-charcoal-600" />
-        <span className="hidden sm:inline">Ask me</span>
-      </button>
+      {!isOpen && (
+        <button
+          type="button"
+          onClick={() => setIsOpen((prev) => !prev)}
+          className="group flex items-center gap-2 rounded-full border border-zinc-900/10 bg-charcoal-500/95 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-charcoal-700/95 dark:border-white/10 dark:bg-timberwolf-100/95 dark:text-charcoal-900 dark:hover:bg-zinc-200/95"
+          aria-expanded={isOpen}
+          aria-label="Toggle message panel"
+        >
+          <ChatBubbleSolidIcon className="h-5 w-5 text-white dark:text-charcoal-600" />
+          <span className="hidden sm:inline">Ask me</span>
+        </button>
+      )}
     </div>
   );
 }
