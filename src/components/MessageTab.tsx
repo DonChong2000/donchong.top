@@ -139,13 +139,14 @@ export function MessageTab() {
   }
 
   return (
-    <div className="fixed right-6 bottom-6 z-50 flex flex-col items-end gap-3">
+    <>
       {isOpen && (
-        <div
-          className={`flex w-[min(92vw,360px)] flex-col overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-2xl backdrop-blur dark:border-white/10 dark:bg-charcoal-700 dark:shadow-zinc-500/15 ${
-            isDetailMode ? 'lg:w-[min(92vw,720px)]' : ''
-          }`}
-        >
+        <div className="fixed inset-x-3 bottom-6 z-50 flex justify-center sm:inset-auto sm:right-6 sm:bottom-6 sm:justify-end">
+          <div
+            className={`flex w-[min(96vw,420px)] flex-col overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-2xl backdrop-blur dark:border-white/10 dark:bg-charcoal-700 dark:shadow-zinc-500/15 sm:w-[min(92vw,360px)] ${
+              isDetailMode ? 'lg:w-[min(92vw,720px)]' : ''
+            }`}
+          >
           <div className="flex items-center justify-end gap-3 border-b border-zinc-900/10 px-4 py-3 text-sm font-semibold text-zinc-500 dark:border-white/10 dark:text-white">
             <div className="flex items-center gap-3">
               <span className="text-xs font-semibold tracking-wide text-zinc-500 dark:text-zinc-300">
@@ -234,20 +235,23 @@ export function MessageTab() {
               </button>
             </div>
           </form>
+          </div>
         </div>
       )}
       {!isOpen && (
-        <button
-          type="button"
-          onClick={() => setIsOpen((prev) => !prev)}
-          className="group flex items-center gap-2 rounded-full border border-zinc-900/10 bg-charcoal-500/95 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-charcoal-700/95 dark:border-white/10 dark:bg-timberwolf-100/95 dark:text-charcoal-900 dark:hover:bg-zinc-200/95"
-          aria-expanded={isOpen}
-          aria-label="Toggle message panel"
-        >
-          <ChatBubbleSolidIcon className="h-5 w-5 text-white dark:text-charcoal-600" />
-          <span className="hidden sm:inline">Ask me</span>
-        </button>
+        <div className="fixed right-3 bottom-6 z-50 flex flex-col items-end gap-3 sm:right-6">
+          <button
+            type="button"
+            onClick={() => setIsOpen((prev) => !prev)}
+            className="group flex items-center gap-2 rounded-full border border-zinc-900/10 bg-charcoal-500/95 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-charcoal-700/95 dark:border-white/10 dark:bg-timberwolf-100/95 dark:text-charcoal-900 dark:hover:bg-zinc-200/95"
+            aria-expanded={isOpen}
+            aria-label="Toggle message panel"
+          >
+            <ChatBubbleSolidIcon className="h-5 w-5 text-white dark:text-charcoal-600" />
+            <span className="hidden sm:inline">Ask me</span>
+          </button>
+        </div>
       )}
-    </div>
+    </>
   );
 }
