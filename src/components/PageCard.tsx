@@ -40,8 +40,17 @@ export function PageCard({
               {title}
             </div>
             {description && (
-              <div className="prose prose-sm mt-1 max-w-none dark:prose-invert">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              <div className="prose mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                <ReactMarkdown //Speific problem on ReactMarkdown and tailwind: https://stackoverflow.com/questions/77548370/react-markdown-not-displaying-ordered-list
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    ul: (props) => <ul className="list-disc pl-5" {...props} />,
+                    ol: (props) => (
+                      <ol className="list-decimal pl-5" {...props} />
+                    ),
+                    li: (props) => <li className="my-1" {...props} />,
+                  }}
+                >
                   {description}
                 </ReactMarkdown>
               </div>
