@@ -13,7 +13,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
 
     strategy:
       matrix:
@@ -57,6 +57,7 @@ jobs:
           context: .
           file: Dockerfile
           push: true
+          platforms: linux/arm64
           tags: |
             ${{ env.IMAGE_NAME }}:${{ github.sha }}
             ${{ env.IMAGE_NAME }}:latest
