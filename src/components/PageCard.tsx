@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 import { TagLink } from '@/components/TagLink';
 
@@ -38,9 +40,11 @@ export function PageCard({
               {title}
             </div>
             {description && (
-              <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-                {description}
-              </p>
+              <div className="prose prose-sm mt-1 max-w-none dark:prose-invert">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {description}
+                </ReactMarkdown>
+              </div>
             )}
           </div>
         </div>
