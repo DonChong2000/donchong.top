@@ -9,6 +9,8 @@ if (!process.env.GEMINI_API_KEY) {
   );
 }
 
+jest.setTimeout(10000);
+
 describe('chatbot connection using AI-SDK (Gemini)', () => {
   it('returns text from the model via GEMINI_API_KEY', async () => {
     const googleAI = createGoogleGenerativeAI({
@@ -18,7 +20,7 @@ describe('chatbot connection using AI-SDK (Gemini)', () => {
     const { text } = await generateText({
       model: googleAI('gemini-2.5-flash'),
       prompt: 'Hello, How is your day?',
-      maxOutputTokens: 64,
+      maxOutputTokens: 30,
     });
     expect(text).toBeTruthy();
   });
