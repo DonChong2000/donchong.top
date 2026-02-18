@@ -6,6 +6,7 @@ interface Callout {
   imageSrc: string;
   imageAlt: string;
   href: string;
+  priority?: boolean;
 }
 
 interface DetailOverlayProps {
@@ -25,6 +26,8 @@ export function DetailOverlay({ callouts }: DetailOverlayProps) {
                     src={callout.imageSrc}
                     alt={callout.imageAlt}
                     fill
+                    priority={callout.priority}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     className="h-full w-full object-cover object-center"
                   />
                 </div>
