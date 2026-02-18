@@ -14,6 +14,7 @@ import { remToPx } from '@/lib/remToPx';
 import { ChevronDownIcon } from './icons/ChevronDownIcon';
 import { ChevronRightIcon } from './icons/ChevronRightIcon';
 import { NewspaperIcon } from './icons/NewspaperIcon';
+import { PaperClipIcon } from './icons/PaperClipIcon';
 
 interface NavGroup {
   title: string;
@@ -72,17 +73,22 @@ function TopLevelNavItem({
   href,
   icon,
   children,
+  active = false,
   ...props
 }: React.ComponentPropsWithoutRef<'li'> & {
   href: string;
   icon?: React.ReactNode;
+  active?: boolean;
 }) {
   return (
     <li {...props}>
       <Link
         href={href}
         className={clsx(
-          'py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white',
+          'py-1 text-sm transition',
+          active
+            ? 'text-zinc-900 dark:text-white'
+            : 'text-zinc-600 hover:text-zinc-900 dark:text-gray-400 dark:hover:text-white',
           icon ? 'flex items-center gap-2' : 'block',
         )}
       >
@@ -115,7 +121,7 @@ function NavLink({
         isAnchorLink ? 'pl-7' : 'pl-4',
         active
           ? 'text-zinc-900 dark:text-white'
-          : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white',
+          : 'text-zinc-600 hover:text-zinc-900 dark:text-gray-400 dark:hover:text-white',
       )}
     >
       <span className="truncate">{children}</span>
@@ -472,15 +478,23 @@ export const navigation: Array<NavGroup> = [
 ];
 
 export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {
+  const pathname = usePathname();
+
   return (
     <nav {...props}>
       <ul role="list">
-        <TopLevelNavItem href="/me" className="md:hidden">
+        <TopLevelNavItem
+          href="/me"
+          className="md:hidden"
+          active={pathname === '/me'}
+          icon={<PaperClipIcon className="h-4 w-4" />}
+        >
           About Me
         </TopLevelNavItem>
         <TopLevelNavItem
           href="/overview"
           icon={<NewspaperIcon className="h-4 w-4" />}
+          active={pathname === '/overview'}
         >
           Overview
         </TopLevelNavItem>
