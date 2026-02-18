@@ -49,6 +49,12 @@ export function PageCard({
                       <ol className="list-decimal pl-5" {...props} />
                     ),
                     li: (props) => <li className="my-1" {...props} />,
+                    strong: (props) => (
+                      <strong
+                        className="font-semibold text-zinc-900 dark:text-zinc-100"
+                        {...props}
+                      />
+                    ),
                   }}
                 >
                   {description}
