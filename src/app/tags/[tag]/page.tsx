@@ -60,7 +60,7 @@ export default async function TagPage({
               <PageCard
                 url={page.url}
                 title={page.title}
-                description={page.description}
+                descriptionMd={page.descriptionMd}
                 tags={page.tags}
                 thumbnail={page.thumbnail}
               />

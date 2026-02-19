@@ -3,7 +3,7 @@ import glob from 'fast-glob';
 export type TagPage = {
   url: string;
   title: string;
-  description?: string;
+  descriptionMd?: string;
   priority?: number;
   tags: string[];
   thumbnail?: string;
@@ -47,7 +47,7 @@ async function loadTagPages(): Promise<TagPage[]> {
       return {
         url,
         title: metadata.title ?? fallbackTitle,
-        description: metadata.description,
+        descriptionMd: metadata.descriptionMd,
         priority: metadata.priority ?? 0,
         tags,
         thumbnail: metadata.thumbnail ?? DEFAULT_THUMBNAIL,

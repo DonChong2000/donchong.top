@@ -8,7 +8,7 @@ import { TagLink } from '@/components/TagLink';
 type PageCardProps = {
   url: string;
   title: string;
-  description?: string;
+  descriptionMd?: string;
   tags?: string[];
   thumbnail?: string;
 };
@@ -16,7 +16,7 @@ type PageCardProps = {
 export function PageCard({
   url,
   title,
-  description,
+  descriptionMd,
   tags,
   thumbnail,
 }: PageCardProps) {
@@ -39,7 +39,7 @@ export function PageCard({
             <div className="text-sm font-semibold text-zinc-900 dark:text-white">
               {title}
             </div>
-            {description && (
+            {descriptionMd && (
               <div className="prose mt-1 text-sm text-zinc-600 dark:text-zinc-400">
                 <ReactMarkdown //Speific problem on ReactMarkdown and tailwind: https://stackoverflow.com/questions/77548370/react-markdown-not-displaying-ordered-list
                   remarkPlugins={[remarkGfm]}
@@ -57,7 +57,7 @@ export function PageCard({
                     ),
                   }}
                 >
-                  {description}
+                  {descriptionMd}
                 </ReactMarkdown>
               </div>
             )}

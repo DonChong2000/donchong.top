@@ -9,7 +9,7 @@ import { Tag } from '@/components/Tag';
 type TagPage = {
   url: string;
   title: string;
-  description?: string;
+  descriptionMd?: string;
   tags: string[];
   thumbnail?: string;
 };
@@ -86,7 +86,7 @@ export function ProjectTagFilterClient({
             <PageCard
               url={page.url}
               title={page.title}
-              description={page.description}
+              descriptionMd={page.descriptionMd}
               tags={page.tags}
               thumbnail={page.thumbnail}
             />
