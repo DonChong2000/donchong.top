@@ -141,7 +141,7 @@ export function MessageTab() {
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-x-3 bottom-6 z-50 flex justify-center sm:inset-auto sm:right-6 sm:bottom-6 sm:justify-end">
+        <div className="fixed inset-x-3 bottom-6 z-50 flex justify-center sm:inset-auto sm:right-6 sm:bottom-6 sm:justify-end min-h-58">
           <div
             className={`flex w-[min(96vw,420px)] flex-col overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-2xl backdrop-blur dark:border-white/10 dark:bg-charcoal-700 dark:shadow-zinc-500/15 sm:w-[min(92vw,360px)] ${
               isDetailMode ? 'lg:w-[min(92vw,720px)]' : ''
@@ -184,6 +184,9 @@ export function MessageTab() {
               </div>
             )}
             {messages.map((message) => {
+              if (message.role !== 'user' && message.content.length === 0) {
+                return null;
+              }
               const isUser = message.role === 'user';
               return (
                 <div
@@ -228,7 +231,7 @@ export function MessageTab() {
               <button
                 type="submit"
                 disabled={isLoading || input.trim().length === 0}
-                className="text-zinc-500transition absolute top-1/2 right-2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-semibold tracking-wide hover:text-zinc-600 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:text-zinc-200"
+                className="text-zinc-500 transition absolute top-1/2 right-2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-semibold tracking-wide hover:text-zinc-600 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:text-zinc-200"
                 aria-label="Send message"
               >
                 ENTER
