@@ -200,7 +200,7 @@ export function MessageTab() {
                   {isUser ? (
                     message.content
                   ) : (
-                    <div className="prose-sm prose max-w-none dark:prose-invert prose-p:my-0 prose-a:text-zinc-700 prose-a:underline dark:prose-a:text-zinc-100 prose-code:rounded prose-code:bg-zinc-200/70 prose-code:px-1 prose-code:py-0.5 prose-code:before:content-none prose-code:after:content-none dark:prose-code:bg-white/10 prose-pre:my-2 prose-pre:rounded-lg prose-pre:bg-zinc-900/90 prose-pre:px-3 prose-pre:py-2 prose-pre:text-zinc-100 dark:prose-pre:bg-black/40">
+                    <div className="prose-sm prose max-w-none dark:prose-invert prose-p:my-0 prose-a:text-zinc-700 prose-a:underline dark:prose-a:text-zinc-100 prose-code:rounded prose-code:bg-zinc-200/70 prose-code:px-1 prose-code:py-0.5 prose-code:before:content-none prose-code:after:content-none dark:prose-code:bg-white/10 prose-pre:my-2 prose-pre:rounded-lg prose-pre:bg-zinc-100 prose-pre:px-3 prose-pre:py-2 prose-pre:text-zinc-900 prose-pre:overflow-x-auto prose-pre:prose-code:bg-transparent prose-pre:prose-code:px-0 prose-pre:prose-code:py-0 prose-pre:prose-code:rounded-none prose-pre:prose-code:border-0 prose-pre:prose-code:ring-0 prose-pre:prose-code:shadow-none dark:prose-pre:bg-black/40 dark:prose-pre:text-zinc-100">
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {message.content}
                       </ReactMarkdown>
