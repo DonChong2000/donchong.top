@@ -89,8 +89,8 @@ The only realistic path is to track CVEs and minimize the blast radius.
 ### Recovery plan
 Honestly, unless we are disconnected from the internet, getting compromised is inevitable. So we should think about how to recover from it instead.
 
-#### Localize the problem
-- Run the server in Docker. This does not add security, but it can help contain damage.
+#### Isolation the damage
+Run the server in Docker. This adds a layer of isolation, but it is not bulletproof. Docker uses namespaces to isolate running containers, yet it is still possible for an application inside a container to escape, as demonstrated by CVE-2019-5736. The Docker-based approach has helped isolate React2Shell within the container, based on others’ experience.
 #### Recovery by Docker
 Dockerize services so reconfiguration is fast and repeatable.
 - [Dockerizing GTNH](/hobbies/gtnh#hosting)
