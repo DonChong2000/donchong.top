@@ -5,7 +5,8 @@ export const img = getImageMap(import.meta.url);
 export const metadata = {
   priority: 0,
   title: 'React2Shell',
-  description: 'An incident report that documents the React2Shell compromise tied to CVE-2025-55182 (Common Vulnerabilities and Exposures) to capture indicators, impact, and recovery steps. Built with Oracle Cloud monitoring, systemd service inspection, and Next.js, focusing on tracing a crypto-mining process pinned at 100% usage and patching from 15.5.2 to 15.5.7.',
+  description: `A detailed incident report on **React2Shell (CVE-2025-55182)**, analyzing attack indicators, impact scope, and remediation steps. Investigated the incident using Oracle Cloud monitoring, system logs, and file tracing, and documented root cause analysis and mitigation strategies.`
+  ,
 };
 
 
@@ -91,7 +92,9 @@ Honestly, unless we are disconnected from the internet, getting compromised is i
 #### Localize the problem
 - Run the server in Docker. This does not add security, but it can help contain damage.
 #### Recovery by Docker
-- Dockerize services so reconfiguration is fast and repeatable.
+Dockerize services so reconfiguration is fast and repeatable.
+- [Dockerizing GTNH](/hobbies/gtnh#hosting)
+
 
 ![[Pasted image 20260210042008.png]]
 

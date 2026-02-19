@@ -1,46 +1,61 @@
-# Protocol test
+# [donchong.top] - My Personal Portfolio & Blog
 
-Protocol is a [Tailwind UI](https://tailwindui.com) site template built using [Tailwind CSS](https://tailwindcss.com) and [Next.js](https://nextjs.org).
+## 🚀 Overview
 
-## Getting started
+This is a personal blog and portfolio site created to showcase my projects and technical writing. I built it to deepen my understanding of modern web technologies, transitioning from my earlier experience with jQuery and Ruby on Rails to today’s standards and best practices. It’s also a space where I can express "humanness" in a world full of AI-generated content.
 
-To get started with this template, first install the npm dependencies:
+**[🌐 Visit the site](https://donchong.top/)**
 
-```bash
-npm install
-```
+---
 
-Next, run the development server:
+## 🖼 Preview
 
-```bash
-npm run dev
-```
+![HomePage-preview](/public/readme-homepage.png)
 
-Finally, open [http://localhost:3000](http://localhost:3000) in your browser to view the website.
+## 🛠 Tech Stack
 
-## Customizing
+I chose **Next.js** for its full-stack capabilities, as well as its strong advantages in SEO and performance. I use **Tailwind CSS** to follow modern styling conventions and build clean, responsive designs.
 
-You can start editing this template by modifying the files in the `/src` folder. The site will auto-update as you edit these files.
+- Built with **Next.js** and **Tailwind CSS**
+- Self-hosted on **Oracle Cloud**, VM.Standard.A1.Flex, **Ubuntu** 22.04.4 LTS
+- **CI/CD** with GitHub Actions
+- Proxied by **Cloudflare**, providing SSL/TLS, DDoS protection, caching, etc.
+- Domain from NameSilo, managed by Cloudflare
 
-## Global search
+## ✨ Features
 
-This template includes a global search that's powered by the [FlexSearch](https://github.com/nextapps-de/flexsearch) library. It's available by clicking the search input or by using the `⌘K` shortcut.
+- Chatbot assistant (In development)
+- Custom remark plugin that supports Obsidian image wiki syntax `![[]]`, along with Next/image optimization and blur placeholder
+- Custom remark plugin that supports tag functions
+- 98/100 Lighthouse score
 
-This feature requires no configuration, and works out of the box by automatically scanning your documentation pages to build its index. You can adjust the search parameters by editing the `/src/mdx/search.mjs` file.
+## 📦 Getting Started
 
-## License
+To run this project locally:
 
-This site template is a commercial product and is licensed under the [Tailwind UI license](https://tailwindui.com/license).
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/donchong/donchong.top.git
+    ```
+2.  **Install dependencies:**
+    ```bash
+    pnpm install
+    ```
+3.  **Run the development server:**
+    ```bash
+    pnpm run dev
+    ```
+4.  Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-## Learn more
+## 📊 Lighthouse benchmark
 
-To learn more about the technologies used in this site template, see the following resources:
+![unlighthouse-benchmark](/public/readme-unlighthouse.png)
 
-- [Tailwind CSS](https://tailwindcss.com/docs) - the official Tailwind CSS documentation
-- [Next.js](https://nextjs.org/docs) - the official Next.js documentation
-- [Headless UI](https://headlessui.dev) - the official Headless UI documentation
-- [Framer Motion](https://www.framer.com/docs/) - the official Framer Motion documentation
-- [MDX](https://mdxjs.com/) - the official MDX documentation
-- [Algolia Autocomplete](https://www.algolia.com/doc/ui-libraries/autocomplete/introduction/what-is-autocomplete/) - the official Algolia Autocomplete documentation
-- [FlexSearch](https://github.com/nextapps-de/flexsearch) - the official FlexSearch documentation
-- [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction) - the official Zustand documentation
+## ☎️ Contact
+
+- [Portfolio Site](https://donchong.top)
+- [LinkedIn](https://www.linkedin.com/in/shing-tung-chong-bb5643225/)
+
+---
+
+_Looking for a Developer? I'm currently open to work! Feel free to reach out._

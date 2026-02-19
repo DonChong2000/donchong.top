@@ -5,16 +5,19 @@ export const metadata = {
   priority: 0,
   title: 'About This Site',
   description:
-    'A personal website that documents my work and design decisions to present my skills and projects clearly. Built with Next.js, Tailwind CSS, GitHub Actions, and Oracle Cloud (Ubuntu 22.04.4), focusing on automated deploys on each push.',
+    `A portfolio platform demonstrating full-stack engineering. It features an interactive Chatbot that provides real-time answers about my professional experience.
+- **Tech Stack**: Built with Next.js and Tailwind CSS, with automated CI/CD pipelines via GitHub Actions, deploying to a self-hosted Oracle Cloud VPS.
+- **Performance**: Achieved a 98/100 Lighthouse score across performance, accessibility, and SEO metrics.
+`,
   thumbnail: '/thumbnial/this-site.png',
 }
 
 
 # Why am I building this site?
-#fullstack #nextJS #tailwind #vps #docker #cicd
+#fullstack #nextJS #tailwind #vps #docker #cicd #chatbot
 
 
-I built this site to deepen my understanding of modern frontend technologies. My previous experience with front-end development was still rooted in the jQuery era, so this project became a way to explore today’s tools and best practices.
+I built this site to deepen my understanding of modern web technologies. My previous experience was rooted in the jQuery era, with Ruby on Rails as the backend. This project became a way for me to bridge the gap between those earlier tools and today’s frameworks, best practices, and development workflows.
 
 More importantly, I wanted a space that reflects my genuine effort and personality. In an age where AI-generated resumes, cover letters, and blog posts are everywhere, I believe content created with real thought and effort stands out more than ever. And that might catch someone's eye.
 
@@ -25,9 +28,9 @@ While I may still be a junior programmer, this site represents what I’ve learn
 
 - Built with Next.js and Tailwind CSS 
 - Running on Oracle Cloud, VM.Standard.A1.Flex, Ubuntu 22.04.4 LTS
-- CI/CD with Github Action
-- Domain from Name Silo, managed by Cloudflare
-- Proxied by Cloudflare, providing SSL/TSL, DDoS protection, caching, etc.
+- CI/CD with GitHub Actions
+- Domain from NameSilo, managed by Cloudflare
+- Proxied by Cloudflare, providing SSL/TLS, DDoS protection, caching, etc.
 
 #### [Theme](#theme)
 The colors are from a random picture that caught my eyes. I use the tinted gray and deep blue as the main color, and keep to color as clean as possible.
@@ -102,8 +105,8 @@ This site uses [next/image](https://nextjs.org/docs/app/getting-started/images) 
 </div>
 
 
-#### [CI/CD](#simple-ci-cd-with-git-hub-actions)
-This site uses a simple CI/CD pipeline powered by GitHub Actions. Whenever I push changes to the repository, the host automatically builds and restarts the server. This ensures the site stays up to date and helps me catch issues immediately.
+#### [CI/CD](#ci-cd-with-git-hub-actions)
+This site uses a CI/CD pipeline powered by GitHub Actions. Whenever I push changes to the repository, the host automatically lints, tests, and build, and restarts the server in Docker. This ensures the site stays up to date and helps me catch issues immediately.
 ![[Pasted image 20251013161416.png]]
 
 
@@ -497,10 +500,9 @@ A tag function is added using remark. Now I can use tags like #fullstack to allo
 Also I renovated "project-overview" to make use of this function, now user can sort post using tags. The project card is also based on metadata instead of being written one by one.
 
 ![[Pasted image 20260211151806.png]]
-# Back End
+## CI/CD with GitHub Actions
 
-## Simple CI/CD with GitHub Actions
-
+### Simple CI/CD with Github Action
 1. **Add SSH secrets in GitHub**  
     ![[Pasted image 20250826153946.png]]
     
@@ -524,6 +526,33 @@ Also I renovated "project-overview" to make use of this function, now user can s
     ![[Pasted image 20250826152400.png]]
     
 
+### CI/CD with docker
+Because of [[React2Shell (CVE-2025-55182)]], I decided to run these services inside a Docker container. However, the build process takes about 10 minutes to complete. One of the main issues is that both the site and the Docker image are built twice. To address this, I tried using GHCR to reuse the existing image instead.
+
+This reduced the deployment step to under a minute. However, exporting the image takes 272 seconds, which is actually longer than the original execution time. Well… lesson learned.
+
+```
+#26 exporting to GitHub Actions Cache
+#26 preparing build cache for export
+.
+.
+.
+#26 writing layer sha256:cb3155ade334807992397c4e22a22e88bde5f797329e0da7c5b217dd5e042229 32.8s done
+#26 preparing build cache for export 272.0s done
+#26 DONE 272.0s
+```
+
+#### Optimizing Docker
+I also worked on reducing the Docker image size to shorten the copy/transfer time from GHCR. The original Docker image was 4GB in size. I followed the Next.js Docker deployment template and switched the build output to `standalone`, which reduced the image size to 902MB.
+
+There is still significant overhead caused by statically imported images. Addressing this will be a future improvement, as discussed in this [this issue](https://github.com/DonChong2000/donchong.top/issues/2).
+
+![[Pasted image 20260216194751.png]]
+
+![[Pasted image 20260216214404.png]]
+
+## Benchmark
+![[Pasted image 20260219022231.png]]
 
 ---
 # Host and Network
