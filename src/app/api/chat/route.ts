@@ -33,11 +33,11 @@ export async function POST(req: Request) {
       `,
   });
 
-  const tokenLimit = Boolean(detailMode) ? 512 : 64;
+  const wordLimit = Boolean(detailMode) ? 512 : 64;
 
   systemMessages.push({
     role: 'system',
-    content: `Answer in fewer than ${tokenLimit} tokens`,
+    content: `Answer in fewer than ${wordLimit} words`,
   });
 
   const modelMessages = systemMessages.length
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
   const result = await streamText({
     model: 'google/gemini-3-flash',
     messages: modelMessages,
-    maxOutputTokens: tokenLimit,
+    maxOutputTokens: 10000,
     tools: {
       getPageContent: tool({
         description:
