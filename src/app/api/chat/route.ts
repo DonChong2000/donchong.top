@@ -1,4 +1,4 @@
-import { streamText } from 'ai';
+import { jsonSchema, stepCountIs, streamText, tool } from 'ai';
 
 export async function POST(req: Request) {
   if (!process.env.AI_GATEWAY_API_KEY) {
@@ -19,39 +19,51 @@ export async function POST(req: Request) {
     } | null;
   };
 
-  const normalizedDetailMode = Boolean(detailMode);
-  const detailPrompt =
-    'You are in detail mode. Provide thorough, well-structured responses with useful context and clear next steps.';
   const systemMessages: Array<{ role: 'system'; content: string }> = [];
 
-  if (pageContext?.content || pageContext?.summary) {
-    const contextLines = [
-      pageContext.title ? `Title: ${pageContext.title}` : null,
-      pageContext.url ? `URL: ${pageContext.url}` : null,
-      pageContext.summary ? `Summary: ${pageContext.summary}` : null,
-      pageContext.content ? `Content: ${pageContext.content}` : null,
-    ].filter(Boolean);
+  const safePageContext = pageContext ?? {};
 
-    systemMessages.push({
-      role: 'system',
-      content:
-        'Use the following page context to answer the user. If the question is unrelated, say you do not have relevant info from the page.' +
-        `\n${contextLines.join('\n')}`,
-    });
-  }
+  systemMessages.push({
+    role: 'system',
+    content: `
+      User is now at ${safePageContext.title ?? 'Not provided'} page.
+      Here is the page summary: ${safePageContext.summary ?? 'Not provided'}        
+      Use the page summary when it is relevant. If it is not relevant, answer normally.
+      If the page summary is insufficient for the user request, call the getPageContent tool to retrieve the full content. Only call it when needed, and do not ask for permission.
+      `,
+  });
 
-  if (normalizedDetailMode) {
-    systemMessages.push({ role: 'system', content: detailPrompt });
-  }
+  const tokenLimit = Boolean(detailMode) ? 512 : 64;
+
+  systemMessages.push({
+    role: 'system',
+    content: `Answer in fewer than ${tokenLimit} tokens`,
+  });
 
   const modelMessages = systemMessages.length
     ? [...systemMessages, ...messages]
     : messages;
 
   const result = await streamText({
-    model: 'google/gemini-2.5-flash-lite',
+    model: 'google/gemini-3-flash',
     messages: modelMessages,
-    maxOutputTokens: normalizedDetailMode ? 512 : 64,
+    maxOutputTokens: tokenLimit,
+    tools: {
+      getPageContent: tool({
+        description:
+          'Retrieve the full page content when the summary is insufficient to answer the user question.',
+        inputSchema: jsonSchema<{}>({
+          type: 'object',
+          properties: {},
+        }),
+        execute: async () => ({
+          title: pageContext?.title ?? null,
+          url: pageContext?.url ?? null,
+          content: pageContext?.content ?? '',
+        }),
+      }),
+    },
+    stopWhen: stepCountIs(3),
   });
 
   return result.toTextStreamResponse();

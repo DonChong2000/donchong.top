@@ -20,7 +20,6 @@ export function MessageTab() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDetailMode, setIsDetailMode] = useState(false);
-  const [includePageContext, setIncludePageContext] = useState(true);
   const [loadingFrame, setLoadingFrame] = useState(0);
   const messagesRef = useRef<ChatMessage[]>([]);
 
@@ -69,9 +68,6 @@ export function MessageTab() {
   }, [isLoading]);
 
   function getPageContext() {
-    if (!includePageContext) {
-      return null;
-    }
     const mainElement = document.querySelector('main');
     const rawText = mainElement?.innerText.replace(/\s+/g, ' ').trim() ?? '';
     const summary = document
@@ -190,24 +186,6 @@ export function MessageTab() {
                     checked={isDetailMode}
                     onChange={(event) => setIsDetailMode(event.target.checked)}
                     aria-label="Toggle detail mode"
-                  />
-                  <span className="h-5 w-9 rounded-full bg-zinc-300 transition peer-checked:bg-charcoal-600 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-zinc-500 dark:bg-zinc-600 dark:peer-checked:bg-white/90" />
-                  <span className="absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white transition peer-checked:translate-x-4 dark:bg-charcoal-700" />
-                </label>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-xs font-semibold tracking-wide text-zinc-500 dark:text-zinc-300">
-                  Page Context
-                </span>
-                <label className="relative inline-flex cursor-pointer items-center">
-                  <input
-                    type="checkbox"
-                    className="peer sr-only"
-                    checked={includePageContext}
-                    onChange={(event) =>
-                      setIncludePageContext(event.target.checked)
-                    }
-                    aria-label="Toggle page context"
                   />
                   <span className="h-5 w-9 rounded-full bg-zinc-300 transition peer-checked:bg-charcoal-600 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-zinc-500 dark:bg-zinc-600 dark:peer-checked:bg-white/90" />
                   <span className="absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white transition peer-checked:translate-x-4 dark:bg-charcoal-700" />
