@@ -41,7 +41,7 @@ export function TableOfContents() {
   let top = firstVisibleSectionIndex * itemHeight;
 
   return (
-    <div className="hidden xl:sticky xl:top-0 xl:block xl:h-screen xl:w-64 xl:flex-none xl:overflow-y-auto xl:py-16">
+    <div className="hidden xl:sticky xl:top-0 xl:block xl:h-screen xl:w-64 xl:flex-none xl:py-16">
       {' '}
       {/* xl:border-l xl:border-zinc-900/10 xl:dark:border-white/10 */}
       <nav aria-labelledby="on-this-page-title" className="relative pl-5">
