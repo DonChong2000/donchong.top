@@ -11,7 +11,12 @@ export async function POST(req: Request) {
   const { messages, detailMode, pageContext } = (await req.json()) as {
     messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
     detailMode?: boolean;
-    pageContext?: { title?: string; url?: string; content?: string } | null;
+    pageContext?: {
+      title?: string;
+      url?: string;
+      content?: string;
+      summary?: string;
+    } | null;
   };
 
   const normalizedDetailMode = Boolean(detailMode);
@@ -19,11 +24,12 @@ export async function POST(req: Request) {
     'You are in detail mode. Provide thorough, well-structured responses with useful context and clear next steps.';
   const systemMessages: Array<{ role: 'system'; content: string }> = [];
 
-  if (pageContext?.content) {
+  if (pageContext?.content || pageContext?.summary) {
     const contextLines = [
       pageContext.title ? `Title: ${pageContext.title}` : null,
       pageContext.url ? `URL: ${pageContext.url}` : null,
-      `Content: ${pageContext.content}`,
+      pageContext.summary ? `Summary: ${pageContext.summary}` : null,
+      pageContext.content ? `Content: ${pageContext.content}` : null,
     ].filter(Boolean);
 
     systemMessages.push({

@@ -73,20 +73,25 @@ export function MessageTab() {
       return null;
     }
     const mainElement = document.querySelector('main');
-    if (!mainElement) {
-      return null;
-    }
-    const rawText = mainElement.innerText.replace(/\s+/g, ' ').trim();
-    if (!rawText) {
+    const rawText = mainElement?.innerText.replace(/\s+/g, ' ').trim() ?? '';
+    const summary = document
+      .querySelector('meta[name="summary"]')
+      ?.getAttribute('content')
+      ?.trim();
+    if (!rawText && !summary) {
       return null;
     }
     const maxChars = 4000;
-    const clippedText =
-      rawText.length > maxChars ? `${rawText.slice(0, maxChars)}...` : rawText;
+    const clippedText = rawText
+      ? rawText.length > maxChars
+        ? `${rawText.slice(0, maxChars)}...`
+        : rawText
+      : undefined;
     return {
       title: document.title,
       url: window.location.href,
       content: clippedText,
+      summary: summary || undefined,
     };
   }
 

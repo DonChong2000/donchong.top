@@ -5,6 +5,7 @@ export const metadata = {
     'In this guide, we will look at how to register and consume webhooks to integrate your app with Protocol.',
   descriptionMd:
     'In this guide, we will look at how to register and consume webhooks to integrate your app with Protocol.',
+  summary: `This guide explains how to integrate a Protocol based app using webhooks, covering registration, consumption, event types, and security verification. It starts with the basic idea: you register a webhook URL in the Protocol dashboard and select the events you want to listen for so your app can react when messages, contacts, or conversations change. The page then walks through how to consume webhook requests by checking the event type and understanding the payload structure, with a sample JSON payload to illustrate the format. A large event type catalog lists the common lifecycle events for contacts, conversations, messages, groups, and attachments, alongside an example payload for a message update. The final section focuses on security, showing how to verify the request signature using an HMAC hash and a shared secret. Multiple language snippets demonstrate the verification process in JavaScript, Python, and PHP. The guide emphasizes that signature verification is required to confirm requests come from Protocol and warns against exposing webhook secrets. Overall, it is a concise, practical reference for setting up reliable webhook driven integrations and handling them safely.`,
 }
 
 # Webhooks

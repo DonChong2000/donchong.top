@@ -4,7 +4,7 @@ import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import 'dotenv/config';
 
 const shouldSkipGeminiTest =
-  !process.env.GEMINI_API_KEY || process.env.SKIP_GEMINI_TESTS === 'true';
+  process.env.SKIP_GEMINI_TESTS === 'true' || !process.env.GEMINI_API_KEY;
 
 jest.setTimeout(10000);
 
@@ -17,7 +17,7 @@ describe('chatbot connection using AI-SDK (Gemini)', () => {
     });
 
     const { text } = await generateText({
-      model: googleAI('gemini-2.5-flash'),
+      model: googleAI('gemini-flash-latest'),
       prompt: 'Hello, How is your day?',
       maxOutputTokens: 10,
     });
