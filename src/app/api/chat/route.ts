@@ -1,69 +1,68 @@
-import { jsonSchema, stepCountIs, streamText, tool } from 'ai';
+import { createResource } from '@/lib/actions/resources';
+import {
+  streamText,
+  tool,
+  stepCountIs,
+} from 'ai';
+import { z } from 'zod';
+import { findRelevantContent } from '@/lib/ai/embedding';
+
+type ChatMessage = {
+  role: 'user' | 'assistant' | 'system' | 'tool';
+  content: string;
+};
+
+// Allow streaming responses up to 30 seconds
+export const maxDuration = 30;
 
 export async function POST(req: Request) {
-  if (!process.env.AI_GATEWAY_API_KEY) {
-    return new Response(
-      'Missing required env var: AI_GATEWAY_API_KEY. Check your .env file.',
-      { status: 500 },
-    );
+  const body = await req.json();
+  const messagesRaw = (body as { messages?: unknown } | null)?.messages;
+  const messages = Array.isArray(messagesRaw)
+    ? (messagesRaw as ChatMessage[])
+    : null;
+  if (!messages || messages.some((message) => typeof message.content !== 'string')) {
+    return new Response('Invalid messages payload', { status: 400 });
   }
+  const modelMessages = messages
+    .filter(
+      (
+        message,
+      ): message is Omit<ChatMessage, 'role'> & {
+        role: 'user' | 'assistant' | 'system';
+      } => message.role !== 'tool',
+    )
+    .map((message) => ({
+      role: message.role,
+      content: message.content,
+    }));
 
-  const { messages, detailMode, pageContext } = (await req.json()) as {
-    messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
-    detailMode?: boolean;
-    pageContext?: {
-      title?: string;
-      url?: string;
-      content?: string;
-      summary?: string;
-    } | null;
-  };
-
-  const systemMessages: Array<{ role: 'system'; content: string }> = [];
-
-  const safePageContext = pageContext ?? {};
-
-  systemMessages.push({
-    role: 'system',
-    content: `
-      User is now at ${safePageContext.title ?? 'Not provided'} page.
-      Here is the page summary: ${safePageContext.summary ?? 'Not provided'}        
-      Use the page summary when it is relevant. If it is not relevant, answer normally.
-      If the page summary is insufficient for the user request, call the getPageContent tool to retrieve the full content. Only call it when needed, and do not ask for permission.
-      `,
-  });
-
-  const wordLimit = Boolean(detailMode) ? 512 : 64;
-
-  systemMessages.push({
-    role: 'system',
-    content: `Answer in fewer than ${wordLimit} words`,
-  });
-
-  const modelMessages = systemMessages.length
-    ? [...systemMessages, ...messages]
-    : messages;
-
-  const result = await streamText({
-    model: 'google/gemini-3-flash',
+  const result = streamText({
+    model: 'openai/gpt-4o',
     messages: modelMessages,
-    maxOutputTokens: 10000,
+    stopWhen: stepCountIs(5),
+    system: `You are a helpful assistant. Check your knowledge base before answering any questions.
+    Only respond to questions using information from tool calls.
+    if no relevant information is found in the tool calls, respond, "Sorry, I don't know."`,
     tools: {
-      getPageContent: tool({
-        description:
-          'Retrieve the full page content when the summary is insufficient to answer the user question.',
-        inputSchema: jsonSchema<{}>({
-          type: 'object',
-          properties: {},
+      addResource: tool({
+        description: `add a resource to your knowledge base.
+          If the user provides a random piece of knowledge unprompted, use this tool without asking for confirmation.`,
+        inputSchema: z.object({
+          content: z
+            .string()
+            .describe('the content or resource to add to the knowledge base'),
         }),
-        execute: async () => ({
-          title: pageContext?.title ?? null,
-          url: pageContext?.url ?? null,
-          content: pageContext?.content ?? '',
+        execute: async ({ content }) => createResource({ content }),
+      }),
+      getInformation: tool({
+        description: `get information from your knowledge base to answer questions.`,
+        inputSchema: z.object({
+          question: z.string().describe('the users question'),
         }),
+        execute: async ({ question }) => findRelevantContent(question),
       }),
     },
-    stopWhen: stepCountIs(3),
   });
 
   return result.toTextStreamResponse();
