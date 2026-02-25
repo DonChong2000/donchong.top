@@ -1,0 +1,117 @@
+import Image from 'next/image'
+import { getImageMap } from '@/lib/imgMap'
+export const img = getImageMap(import.meta.url)
+
+# Site Chatbot
+
+Here I will document the details of the chat bot in this site. Including what its capability is, what information does it know and the implementation details.
+
+At first, I was going to build a standalone site, named "Chat-CV" or "AskMe". But after a while, I decided to integrate it into the site, as a little button at the bottom. And I think this will increase the interaction of this function, and provide a tool to help user navigte the site.
+
+## Bot Capability
+1. Answer questions about the contents on this site.
+2. Able to know the user's current page.
+3. Provide a detailed mode, tailored for mobile users.
+4. (To be implemented) Return the schedule of Don for availability.
+5. (To be implemented) Send email to Don.
+
+# Bot's Knowledge
+1. Pages on this site
+2. (To be added) Hand-pick notes from my 306 notes in Obsidian
+3. (To be added) My project documents, like FYP reports
+4. (To be added) Resume
+5. (To be added) Common Q&A the bot might be asked
+
+## Retrieval-augmented generation (RAG)
+RAG is a common tool to pull related information into LLM's context. For small amounts of data, we can simply include it in the system prompt and call it a day, but loading a large amount of data into context will lead to [Context Rot](https://research.trychroma.com/context-rot) and break my bank account quickly. And here is where RAG comes into play.
+
+RAG is basically a function call that retrieves similar content from a database and feeds it as context. Say the user asks "What is my favorite game?", "Game" related content will show up on top. Then the AI can return related and fact-grounded information.
+
+Here are the basic steps to build a RAG system:
+#### Ingesting Data
+To store data in a RAG system:
+1. Gather documents you want to include
+2. Split the documents into chunks
+3. Convert them into vectors (embeddings)
+4. Save the embeddings in a vector database
+
+#### Retrieving Data
+To retrieve relevant information:
+1. Create a string (question) as a query; the simplest way is just let LLM fill in the parameter for function calling
+2. Convert the string into embeddings.
+3. Calculate the similarity (vector distance)
+4. Return the top-N answer
+5. Reranking if you need it.
+6. Return the function call as context
+
+### Implementation
+I started building my RAG system from Vercel's [cookbook](https://ai-sdk.dev/cookbook/guides/rag-chatbot).
+And here are the details of how I collect documents, chunk them, and embed them.
+
+### Collecting data
+In the RAG database, I included or to be included the following:
+1. Pages on this site
+2. Hand-pick notes from my 306 notes in Obsidian
+3. My project documents, like FYP reports
+4. Resume
+5. Common Q&A the bot might be asked
+
+#### Generate scope wide context
+But the RAG does not contain scope-wide content. The bot will not be able to answer "List your projects", as they are all in different chunks. Therefore, I created a prompt that asks a coding agent to summarize different scopes, and output files and paths as a list.
+
+```
+You are a concise technical summarizer for a RAG knowledge base.
+
+Goal
+Discover which folders deserve a scope summary, then create a general summary for each selected scope that covers all documents within that scope, and include all document titles in the output.
+
+Inputs
+[truncated]...
+
+Instructions
+- Scan the full folder tree and decide which folders deserve their own scope summary.
+- A folder deserves a scope summary if it is a meaningful category and contains at least 2 documents.
+- Always include the root as a scope.
+- For each selected scope:
+  - Read every document in the scope. Do not ignore any document.
+  - Write a single general summary that represents the entire scope, not individual documents.
+  - The summary should be 4-6 sentences, factual, and avoid speculation.
+  - Include all titles in the output, grouped under a dedicated "Titles" section.
+  - Preserve title casing exactly as provided.
+  - Do not add new titles or paraphrase titles.
+  - If a document has no title, use its path as the title.
+- Keep the output in plain text.
+
+Output Format
+[truncated]...
+
+```
+
+### chunking
+When I search for how to chunk a piece of markdown, they ask us to chunk it based on a lot of criteria, such as:
+1. Add prefix path and title
+2. limit token size
+3. Don't split code blocks, tables, or  lists
+3. Add overlap to preserve context
+4. Split by headings, subheadings, paragraphs
+5. Avoid tiny segments
+
+I thought to myself, why don't I just let LLM split it for me?
+ChatGPT advises me not to, but I decided to do it anyway for the following reason:
+1. LLM can understand the text and split it into meaningful chunks.
+2. If a chunk does not have a complete context, LLM fills it for me.
+3. I don't have to consider code blocks, tables, list. LLM will handle them naturally.
+4. For my amount of data, and considering it is a one-time calculation, it's cheap; in fact, it only cost me around $1 USD at the end.
+
+For the detailed Implementation, check out the repo's `rag-ingest.mjs`.
+
+### Embeddings
+
+In Vercel’s cookbook, they use OpenAI’s `text-embedding-3-small` as the default embedding model. According to the [MTEB Leaderboard](https://huggingface.co/spaces/mteb/leaderboard), it is currently the most cost-effective embedding model available on Vercel.
+
+Although `gemini-embedding-001` is 7.5× more expensive than `text-embedding-3-small`, the absolute cost is still very low—around $0.15 per million tokens. Since embeddings are generally inexpensive, I decided to test whether switching to a higher-performing model would make a noticeable difference.
+
+On MTEB, `gemini-embedding-001` ranks No. 4, while `text-embedding-3-small` ranks No. 44. I will implement both models and compare their performance to see if the difference is meaningful.
+
+
+

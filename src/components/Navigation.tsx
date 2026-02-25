@@ -416,6 +416,7 @@ export const navigation: Array<NavGroup> = [
     links: [
       // { title: 'Chat-CV', href: '/chat-cv' },
       { title: 'DonChong.Top', href: '/projects/this-site' },
+      { title: 'Site Chatbot', href: '/projects/site-chatbot' },
       {
         title: 'Drowning Detection & Rescue System',
         href: '/projects/drowning-detection-rescue-system',
