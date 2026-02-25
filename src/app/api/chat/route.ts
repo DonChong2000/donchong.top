@@ -1,6 +1,6 @@
 import { jsonSchema, stepCountIs, streamText, tool } from 'ai';
 
-import { searchRagContent } from '../../../lib/rag';
+import { searchRagContent } from '@/lib/rag';
 
 export async function POST(req: Request) {
   if (!process.env.AI_GATEWAY_API_KEY) {
@@ -10,29 +10,26 @@ export async function POST(req: Request) {
     );
   }
 
-  const { messages, detailMode, pageContext } = (await req.json()) as {
+  const { messages, detailMode, pageMeta } = (await req.json()) as {
     messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
     detailMode?: boolean;
-    pageContext?: {
+    pageMeta?: {
       title?: string;
       url?: string;
-      content?: string;
-      summary?: string;
     } | null;
   };
 
   const systemMessages: Array<{ role: 'system'; content: string }> = [];
 
-  const safePageContext = pageContext ?? {};
+  const safePageMeta = pageMeta ?? {};
 
   systemMessages.push({
     role: 'system',
     content: `
-      User is now at ${safePageContext.title ?? 'Not provided'} page.
-      Here is the page summary: ${safePageContext.summary ?? 'Not provided'}        
-      Use the page summary when it is relevant. If it is not relevant, answer normally.
-      If the page summary is insufficient for the user request, call the getPageContent tool to retrieve the full content. Only call it when needed, and do not ask for permission.
-      If the user asks for information that is not available on the page or requires external knowledge, call the getRagContent tool with a focused query based on the user request.
+      User is now at ${safePageMeta.title ?? 'Not provided'} page.
+      Page URL: ${safePageMeta.url ?? 'Not provided'}
+      If the user asks for information that is not available or requires external knowledge, call the getRagContent tool with a focused query based on the user request without asking.
+      If the answer cannot be determined from the retrieved context, respond with a brief statement indicating uncertainty (e.g., “I don’t have enough information” or “Sorry, I don't know”). Do not add any new information.
       `,
   });
 
@@ -52,19 +49,6 @@ export async function POST(req: Request) {
     messages: modelMessages,
     maxOutputTokens: 10000,
     tools: {
-      getPageContent: tool({
-        description:
-          'Retrieve the full page content when the summary is insufficient to answer the user question.',
-        inputSchema: jsonSchema<{}>({
-          type: 'object',
-          properties: {},
-        }),
-        execute: async () => ({
-          title: pageContext?.title ?? null,
-          url: pageContext?.url ?? null,
-          content: pageContext?.content ?? '',
-        }),
-      }),
       getRagContent: tool({
         description:
           'Retrieve relevant knowledge-base content for the user request using semantic search.',
@@ -76,8 +60,7 @@ export async function POST(req: Request) {
           },
           required: ['query'],
         }),
-        execute: async ({ query, limit }) =>
-          searchRagContent(query, limit),
+        execute: async ({ query, limit }) => searchRagContent(query, limit),
       }),
     },
     stopWhen: stepCountIs(3),

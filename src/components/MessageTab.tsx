@@ -67,27 +67,13 @@ export function MessageTab() {
     };
   }, [isLoading]);
 
-  function getPageContext() {
-    const mainElement = document.querySelector('main');
-    const rawText = mainElement?.innerText.replace(/\s+/g, ' ').trim() ?? '';
-    const summary = document
-      .querySelector('meta[name="summary"]')
-      ?.getAttribute('content')
-      ?.trim();
-    if (!rawText && !summary) {
+  function getPageMeta() {
+    if (!document.title && !window.location.href) {
       return null;
     }
-    const maxChars = 4000;
-    const clippedText = rawText
-      ? rawText.length > maxChars
-        ? `${rawText.slice(0, maxChars)}...`
-        : rawText
-      : undefined;
     return {
-      title: document.title,
-      url: window.location.href,
-      content: clippedText,
-      summary: summary || undefined,
+      title: document.title || undefined,
+      url: window.location.href || undefined,
     };
   }
 
@@ -114,7 +100,7 @@ export function MessageTab() {
     ]);
 
     try {
-      const pageContext = getPageContext();
+      const pageMeta = getPageMeta();
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
@@ -123,7 +109,7 @@ export function MessageTab() {
         body: JSON.stringify({
           messages: nextMessages,
           detailMode: isDetailMode,
-          pageContext,
+          pageMeta,
         }),
       });
 
