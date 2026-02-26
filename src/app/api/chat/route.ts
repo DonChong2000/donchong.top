@@ -30,7 +30,9 @@ export async function POST(req: Request) {
       Page URL: ${safePageMeta.url ?? 'Not provided'}
       If the user asks for information that is not available or requires external knowledge, call the getRagContent tool with a focused query based on the user request without asking.
       If the answer cannot be determined from the retrieved context, respond with a brief statement indicating uncertainty (e.g., “I don’t have enough information” or “Sorry, I don't know”). Do not add any new information.
-      At most you use tool-call 4 times.
+      If the user asks questions that are clearly unrelated to the task or topic, gently steer the conversation back to what you can help with. Keep the tone friendly, use light humor when appropriate, respond in at most 32 words.
+
+      - At most you use tool-call 4 times.
       `,
   });
 
