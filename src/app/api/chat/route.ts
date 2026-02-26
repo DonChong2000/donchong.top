@@ -30,6 +30,7 @@ export async function POST(req: Request) {
       Page URL: ${safePageMeta.url ?? 'Not provided'}
       If the user asks for information that is not available or requires external knowledge, call the getRagContent tool with a focused query based on the user request without asking.
       If the answer cannot be determined from the retrieved context, respond with a brief statement indicating uncertainty (e.g., “I don’t have enough information” or “Sorry, I don't know”). Do not add any new information.
+      At most you use tool-call 4 times.
       `,
   });
 
@@ -44,7 +45,7 @@ export async function POST(req: Request) {
     ? [...systemMessages, ...messages]
     : messages;
 
-  const result = await streamText({
+  const result = streamText({
     model: 'google/gemini-3-flash',
     messages: modelMessages,
     maxOutputTokens: 10000,
@@ -63,8 +64,66 @@ export async function POST(req: Request) {
         execute: async ({ query, limit }) => searchRagContent(query, limit),
       }),
     },
-    stopWhen: stepCountIs(3),
+    stopWhen: stepCountIs(5),
+    onFinish: ({ finishReason, steps }) => {
+      console.info('chat stream completed', {
+        finishReason,
+        stepCount: steps?.length ?? 0,
+        wordLimit,
+      });
+    },
   });
 
-  return result.toTextStreamResponse();
+  let hasNonWhitespace = false;
+
+  const stream = new ReadableStream<string>({
+    async start(controller) {
+      const reader = result.textStream.getReader();
+      let didError = false;
+      try {
+        let done = false;
+        while (!done) {
+          const { value, done: readerDone } = await reader.read();
+          done = readerDone;
+          if (value) {
+            if (!hasNonWhitespace && /\S/.test(value)) {
+              hasNonWhitespace = true;
+            }
+            controller.enqueue(value);
+          }
+        }
+
+        const finishReason = await result.finishReason;
+        const errors: string[] = [];
+
+        if (!hasNonWhitespace) {
+          errors.push('Empty model response');
+        }
+
+        if (finishReason !== 'stop') {
+          errors.push('Model did not finish normally');
+        }
+
+        if (errors.length > 0) {
+          controller.enqueue(
+            `\n\n[Error] ${errors.join('. ')} (finishReason: ${finishReason})\n`,
+          );
+        }
+      } catch (error) {
+        didError = true;
+        controller.error(error);
+      } finally {
+        reader.releaseLock();
+        if (!didError) {
+          controller.close();
+        }
+      }
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      'content-type': 'text/plain; charset=utf-8',
+    },
+  });
 }
