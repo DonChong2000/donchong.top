@@ -153,105 +153,107 @@ export function MessageTab() {
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-x-3 bottom-6 z-50 flex justify-center sm:inset-auto sm:right-6 sm:bottom-6 sm:justify-end min-h-58">
+        <div className="fixed inset-x-3 bottom-6 z-50 flex min-h-58 justify-center sm:inset-auto sm:right-6 sm:bottom-6 sm:justify-end">
           <div
-            className={`flex w-[min(96vw,420px)] flex-col overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-2xl backdrop-blur dark:border-white/10 dark:bg-charcoal-700 dark:shadow-zinc-500/15 sm:w-[min(92vw,360px)] ${
+            className={`flex w-[min(96vw,420px)] flex-col overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-2xl backdrop-blur sm:w-[min(92vw,360px)] dark:border-white/10 dark:bg-charcoal-700 dark:shadow-zinc-500/15 ${
               isDetailMode ? 'lg:w-[min(92vw,720px)]' : ''
             }`}
           >
-          <div className="flex items-center justify-end gap-3 border-b border-zinc-900/10 px-4 py-3 text-sm font-semibold text-zinc-500 dark:border-white/10 dark:text-white">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3">
-                <span className="text-xs font-semibold tracking-wide text-zinc-500 dark:text-zinc-300">
-                  Detail
-                </span>
-                <label className="relative inline-flex cursor-pointer items-center">
-                  <input
-                    type="checkbox"
-                    className="peer sr-only"
-                    checked={isDetailMode}
-                    onChange={(event) => setIsDetailMode(event.target.checked)}
-                    aria-label="Toggle detail mode"
-                  />
-                  <span className="h-5 w-9 rounded-full bg-zinc-300 transition peer-checked:bg-charcoal-600 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-zinc-500 dark:bg-zinc-600 dark:peer-checked:bg-white/90" />
-                  <span className="absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white transition peer-checked:translate-x-4 dark:bg-charcoal-700" />
-                </label>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setIsOpen(false)}
-              className="rounded-full px-2 py-1 text-xs text-zinc-500 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
-              aria-label="Close message panel"
-            >
-              Close
-            </button>
-          </div>
-          <div
-            ref={listRef}
-            className="subtle-scrollbar flex max-h-[50vh] flex-1 flex-col gap-3 overflow-y-auto px-4 py-4 text-sm"
-          >
-            {messages.length === 0 && (
-              <div className="rounded-2xl border border-zinc-900/10 bg-zinc-50 px-4 py-3 text-zinc-600 dark:border-white/10 dark:bg-charcoal-800 dark:text-zinc-300">
-                Ask about projects, notes, experience or dive into Don’s
-                thoughts on AI.
-              </div>
-            )}
-            {messages.map((message) => {
-              if (message.role !== 'user' && message.content.length === 0) {
-                return null;
-              }
-              const isUser = message.role === 'user';
-              return (
-                <div
-                  key={message.id}
-                  className={`w-fit max-w-[85%] rounded-2xl px-4 py-2 leading-relaxed ${
-                    isUser
-                      ? 'ml-auto bg-zinc-700 text-white dark:bg-timberwolf-100 dark:text-charcoal-900'
-                      : 'bg-timberwolf-100 text-zinc-700 dark:bg-charcoal-800 dark:text-zinc-200'
-                  }`}
-                >
-                  {isUser ? (
-                    message.content
-                  ) : (
-                    <div className="prose-sm prose max-w-none dark:prose-invert prose-p:my-0 prose-a:text-zinc-700 prose-a:underline dark:prose-a:text-zinc-100 prose-code:rounded prose-code:bg-zinc-200/70 prose-code:px-1 prose-code:py-0.5 prose-code:before:content-none prose-code:after:content-none dark:prose-code:bg-white/10 prose-pre:my-2 prose-pre:rounded-lg prose-pre:bg-zinc-100 prose-pre:px-3 prose-pre:py-2 prose-pre:text-zinc-900 prose-pre:overflow-x-auto prose-pre:prose-code:bg-transparent prose-pre:prose-code:px-0 prose-pre:prose-code:py-0 prose-pre:prose-code:rounded-none prose-pre:prose-code:border-0 prose-pre:prose-code:ring-0 prose-pre:prose-code:shadow-none dark:prose-pre:bg-black/40 dark:prose-pre:text-zinc-100">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {message.content}
-                      </ReactMarkdown>
-                    </div>
-                  )}
+            <div className="flex items-center justify-end gap-3 border-b border-zinc-900/10 px-4 py-3 text-sm font-semibold text-zinc-500 dark:border-white/10 dark:text-white">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-semibold tracking-wide text-zinc-500 dark:text-zinc-300">
+                    Detail
+                  </span>
+                  <label className="relative inline-flex cursor-pointer items-center">
+                    <input
+                      type="checkbox"
+                      className="peer sr-only"
+                      checked={isDetailMode}
+                      onChange={(event) =>
+                        setIsDetailMode(event.target.checked)
+                      }
+                      aria-label="Toggle detail mode"
+                    />
+                    <span className="h-5 w-9 rounded-full bg-zinc-300 transition peer-checked:bg-charcoal-600 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-zinc-500 dark:bg-zinc-600 dark:peer-checked:bg-white/90" />
+                    <span className="absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white transition peer-checked:translate-x-4 dark:bg-charcoal-700" />
+                  </label>
                 </div>
-              );
-            })}
-            {isLoading && (
-              <div className="w-fit max-w-[85%] rounded-2xl py-2 text-zinc-500 dark:text-zinc-300">
-                {loadingFrame === 0 ? '🐋...' : '🐬...'}
               </div>
-            )}
-          </div>
-          <form
-            onSubmit={handleSubmit}
-            className="border-t border-zinc-900/10 px-4 py-3 dark:border-white/10"
-          >
-            <div className="relative">
-              <input
-                ref={inputRef}
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-                placeholder="Type a message..."
-                className="w-full rounded-md bg-zinc-50 px-3 py-2 pr-16 text-sm text-zinc-800 transition outline-none focus:bg-white disabled:cursor-not-allowed disabled:opacity-60 dark:bg-charcoal-750 dark:text-zinc-100 dark:focus:bg-charcoal-700"
-                disabled={isLoading}
-              />
               <button
-                type="submit"
-                disabled={isLoading || input.trim().length === 0}
-                className="text-zinc-500 transition absolute top-1/2 right-2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-semibold tracking-wide hover:text-zinc-600 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:text-zinc-200"
-                aria-label="Send message"
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="rounded-full px-2 py-1 text-xs text-zinc-500 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+                aria-label="Close message panel"
               >
-                ENTER
+                Close
               </button>
             </div>
-          </form>
+            <div
+              ref={listRef}
+              className="subtle-scrollbar flex max-h-[50vh] flex-1 flex-col gap-3 overflow-y-auto px-4 py-4 text-sm"
+            >
+              {messages.length === 0 && (
+                <div className="rounded-2xl border border-zinc-900/10 bg-zinc-50 px-4 py-3 text-zinc-600 dark:border-white/10 dark:bg-charcoal-800 dark:text-zinc-300">
+                  Ask about projects, notes, experience or dive into Don’s
+                  thoughts on AI.
+                </div>
+              )}
+              {messages.map((message) => {
+                if (message.role !== 'user' && message.content.length === 0) {
+                  return null;
+                }
+                const isUser = message.role === 'user';
+                return (
+                  <div
+                    key={message.id}
+                    className={`w-fit max-w-[85%] rounded-2xl px-4 py-2 leading-relaxed ${
+                      isUser
+                        ? 'ml-auto bg-zinc-700 text-white dark:bg-timberwolf-100 dark:text-charcoal-900'
+                        : 'bg-timberwolf-100 text-zinc-700 dark:bg-charcoal-800 dark:text-zinc-200'
+                    }`}
+                  >
+                    {isUser ? (
+                      message.content
+                    ) : (
+                      <div className="prose-sm prose max-w-none dark:prose-invert prose-p:my-0 prose-p:text-sm prose-a:text-sm prose-a:text-zinc-700 prose-a:underline dark:prose-a:text-zinc-100 prose-code:rounded prose-code:bg-zinc-200/70 prose-code:px-1 prose-code:py-0.5 prose-code:before:content-none prose-code:after:content-none dark:prose-code:bg-white/10 prose-pre:my-2 prose-pre:overflow-x-auto prose-pre:rounded-lg prose-pre:bg-zinc-100 prose-pre:px-3 prose-pre:py-2 prose-pre:text-zinc-900 dark:prose-pre:bg-black/40 dark:prose-pre:text-zinc-100 prose-pre:prose-code:rounded-none prose-pre:prose-code:border-0 prose-pre:prose-code:bg-transparent prose-pre:prose-code:px-0 prose-pre:prose-code:py-0 prose-pre:prose-code:shadow-none prose-pre:prose-code:ring-0">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {message.content}
+                        </ReactMarkdown>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+              {isLoading && (
+                <div className="w-fit max-w-[85%] rounded-2xl py-2 text-zinc-500 dark:text-zinc-300">
+                  {loadingFrame === 0 ? '🐋...' : '🐬...'}
+                </div>
+              )}
+            </div>
+            <form
+              onSubmit={handleSubmit}
+              className="border-t border-zinc-900/10 px-4 py-3 dark:border-white/10"
+            >
+              <div className="relative">
+                <input
+                  ref={inputRef}
+                  value={input}
+                  onChange={(event) => setInput(event.target.value)}
+                  placeholder="Type a message..."
+                  className="w-full rounded-md bg-zinc-50 px-3 py-2 pr-16 text-sm text-zinc-800 transition outline-none focus:bg-white disabled:cursor-not-allowed disabled:opacity-60 dark:bg-charcoal-750 dark:text-zinc-100 dark:focus:bg-charcoal-700"
+                  disabled={isLoading}
+                />
+                <button
+                  type="submit"
+                  disabled={isLoading || input.trim().length === 0}
+                  className="absolute top-1/2 right-2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-semibold tracking-wide text-zinc-500 transition hover:text-zinc-600 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:text-zinc-200"
+                  aria-label="Send message"
+                >
+                  ENTER
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
