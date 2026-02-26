@@ -87,12 +87,28 @@ Output Format
 [truncated]...
 
 ```
+#### non-md files
+However, not every files are marddowns, for instance, I want to add my FYP report to RAG, how should I do that?
+A simple answer is: just use [markdown.new](https://markdown.new/),
+
+I came across 3 options:
+1. [markitdown](https://github.com/microsoft/markitdown) by microsoft.
+It will break tables, no page numbers, not very good.
+2. Use Markitdown and refine it using coding agent.
+It reconstruct the table, better.
+3. [markdown.new](https://markdown.new/) by Cloudfalre.
+- It split by pages and has page numbers.
+- It retain tables, It support wide-range of file type, like document, spreadsheet, images, etc.
+- It has API support.
+- Its free.
+- You can self-host if you reach the free limit (500 request)
+
 
 ### chunking
 When I search for how to chunk a piece of markdown, they ask us to chunk it based on a lot of criteria, such as:
 1. Add prefix path and title
 2. limit token size
-3. Don't split code blocks, tables, or  lists
+3. Don't split code blocks, tables, or lists
 3. Add overlap to preserve context
 4. Split by headings, subheadings, paragraphs
 5. Avoid tiny segments
