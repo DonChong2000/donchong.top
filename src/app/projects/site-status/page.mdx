@@ -9,6 +9,8 @@ export const metadata = {
   descriptionMd:
     `A **dashboard** shows my service status in real time. It can also start my Minecraft server for TFG's specific needs. I built the function using **Cloudflare Workers** and overengineered just to play with the api worker concept and **RESTful** API.`,
   summary: `This page documents status.donchong.top, a Cloudflare Workers dashboard that monitors personal services and can trigger a Minecraft server startup. It explains the motivation: a simple, highly available status page that also exposes lightweight control features. The writeup covers initial Worker setup, common Wrangler deployment issues, and the need to update outdated tooling and example syntax. It walks through custom domain configuration and DNS cache flushing, then verifies the Bill AI test deployment. Technical sections show how TCP checks are used to detect service availability and how a third party Minecraft status API provides richer server details like players, version, and MOTD. The page also details an intentionally over engineered control path for starting a server: the frontend calls a Worker API, which forwards to an Oracle Cloud host running an Express endpoint that spawns the server. Code snippets illustrate each hop and error handling. A note mentions the start function is currently disabled. The page ends by acknowledging that a simpler solution like UptimeRobot covers most monitoring needs and lists its supported check types. Overall, it is a practical walkthrough of building a custom status and control dashboard with Workers, plus lessons learned.`,
+  thumbnail: '/thumbnial/status.png',
+
 };
 
 # status.donchong.top
