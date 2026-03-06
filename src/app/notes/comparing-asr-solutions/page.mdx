@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { getImageMap } from '@/lib/imgMap';
 export const img = getImageMap(import.meta.url);
 export const metadata = {
-  priority: 0,
+  priority: 100,
   title: 'Comparing ASR Solutions',
   description: `A benchmark note that compares automatic speech recognition (ASR) services on price, accuracy, and speed. Used Postman to compare OpenAI, Azure, Cloudflare, LemonFox, and a self-hosting solution using Postman.`,
   descriptionMd: `A benchmark note that compares **automatic speech recognition (ASR)** services on price, accuracy, and speed. Used **Postman** to compare OpenAI, Azure, Cloudflare, LemonFox, and a self-hosting solution using Postman.`,
