@@ -25,7 +25,7 @@ export function PageCard({
       <Link href={url} className="block">
         <div className="flex gap-4">
           {thumbnail && (
-            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-zinc-100 dark:bg-white/10">
+            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-zinc-100 shadow-md dark:bg-white/10 dark:shadow-black/40">
               <Image
                 src={thumbnail}
                 alt={title}
