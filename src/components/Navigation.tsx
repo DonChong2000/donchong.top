@@ -460,6 +460,7 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Hobbies',
     links: [
+      { title: 'OC-CODE', href: '/hobbies/oc-code' },
       { title: 'GTNH', href: '/hobbies/gtnh' },
       { title: 'Factorio', href: '/hobbies/factorio' },
       { title: "Don's Cookbook", href: '/dons-cookbook' },

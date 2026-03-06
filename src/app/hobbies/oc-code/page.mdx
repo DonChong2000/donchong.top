@@ -1,0 +1,77 @@
+import { YouTubeEmbed } from '@next/third-parties/google';
+import Image from 'next/image';
+import { getImageMap } from '@/lib/imgMap';
+export const img = getImageMap(import.meta.url);
+
+export const metadata = {
+    priority: 0,
+    title: 'OC-CODE - Claude Code in Minecraft',
+    description:
+        '',
+    descriptionMd:
+        '',
+    summary: ``,
+};
+
+{/* # OC-CODE and AI-SDK */}
+
+{/* I built OC-CODE and AI-SDK for Minecraft with two goals in mind: making it easier to integrate OpenComputers into a modded factory and paving the way for an AI-managed base in my GTNH playthrough. */}
+
+{/* Note: This project also serves as an experiment to test the possibilities and limitations of agentic coding. */}
+
+## OC-CODE
+
+OC-CODE is a coding agent for the OpenComputers mod; it is the Codex or Claude Code live in Minecraft. OpenComputers mod is a hidden gem; it can automate IC2 crops breeding, control reactors, and manage AE2 inventory. Yet due to the steep learning curve, it is not popular even among expert communities like GTNH. OC-CODE aims to change that, allowing us to integrate our factory by vibe coding in Minecraft. 
+
+
+
+### Demo
+Here is a demo of OC-CODE coding a **3D Spinning Cube**, **building an 8x8 Checkerboard**, and a **3D Hilbert curve**.
+
+<YouTubeEmbed videoid="u-gIQOXLimQ" />
+
+#### 3D Spinning Cube written by OC-CODE
+{/* ![[3D_Spinning_Cube.gif]] */}
+<video autoPlay loop muted playsInline>
+  <source src="/oc-code/3D_Spinning_Cube.mp4" type="video/mp4" />
+</video>
+
+#### 3D Hilbert Curve written by OC-CODE
+{/* ![[3D_Hilbert_Curve.gif]] */}
+<video autoPlay loop muted playsInline>
+  <source src="/oc-code/3D_HilbertCurve.mp4" type="video/mp4" />
+</video>
+
+
+## AI-SDK
+
+OC-CODE is built on top of AI-SDK, it is a Vercel AI SDK-inspired library that unifies the different API conventions of various LLM providers behind a single, clean interface.
+
+Example:
+
+```lua
+local ai = require("ai")
+
+local result = ai.generateText({
+  model = "google/gemini-2.5-flash-lite",
+  prompt = "Why is the sky blue? (50 words)",
+})
+
+print(result.text)
+```
+
+Currently, it supports Vercel, Google, OpenAI, and Groq. It can also incorporate other OpenAI-compatible APIs with minimal effort.
+
+
+
+Supported functions:
+
+1. generateText
+2. streamText
+3. toolCalling
+4. generateStructuredOutput with schema
+
+Check out the [examples](https://github.com/DonChong2000/oc-ai/tree/main/examples) for usage details.
+
+If you are interested in it, you can check out the [Github Repo](https://github.com/DonChong2000/oc-ai) for the installation guide.
+
