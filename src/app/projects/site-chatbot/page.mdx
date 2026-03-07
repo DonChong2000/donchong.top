@@ -1,8 +1,22 @@
 import Image from 'next/image'
 import { getImageMap } from '@/lib/imgMap'
 export const img = getImageMap(import.meta.url)
+export const metadata = {
+  priority: 301,
+  title: 'This Site - Chatbot',
+  description:
+    'A RAG-powered chatbot embedded in this site, capable of answering questions about site content with context-aware retrieval. Built with the Vercel AI SDK, OpenAI embeddings, and LLM-assisted chunking for intelligent knowledge retrieval.',
+  descriptionMd:
+    `A **RAG-powered** chatbot embedded in this site, answering questions about site content with context-aware retrieval.
+- **Features**: Context-aware chunking via LLM, with scope-wide summary generation.
+- **Tech Stack**: Built with Vercel AI SDK, \`gemini-embedding-001\` embeddings, and a PostgreSQL vector database.
+`,
+  thumbnail: '/thumbnial/this-site-ascii.png',
+  summary: `This page is a detailed build log for DonChong.top, covering the motivation, design process, and engineering decisions behind the site. It explains the personal goals: bridging a gap from older web stacks to modern frameworks, and creating authentic content in a world of generic AI writing. The technical overview lists Next.js, Tailwind CSS, GitHub Actions, and an Oracle Cloud VPS, with emphasis on automated CI/CD and strong Lighthouse scores. Much of the writeup focuses on design: deriving a palette from a reference image, refining link styles for readability, correcting image color balance, and experimenting with code block texture. It also documents the evolution of the logo from early drafts to a custom wordmark and a block inspired icon. Interface work includes rebuilding navigation into a two layer system and adding a table of contents inspired by Cloudflare and OpenAI docs. A large section explains image optimization with next/image, including blur placeholders and a custom static image map helper. There is also a deep dive into custom MDX remark processing for Obsidian style image syntax and tags. The page closes with deployment details like Dockerization, Nginx routing, SSL setup, benchmarking, and a list of bugs and fixes. Overall, it is a comprehensive technical and design case study of the site itself.`,
+}
 
 # Site Chatbot
+#ai #chatbot #rag #vercel
 
 Here I will document the details of the chat bot in this site. Including what its capability is, what information does it know and the implementation details.
 
