@@ -196,7 +196,13 @@ export function MessageTab() {
               {messages.length === 0 && (
                 <div className="rounded-2xl border border-zinc-900/10 bg-zinc-50 px-4 py-3 text-zinc-600 dark:border-white/10 dark:bg-charcoal-800 dark:text-zinc-300">
                   Ask about projects, notes, experience or dive into Don’s
-                  thoughts on AI.
+                  thoughts on AI.{' '}
+                  <a
+                    href="/projects/site-chatbot"
+                    className="font-semibold underline"
+                  >
+                    See what it can do.
+                  </a>
                 </div>
               )}
               {messages.map((message) => {
