@@ -1,8 +1,14 @@
-import Image, { type StaticImageData } from 'next/image';
+import Image from 'next/image';
 import type { SVGProps } from 'react';
+import manifest from '@/lib/image-dimensions.json';
+
+const dims = manifest as Record<
+  string,
+  { width: number; height: number; blurDataURL?: string }
+>;
 
 type GridItem = {
-  src: StaticImageData | string;
+  src: string;
   alt?: string;
   title: string;
   href?: string;
@@ -76,6 +82,13 @@ export default function GalleryGrid({
               width={224}
               height={224}
               sizes="(max-width: 768px) 100vw, 224px"
+              {...(dims[decodeURIComponent(item.src)]?.blurDataURL
+                ? {
+                    placeholder: 'blur' as const,
+                    blurDataURL:
+                      dims[decodeURIComponent(item.src)].blurDataURL,
+                  }
+                : {})}
             />
             <div className="absolute inset-0 flex flex-col justify-end bg-charcoal/25 p-4 text-white opacity-0 transition-all duration-300 group-hover:opacity-100 dark:bg-white/15">
               <h1 className="text-xl font-medium text-timberwolf-300 text-shadow-lg">

@@ -1,9 +1,26 @@
 
 import { visit } from 'unist-util-visit';
+import fs from 'fs';
+import path from 'path';
 
 const WIKI_LINK_IMAGE_REGEX = /!\[\[([^\]]+)\]\]/g;
 
-export const remarkWikiLinkImages = () => (tree) => {
+// Load dimension manifest once at plugin init
+const manifestPath = path.resolve(
+  import.meta.dirname,
+  '../lib/image-dimensions.json',
+);
+const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+
+function routeFromFile(file) {
+  const filePath = file.history[0]?.replace(/\\/g, '/') || '';
+  const match = filePath.match(/\/src\/app\/(.*)\/page\.mdx$/);
+  return match ? match[1] : '';
+}
+
+export const remarkWikiLinkImages = () => (tree, file) => {
+  const route = routeFromFile(file);
+
   visit(tree, 'text', (node, index, parent) => {
     if (!parent || typeof index !== 'number') {
       return;
@@ -23,18 +40,29 @@ export const remarkWikiLinkImages = () => (tree) => {
       }
 
       const cleanedName = imageName.split('?')[0].split('#')[0];
-      const extension = cleanedName.split('.').pop()?.toLowerCase();
-      const supportsBlur = ['png', 'jpg', 'jpeg', 'webp', 'avif'].includes(
-        extension,
-      );
+      const encodedName = encodeURIComponent(cleanedName);
+      const srcUrl = `/images/${route}/${encodedName}`;
+
+      // Look up dimensions from manifest
+      const dims = manifest[srcUrl];
 
       const attributes = [
         {
           type: 'mdxJsxAttribute',
           name: 'src',
+          value: srcUrl,
+        },
+        { type: 'mdxJsxAttribute', name: 'alt', value: imageName },
+      ];
+
+      // Add width/height from manifest
+      if (dims) {
+        attributes.push({
+          type: 'mdxJsxAttribute',
+          name: 'width',
           value: {
             type: 'mdxJsxAttributeValueExpression',
-            value: `img['${imageName}']`,
+            value: String(dims.width),
             data: {
               estree: {
                 type: 'Program',
@@ -42,33 +70,49 @@ export const remarkWikiLinkImages = () => (tree) => {
                   {
                     type: 'ExpressionStatement',
                     expression: {
-                      type: 'MemberExpression',
-                      object: { type: 'Identifier', name: 'img' },
-                      property: {
-                        type: 'Literal',
-                        value: imageName,
-                        raw: `'${imageName}'`,
-                      },
-                      computed: true,
-                      optional: false,
+                      type: 'Literal',
+                      value: dims.width,
+                      raw: String(dims.width),
                     },
                   },
                 ],
-                sourceType: 'script',
+                sourceType: 'module',
               },
             },
           },
-        },
-        { type: 'mdxJsxAttribute', name: 'alt', value: imageName },
-      ];
-
-      if (supportsBlur) {
+        });
         attributes.push({
           type: 'mdxJsxAttribute',
-          name: 'placeholder',
-          value: 'blur',
+          name: 'height',
+          value: {
+            type: 'mdxJsxAttributeValueExpression',
+            value: String(dims.height),
+            data: {
+              estree: {
+                type: 'Program',
+                body: [
+                  {
+                    type: 'ExpressionStatement',
+                    expression: {
+                      type: 'Literal',
+                      value: dims.height,
+                      raw: String(dims.height),
+                    },
+                  },
+                ],
+                sourceType: 'module',
+              },
+            },
+          },
         });
       }
+
+      // Add sizes for responsive loading
+      attributes.push({
+        type: 'mdxJsxAttribute',
+        name: 'sizes',
+        value: '(min-width: 768px) 720px, 100vw',
+      });
 
       // Add the image node
       newNodes.push({
@@ -97,7 +141,7 @@ export const remarkWikiLinkImages = () => (tree) => {
         if (newNodes[0].type === 'text' && index > 0 && parent.children[index - 1].type === 'text') {
             parent.children[index - 1].value += newNodes.shift().value;
         }
-        
+
         // If the last new node is text and the next sibling is also text, merge them.
         if (newNodes.length > 0 && newNodes[newNodes.length - 1].type === 'text' && index < parent.children.length - 1 && parent.children[index + 1].type === 'text') {
             parent.children[index + 1].value = newNodes.pop().value + parent.children[index + 1].value;

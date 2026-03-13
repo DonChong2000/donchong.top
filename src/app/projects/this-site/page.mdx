@@ -1,6 +1,3 @@
-import Image from 'next/image'
-import { getImageMap } from '@/lib/imgMap'
-export const img = getImageMap(import.meta.url)
 export const metadata = {
   priority: 301,
   title: 'About This Site',
@@ -103,8 +100,8 @@ Based on Tailwind CSS’s Protocol template, I customized the navigation bar and
 This site uses [next/image](https://nextjs.org/docs/app/getting-started/images) to improve loading performance and display a blurred preview while images load, which eliminates any layout shift. It also supports Obsidian-style image syntax `![[]]` through a custom Remark plugin.
 
 <div className="flex justify-center w-full gap-5">
-  <Image src={img['Pasted image 20250820160328.png']} alt='Image size difference' />
-  <Image src={img['Picture3.png']} alt='loading blur image sample'/>
+  <Image src="/images/projects/this-site/Pasted%20image%2020250820160328.png" width={348} height={255} alt='Image size difference' />
+  <Image src="/images/projects/this-site/Picture3.png" width={257} height={255} alt='loading blur image sample'/>
 </div>
 
 
@@ -314,7 +311,7 @@ Mind its a bit different for tis props:
 
 #### Blur placeholder when loading
 
-`placeholder="blur"` will render a blur image when the actual image still loading.
+`` will render a blur image when the actual image still loading.
 If the image is from static import, `blurDataURL` is not needed.
 
 ```js
@@ -385,90 +382,30 @@ To clean this up, I decided to:
 * Import images **statically** instead of by path.
 * Give each page its **own `images` folder**, matching my Obsidian file structure.
 
-When images are imported statically, Next.js automatically detects their dimensions and generates blur placeholders natively — no manual setup required.
+#### URL-Based Images
 
-##### First Attempt
+Images are served as static files from `public/images/<route>/`, completely bypassing the webpack build graph. A build-time dimension manifest (`src/lib/image-dimensions.json`) provides `width` and `height` for every image, preventing layout shift without manual measurement.
 
-Initially, I wrote a small script to auto-import every image inside a folder and store them in an `img` object:
+The `Image` component from `next/image` is registered globally via `src/components/mdx.tsx`, so MDX files need zero boilerplate imports.
 
-In **`test/images/img.tsx`**:
+##### How it works
 
-```js
-const imageContext = require.context('', false, /\.(png|jpe?g|svg|gif)$/);
-export default imageContext.keys().reduce((acc, path) => {
-  const key = path.replace('./', '');
-  acc[key] = imageContext(path);
-  return acc;
-}, {});
-```
-
-Then I could use it like this:
-
-In **`test/page.mdx`**:
-
-```js
-import img from './images/img'
-<Image src={img['follow2.png']} />
-```
-
-This worked fine — it was simple and automatic. But having the same import script in every folder felt repetitive and messy.
-
-##### The Helper Script
-
-So I made a central helper to handle it globally:
-
-**`src/lib/imgMap.js`**
-
-```js
-// Collect every image under /content/**/images/
-const allImages = require.context('../app', true, /images\/.*\.(png|jpe?g|svg|gif)$/);
-
-/**
- * Returns static images from './image' folder
- * ├───test
- * │   │   page.mdx
- * │   └───images
- * │           follow2.png
- * │           img.tsx
- * @param {string} mdxUrl - Pass `import.meta.url` from the MDX file
- */
-export function getImageMap(mdxUrl) {
-  const match = mdxUrl.match(/\/app\/(.*)\/[^/]+$/);
-  const pagePath = match ? match[1] : null;
-  if (!pagePath) {
-    console.warn(`Could not determine page path from ${mdxUrl}`);
-    return {};
-  }
-
-  const prefix = `./${pagePath}/images/`;
-  const map = {};
-
-  allImages.keys().forEach((key) => {
-    if (key.startsWith(prefix)) {
-      const filename = key.replace(prefix, '');
-      map[filename] = allImages(key).default;
-    }
-  });
-
-  return map;
-}
+Images are organized under `public/images/` mirroring the app route structure:
 
 ```
-
-Now, in **`test/page.mdx`**:
-
-```js
-import { getImageMap } from '@/lib/imgMap'
-export const img = getImageMap(import.meta.url)
-
-<Image src={img['color.png']} alt="Logo" placeholder="blur" />
+public/images/
+  hobbies/factorio/   ← images for /hobbies/factorio
+  projects/this-site/ ← images for /projects/this-site
+  dons-cookbook/       ← images for /dons-cookbook
 ```
+
+The remark plugin converts `![[filename.png]]` into `<Image src="/images/<route>/filename.png" width={W} height={H} />` at build time, reading dimensions from the manifest.
 
 ##### Result
 
-* No need to specify `width` and `height` manually.
-* Native blur placeholders just work.
-* Clean image organization per page.
+* No webpack processing of images — faster builds and lower memory usage.
+* Obsidian-compatible `![[]]` syntax works seamlessly.
+* Dimensions are injected automatically from the manifest.
 
 ![[Pasted image 20251006054656.png]]
 
@@ -476,24 +413,15 @@ export const img = getImageMap(import.meta.url)
 ## MDX-remark
 ### Custom syntax `![[]]`
 
-The first thing I tried was modifying the MDX image component — only to realize that `![]()` can pass *only strings* as the `src` parameter. 
+The remark plugin parses the Markdown AST and transforms `![[filename]]` references into `<Image>` components with URL-based `src` attributes and auto-injected dimensions.
 
-In my setup, images are statically imported and stored in an `img` object, which can’t be directly passed as a `src`.
-
-To solve this, I built a **remark plugin** that parses the Markdown AST and transforms expressions like `![](img['foo'])` into a proper `Next/Image` component right inside the MDX.
-
-```js
-![Logo](img['color.png']) {/** ✅ Converted into <Image /> */}
-![Logo](img['Pasted image 20250630155824.png']) {/** ❌ Rendered as plain text */}
-![Logo](<img['Pasted image 20250630155824.png']>) {/** ✅ Converted into <Image /> */}
-![Test](https://na.cx/i/zuXjaPX.jpg) {/** ✅ Handled by default MDX logic */}
+```md
+![[color.png]]                          {/** ✅ Converted into <Image src="/images/.../color.png" /> */}
+![[Pasted image 20250630155824.png]]    {/** ✅ Spaces are URL-encoded automatically */}
+![Test](https://na.cx/i/zuXjaPX.jpg)   {/** ✅ Handled by default MDX logic */}
 ```
 
-Now, my mdx is more clean and next/image's benefits still applies, but with the following limitation:
-1. Filename must not contain empty spaces
-2. `img[]` is still not native syntax, I cannot simply copy my obsidian notes over.
-
-After realizing Obsidian doesn’t use standard MDX syntax, I found I had more flexibility. I now convert all `![[imgsrc]]` references into my `next/Image` format with Remark, and it works perfectly.
+This approach keeps MDX files clean with Obsidian-compatible syntax, while `next/image` optimizations still apply.
 
 
 ### Tags

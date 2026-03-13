@@ -1,9 +1,26 @@
+import NextImage, { type ImageProps } from 'next/image';
 import Link from 'next/link';
 import clsx from 'clsx';
 
 import { Feedback } from '@/components/Feedback';
 import { Heading } from '@/components/Heading';
 import { Prose } from '@/components/Prose';
+import manifest from '@/lib/image-dimensions.json';
+
+const dims = manifest as Record<
+  string,
+  { width: number; height: number; blurDataURL?: string }
+>;
+
+export function Image(props: ImageProps) {
+  const src = typeof props.src === 'string' ? props.src : undefined;
+  const entry = src ? dims[decodeURIComponent(src)] : undefined;
+  const blurProps =
+    entry?.blurDataURL && !props.placeholder
+      ? { placeholder: 'blur' as const, blurDataURL: entry.blurDataURL }
+      : {};
+  return <NextImage {...blurProps} {...props} />;
+}
 
 export const a = Link;
 export { Button } from '@/components/Button';
