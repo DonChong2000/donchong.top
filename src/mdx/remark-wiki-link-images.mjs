@@ -3,7 +3,15 @@ import { visit } from 'unist-util-visit';
 
 const WIKI_LINK_IMAGE_REGEX = /!\[\[([^\]]+)\]\]/g;
 
-export const remarkWikiLinkImages = () => (tree) => {
+function getPagePath(file) {
+  const filePath = (file.path || file.history[0] || '').replace(/\\/g, '/');
+  const match = filePath.match(/\/src\/app\/(.+)\/[^/]+$/);
+  return match ? match[1] : '';
+}
+
+export const remarkWikiLinkImages = () => (tree, file) => {
+  const pagePath = getPagePath(file);
+
   visit(tree, 'text', (node, index, parent) => {
     if (!parent || typeof index !== 'number') {
       return;
@@ -22,53 +30,12 @@ export const remarkWikiLinkImages = () => (tree) => {
         newNodes.push({ type: 'text', value: text.slice(lastIndex, match.index) });
       }
 
-      const cleanedName = imageName.split('?')[0].split('#')[0];
-      const extension = cleanedName.split('.').pop()?.toLowerCase();
-      const supportsBlur = ['png', 'jpg', 'jpeg', 'webp', 'avif'].includes(
-        extension,
-      );
+      const src = `/images/${pagePath}/${encodeURIComponent(imageName)}`;
 
       const attributes = [
-        {
-          type: 'mdxJsxAttribute',
-          name: 'src',
-          value: {
-            type: 'mdxJsxAttributeValueExpression',
-            value: `img['${imageName}']`,
-            data: {
-              estree: {
-                type: 'Program',
-                body: [
-                  {
-                    type: 'ExpressionStatement',
-                    expression: {
-                      type: 'MemberExpression',
-                      object: { type: 'Identifier', name: 'img' },
-                      property: {
-                        type: 'Literal',
-                        value: imageName,
-                        raw: `'${imageName}'`,
-                      },
-                      computed: true,
-                      optional: false,
-                    },
-                  },
-                ],
-                sourceType: 'script',
-              },
-            },
-          },
-        },
+        { type: 'mdxJsxAttribute', name: 'src', value: src },
         { type: 'mdxJsxAttribute', name: 'alt', value: imageName },
       ];
-
-      if (supportsBlur) {
-        attributes.push({
-          type: 'mdxJsxAttribute',
-          name: 'placeholder',
-          value: 'blur',
-        });
-      }
 
       // Add the image node
       newNodes.push({
