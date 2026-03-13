@@ -47,6 +47,7 @@
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.0",
     "remark-mdx": "^3.0.0",
+    "sharp": "^0.34.5",
     "shiki": "^0.14.7",
     "simple-functional-loader": "^1.2.1",
     "tailwindcss": "^4.0.6",
