@@ -2,15 +2,44 @@
 import { visit } from 'unist-util-visit';
 import fs from 'fs';
 import path from 'path';
+import { createRequire } from 'module';
 
 const WIKI_LINK_IMAGE_REGEX = /!\[\[([^\]]+)\]\]/g;
 
-// Load dimension manifest once at plugin init
-const manifestPath = path.resolve(
-  import.meta.dirname,
-  '../lib/image-dimensions.json',
-);
-const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+const require = createRequire(import.meta.url);
+const { imageSize } = require('image-size');
+const sharp = require('sharp');
+
+/** @type {Map<string, {width: number, height: number, blurDataURL?: string}>} */
+const cache = new Map();
+
+async function ensureCached(srcUrl) {
+  if (cache.has(srcUrl)) return;
+
+  const filePath = path.resolve(
+    import.meta.dirname,
+    '../../public',
+    decodeURIComponent(srcUrl).slice(1),
+  );
+  if (!fs.existsSync(filePath)) return;
+
+  try {
+    const buf = fs.readFileSync(filePath);
+    const d = imageSize(new Uint8Array(buf));
+    if (!d.width || !d.height) return;
+
+    const entry = { width: d.width, height: d.height };
+    try {
+      const blurBuf = await sharp(filePath).resize(8).png().toBuffer();
+      entry.blurDataURL = `data:image/png;base64,${blurBuf.toString('base64')}`;
+    } catch {
+      // Skip blur for unsupported formats
+    }
+    cache.set(srcUrl, entry);
+  } catch {
+    // Skip if dimensions can't be computed
+  }
+}
 
 function routeFromFile(file) {
   const filePath = file.history[0]?.replace(/\\/g, '/') || '';
@@ -18,9 +47,24 @@ function routeFromFile(file) {
   return match ? match[1] : '';
 }
 
-export const remarkWikiLinkImages = () => (tree, file) => {
+export const remarkWikiLinkImages = () => async (tree, file) => {
   const route = routeFromFile(file);
 
+  // First pass: collect all image URLs for batch computation
+  const urls = new Set();
+  visit(tree, 'text', (node) => {
+    let m;
+    const re = /!\[\[([^\]]+)\]\]/g;
+    while ((m = re.exec(node.value)) !== null) {
+      const name = m[1].split('?')[0].split('#')[0];
+      urls.add(`/images/${route}/${encodeURIComponent(name)}`);
+    }
+  });
+
+  // Compute dimensions + blur for all uncached images
+  await Promise.all([...urls].map(ensureCached));
+
+  // Second pass: modify tree
   visit(tree, 'text', (node, index, parent) => {
     if (!parent || typeof index !== 'number') {
       return;
@@ -43,8 +87,7 @@ export const remarkWikiLinkImages = () => (tree, file) => {
       const encodedName = encodeURIComponent(cleanedName);
       const srcUrl = `/images/${route}/${encodedName}`;
 
-      // Look up dimensions from manifest
-      const dims = manifest[srcUrl];
+      const dims = cache.get(srcUrl);
 
       const attributes = [
         {
@@ -55,7 +98,6 @@ export const remarkWikiLinkImages = () => (tree, file) => {
         { type: 'mdxJsxAttribute', name: 'alt', value: imageName },
       ];
 
-      // Add width/height from manifest
       if (dims) {
         attributes.push({
           type: 'mdxJsxAttribute',
@@ -105,6 +147,19 @@ export const remarkWikiLinkImages = () => (tree, file) => {
             },
           },
         });
+
+        if (dims.blurDataURL) {
+          attributes.push({
+            type: 'mdxJsxAttribute',
+            name: 'placeholder',
+            value: 'blur',
+          });
+          attributes.push({
+            type: 'mdxJsxAttribute',
+            name: 'blurDataURL',
+            value: dims.blurDataURL,
+          });
+        }
       }
 
       // Add sizes for responsive loading
