@@ -1,7 +1,3 @@
-import Image from 'next/image';
-import { getImageMap } from '@/lib/imgMap';
-export const img = getImageMap(import.meta.url);
-
 export const metadata = {
   priority: 0,
   title: 'Factorio',
@@ -27,17 +23,12 @@ The logistics challenge in K2SE isn't as simple as in standard Factorio runs. In
 
 This is where the Logistic Train Network (LTN) becomes a substitute for advanced logistics robots. Essentially, we use LTN to manage all material movement. Our network comprises 302 stations and 33 trains, handling the production of every common item and managing all resource processing. Below, you can see the city block stations we dedicated to supplying the basic components for infrastructure like pipe work, electricity, and the railroad.
 
-<div className="flex w-full justify-center gap-5">
-  <Image
-    src={img['Pasted image 20251028220441.png']}
-    alt="Train Station that craft the common items"
-    className="w-1/2"
-  />
-  <Image
-    src={img['Pasted image 20251028220537.png']}
-    alt="Train Station that craft the common items"
-    className="w-1/2"
-  />
+<div className="flex w-full justify-center gap-5 [&>*]:w-1/2">
+
+![[Pasted image 20251028220441.png]]
+
+![[Pasted image 20251028220537.png]]
+
 </div>
 
 The rocket sections take 10 different materials to craft. Using the LTN system, all these materials are easily allocated together by trains.
