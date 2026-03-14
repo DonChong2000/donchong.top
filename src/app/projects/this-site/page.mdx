@@ -299,7 +299,7 @@ Next JS provide a easy way to optimize images, it will do the follows:
   ![[Pasted image 20250819225057.png]]
 
 
-### How to use next/image
+{/* ### How to use next/image
 Include `'next/image'` and use it like an `<img>` tag.
 
 ```js
@@ -338,6 +338,7 @@ Result:
 
 The official site recommended [joe-bell/plaiceholder: Beautiful image placeholders, without the hassle.](https://github.com/joe-bell/plaiceholder) to generate blur images. I think it needs an extra wrapper to make the code nice, otherwise it is too dirty.
 
+
 #### Positioning `<Image />`
 
 #### Make it responsive
@@ -364,7 +365,7 @@ Styling it with `width: 100%` and `height: 'auto'` will change the image size dy
   height={1200}
   className='w-1/2 h-auto'
 />
-```
+``` */}
 
 ### Improvements
 
@@ -387,7 +388,7 @@ To clean this up, I decided to:
 
 When images are imported statically, Next.js automatically detects their dimensions and generates blur placeholders natively — no manual setup required.
 
-##### First Attempt
+#### First Attempt
 
 Initially, I wrote a small script to auto-import every image inside a folder and store them in an `img` object:
 
@@ -413,7 +414,7 @@ import img from './images/img'
 
 This worked fine — it was simple and automatic. But having the same import script in every folder felt repetitive and messy.
 
-##### The Helper Script
+#### The Helper Script
 
 So I made a central helper to handle it globally:
 
@@ -495,6 +496,11 @@ Now, my mdx is more clean and next/image's benefits still applies, but with the 
 
 After realizing Obsidian doesn’t use standard MDX syntax, I found I had more flexibility. I now convert all `![[imgsrc]]` references into my `next/Image` format with Remark, and it works perfectly.
 
+### Yet another Image improvement
+**Added on:** 2026-03
+
+While working with Docker, I noticed that using [static imports significantly increased both the image size and the build time](https://github.com/DonChong2000/donchong.top/issues/2). To address this, I migrated the images to be served from a public folder and added a build-time script that injects the width, height, and blur placeholder metadata automatically. 
+Now the logic also centralize in `remark-wiki-link-images.mjs`.
 
 ### Tags
 2026-02-11
@@ -548,12 +554,17 @@ This reduced the deployment step to under a minute. However, exporting the image
 #### Optimizing Docker
 I also worked on reducing the Docker image size to shorten the copy/transfer time from GHCR. The original Docker image was 4GB in size. I followed the Next.js Docker deployment template and switched the build output to `standalone`, which reduced the image size to 902MB.
 
-There is still significant overhead caused by statically imported images. Addressing this will be a future improvement, as discussed in this [this issue](https://github.com/DonChong2000/donchong.top/issues/2).
+~There is still significant overhead caused by statically imported images. Addressing this will be a future improvement, as discussed in this [this issue](https://github.com/DonChong2000/donchong.top/issues/2).~
 
+**Added:** The [issue](https://github.com/DonChong2000/donchong.top/issues/2) was closed. Now the image size shrink even further to 588MB:
+
+
+####  Original Size:
 ![[Pasted image 20260216194751.png]]
-
+####  Applying Standalone Build: 
 ![[Pasted image 20260216214404.png]]
-
+####  After solving [issue](https://github.com/DonChong2000/donchong.top/issues/2):
+![[Pasted image 20260314154349.png]]
 ## Benchmark
 ![[Pasted image 20260219022231.png]]
 
