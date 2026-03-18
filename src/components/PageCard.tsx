@@ -23,7 +23,7 @@ export function PageCard({
   return (
     <div className="group rounded-2xl border border-zinc-900/5 bg-white/50 p-4 transition hover:border-zinc-900/10 dark:border-white/10 dark:bg-white/5">
       <Link href={url} className="block">
-        <div className="flex gap-4">
+        <div className="flex items-center gap-4">
           {thumbnail && (
             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-zinc-100 shadow-md dark:bg-white/10 dark:shadow-black/40">
               <Image
@@ -35,34 +35,32 @@ export function PageCard({
               />
             </div>
           )}
-          <div className="min-w-0">
-            <div className="text-sm font-semibold text-zinc-900 dark:text-white">
-              {title}
-            </div>
-            {descriptionMd && (
-              <div className="prose mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-                <ReactMarkdown //Speific problem on ReactMarkdown and tailwind: https://stackoverflow.com/questions/77548370/react-markdown-not-displaying-ordered-list
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    ul: (props) => <ul className="list-disc pl-5" {...props} />,
-                    ol: (props) => (
-                      <ol className="list-decimal pl-5" {...props} />
-                    ),
-                    li: (props) => <li className="my-1" {...props} />,
-                    strong: (props) => (
-                      <strong
-                        className="font-semibold text-zinc-900 dark:text-zinc-100"
-                        {...props}
-                      />
-                    ),
-                  }}
-                >
-                  {descriptionMd}
-                </ReactMarkdown>
-              </div>
-            )}
+          <div className="text-sm font-semibold text-zinc-900 dark:text-white">
+            {title}
           </div>
         </div>
+        {descriptionMd && (
+          <div className="prose mt-3 text-sm text-zinc-600 dark:text-zinc-400">
+            <ReactMarkdown //Speific problem on ReactMarkdown and tailwind: https://stackoverflow.com/questions/77548370/react-markdown-not-displaying-ordered-list
+              remarkPlugins={[remarkGfm]}
+              components={{
+                ul: (props) => <ul className="list-disc pl-5" {...props} />,
+                ol: (props) => (
+                  <ol className="list-decimal pl-5" {...props} />
+                ),
+                li: (props) => <li className="my-1" {...props} />,
+                strong: (props) => (
+                  <strong
+                    className="font-semibold text-zinc-900 dark:text-zinc-100"
+                    {...props}
+                  />
+                ),
+              }}
+            >
+              {descriptionMd}
+            </ReactMarkdown>
+          </div>
+        )}
       </Link>
       {tags && tags.length > 0 ? (
         <div className="mt-3 flex flex-wrap gap-1">
