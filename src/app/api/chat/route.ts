@@ -1,6 +1,13 @@
 import { jsonSchema, stepCountIs, streamText, tool } from 'ai';
 
+import { checkRateLimit, MAX_TOKENS } from '@/lib/rateLimiter';
 import { searchRagContent } from '@/lib/rag';
+
+function extractIp(req: Request): string {
+  const forwarded = req.headers.get('x-forwarded-for');
+  if (forwarded) return forwarded.split(',')[0].trim();
+  return req.headers.get('x-real-ip') ?? 'unknown';
+}
 
 export async function POST(req: Request) {
   if (!process.env.AI_GATEWAY_API_KEY) {
@@ -8,6 +15,21 @@ export async function POST(req: Request) {
       'Missing required env var: AI_GATEWAY_API_KEY. Check your .env file.',
       { status: 500 },
     );
+  }
+
+  const ip = extractIp(req);
+  const limit = checkRateLimit(ip);
+  if (!limit.allowed) {
+    const retryAfterSecs = Math.ceil(limit.retryAfterMs / 1000);
+    return new Response('Too Many Requests', {
+      status: 429,
+      headers: {
+        'Retry-After':           String(retryAfterSecs),
+        'X-RateLimit-Limit':     String(MAX_TOKENS),
+        'X-RateLimit-Remaining': '0',
+        'X-RateLimit-Reset':     String(Math.ceil((Date.now() + limit.retryAfterMs) / 1000)),
+      },
+    });
   }
 
   const { messages, detailMode, pageMeta } = (await req.json()) as {
