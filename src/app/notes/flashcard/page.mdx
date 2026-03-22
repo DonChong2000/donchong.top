@@ -1,0 +1,56 @@
+export const metadata = {
+    priority: 150,
+    title: 'AWS Cert Flashcards',
+    description:
+        'A static PWA flashcard app for studying AWS certification exams. Built with Next.js and deployed to GitHub Pages, featuring progress tracking, exam simulation, and offline support.',
+    descriptionMd:
+        'A static **PWA flashcard app** for studying **AWS certification** exams. Built with **Next.js** and deployed to GitHub Pages, featuring progress tracking, exam simulation, and offline support.',
+    summary: `This page introduces a static web flashcard application built to help study for AWS certification exams. The app is built with Next.js as a fully static export and deployed to GitHub Pages. It supports multiple practice modes including studying by topic or attempting all questions at once. Progress is persisted in localStorage so performance carries over between sessions. Users can filter to review only incorrect or bookmarked questions. An exam simulation mode presents 65 randomly shuffled questions. Keyboard shortcuts cover option selection, submission, and bookmarking. Progress can be exported and imported as JSON for portability. The app works offline and is installable as a PWA. New question banks can be added by dropping JSON files into the data directory, which are picked up at build time.`,
+};
+
+# AWS Cert Flashcards
+
+#nextjs #typescript #pwa #aws
+
+I was studying for the AWS Certified Solutions Architect Associate Exam, and I found that studying the question set is very inefficient. Therefore, I quickly built a flashcard web app to help me study while commuting and to revisit incorrect questions.
+Deployed at [donchong2000.github.io/flashcard](https://donchong2000.github.io/flashcard).
+
+![[Pasted image 20260322060801.png]]
+
+## Features
+
+### Practice Modes
+
+- **All questions**: cycle through the full bank
+- **Exam simulation**: 65 randomly shuffled questions, mimicking the real exam format
+
+- ~~**By topic**: focus on a specific domain (e.g. S3, IAM, EC2)~~ Not ready yet
+
+
+### Progress Tracking
+
+Answers are stored in `localStorage`, so correct/incorrect history persists across sessions. You can filter to show only questions you got wrong or ones you've bookmarked for review.
+
+### Keyboard Navigation
+
+| Key | Action |
+|-----|--------|
+| `1`–`6` | Select option |
+| `Enter` / `Space` | Submit answer |
+| `B` | Bookmark question |
+
+### Data Portability
+
+Progress can be exported as JSON and re-imported, making it easy to back up. Answer history is stored as a **hex bitmap**, keeping the exported data compact and human-readable.
+
+### Offline / PWA
+
+The app is installable and functions fully offline, useful for studying on the go without a connection.
+
+## Adding Question Banks
+
+New exam datasets can be contributed by placing a JSON file in the `data/` directory following the schema (questions, options, correct answers, community votes, discussions). The build process picks them up automatically.
+
+## Source
+
+[github.com/DonChong2000/flashcard](https://github.com/DonChong2000/flashcard)

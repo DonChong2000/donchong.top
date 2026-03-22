@@ -455,6 +455,7 @@ export const navigation: Array<NavGroup> = [
         href: '/notes/comparing-asr-solutions',
       },
       { title: 'React2Sehll (CVE-2025-55182)', href: '/notes/react2shell' },
+      { title: 'AWS Cert Flashcards', href: '/notes/flashcard' },
     ],
   },
   {
