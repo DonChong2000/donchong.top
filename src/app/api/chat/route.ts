@@ -24,10 +24,12 @@ export async function POST(req: Request) {
     return new Response('Too Many Requests', {
       status: 429,
       headers: {
-        'Retry-After':           String(retryAfterSecs),
-        'X-RateLimit-Limit':     String(MAX_TOKENS),
+        'Retry-After': String(retryAfterSecs),
+        'X-RateLimit-Limit': String(MAX_TOKENS),
         'X-RateLimit-Remaining': '0',
-        'X-RateLimit-Reset':     String(Math.ceil((Date.now() + limit.retryAfterMs) / 1000)),
+        'X-RateLimit-Reset': String(
+          Math.ceil((Date.now() + limit.retryAfterMs) / 1000),
+        ),
       },
     });
   }
@@ -49,12 +51,12 @@ export async function POST(req: Request) {
     role: 'system',
     content: `
       User is now at ${safePageMeta.title ?? 'Not provided'} page.
-      Page URL: ${safePageMeta.url ?? 'Not provided'}
+      Page URL: ${safePageMeta.url ?? 'Not provided'}.
       If the user asks for information that is not available or requires external knowledge, call the getRagContent tool with a focused query based on the user request without asking.
       If the answer cannot be determined from the retrieved context, respond with a brief statement indicating uncertainty (e.g., “I don’t have enough information” or “Sorry, I don't know”). Do not add any new information.
-      If the user asks questions that are clearly unrelated to the task or topic, gently steer the conversation back to what you can help with. Keep the tone friendly, use light humor when appropriate, respond in at most 32 words.
+      If the user asks questions that are clearly unrelated to the task or topic, gently steer the conversation back to what you can help with. Keep the tone friendly, use light humor when appropriate, answer unrelated questions within 30 words.
 
-      - At most you use tool-call 4 times.
+      At most you use tool-call 4 times.
       `,
   });
 
