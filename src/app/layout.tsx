@@ -1,5 +1,6 @@
 import { type Metadata } from 'next';
 import glob from 'fast-glob';
+import Script from 'next/script';
 
 import { Providers } from '@/app/providers';
 import { Layout } from '@/components/Layout';
@@ -24,7 +25,7 @@ export default async function RootLayout({
   let pages = await glob('**/*.mdx', { cwd: 'src/app' });
   let allSectionsEntries = (await Promise.all(
     pages.map(async (filename) => [
-      '/' + filename.replace(/(^|\/)page\.mdx$/, ''),
+      '/' + filename.replace(/(^|\/)(page\.mdx)$/, ''),
       (await import(`./${filename}`)).sections,
     ]),
   )) as Array<[string, Array<Section>]>;
@@ -49,6 +50,19 @@ export default async function RootLayout({
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
       <body className="flex min-h-full bg-white antialiased dark:bg-charcoal-800">
+        {/* Google Analytics (GA4) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-188JTTH07H"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-188JTTH07H');
+          `}
+        </Script>
         <Providers>
           <EasterEgg />
           <div className="w-full">
