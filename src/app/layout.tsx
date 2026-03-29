@@ -1,6 +1,6 @@
 import { type Metadata } from 'next';
 import glob from 'fast-glob';
-import Script from 'next/script';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 import { Providers } from '@/app/providers';
 import { Layout } from '@/components/Layout';
@@ -50,19 +50,6 @@ export default async function RootLayout({
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
       <body className="flex min-h-full bg-white antialiased dark:bg-charcoal-800">
-        {/* Google Analytics (GA4) */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-188JTTH07H"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-188JTTH07H');
-          `}
-        </Script>
         <Providers>
           <EasterEgg />
           <div className="w-full">
@@ -70,6 +57,7 @@ export default async function RootLayout({
           </div>
         </Providers>
       </body>
+      <GoogleAnalytics gaId="G-188JTTH07H" />
     </html>
   );
 }
