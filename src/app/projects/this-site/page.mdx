@@ -659,6 +659,16 @@ server {
 }
 
 ```
+
+## Google Analytics 4
+I added Google Analytics to my site, which is surprisingly simple.
+```ts
+import { GoogleAnalytics } from '@next/third-parties/google';
+<GoogleAnalytics gaId="G-XXXXXXXXX" />
+```
+
+But my site has zero traffic, so... We will get back to this when there is more data to analyze.
+![[Pasted image 20260329211040.png]]
 # Bugs
 
 - Large Image are not supported
