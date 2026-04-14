@@ -56,6 +56,8 @@ To retrieve relevant information:
 5. Reranking if you need it.
 6. Return the function call as context
 
+> fun fact: We use cosine similarity, not distance to find k-nearest neighbor. Because distance is rather useless in high dimension, see:  [Curse of dimensionality](https://en.wikipedia.org/wiki/Curse_of_dimensionality)
+
 ### Implementation
 I started building my RAG system from Vercel's [cookbook](https://ai-sdk.dev/cookbook/guides/rag-chatbot).
 And here are the details of how I collect documents, chunk them, and embed them.
