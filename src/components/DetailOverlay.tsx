@@ -19,7 +19,7 @@ export function DetailOverlay({ callouts }: DetailOverlayProps) {
       <div className="mt-4 space-y-12 lg:grid lg:grid-cols-3 lg:space-y-0 lg:gap-x-6">
         {callouts.map((callout) => (
           <div key={callout.name} className="group relative">
-            <div className="GH not-prose relative w-full overflow-hidden rounded-lg group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 lg:aspect-square">
+            <div className="GH not-prose relative aspect-2/1 w-full overflow-hidden rounded-lg group-hover:opacity-75 lg:aspect-square">
               <Image
                 src={callout.imageSrc}
                 alt={callout.imageAlt}
