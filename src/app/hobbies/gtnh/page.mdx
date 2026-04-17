@@ -14,9 +14,9 @@ export const metadata = {
 
 #docker #automation
 
-GregTech: New Horizons (GTNH) is an expert-level Minecraft modpack, widely regarded as the most difficult in the game. With its immense tech progression and complex crafting chains, completing it can take years.
+GregTech: New Horizons (GTNH) is an expert-level Minecraft modpack, known as one of the hardest modpacks out there. With deep tech progression and complex crafting chains, completing it can take years.
 
-I have been playing GTNH since 2021. As of 2025-10-08, I have played for 3000 hours, and I would like to share my journey so far.
+I have been playing GTNH since 2021. As of 2025-10-08, I have played for 3000 hours, and here's my journey so far.
 
 Since I began keeping notes in the IV Age, I’ll briefly summarize the earlier stages first.
 
@@ -26,7 +26,7 @@ Since I began keeping notes in the IV Age, I’ll briefly summarize the earlier 
 
 ## The Beginning
 
-Like most Minecraft survival worlds, the journey began in a humble dirt house.  
+Like most Minecraft survival worlds, the journey began in a dirt house.  
 ![[2025-08-10_22.06.00.png]]
 
 GTNH started with three players: Tom, Sergio, and me.  
@@ -39,21 +39,21 @@ In the Stone Age, our priority was farming food for survival. Below are our farm
 
 ### Steam Age to MV Tier
 
-We chose the Canyon biome for our base because of its unique view, lack of rain, high blast resistance, and—most importantly—absence of stone or cobblestone, which prevents the dreaded “drown creeper” (a creeper variant that spawns swarms of silverfish that hide in stone and multiply).  
+We chose the Canyon biome for our base because of its unique view, lack of rain, high blast resistance, and most importantly, no stone or cobblestone, which prevents the dreaded “drown creeper” (a creeper variant that spawns swarms of silverfish that hide in stone and multiply).  
 ![[2025-08-10_22.29.38.png]]
 
 ---
 
 ### HV, EV
 
-A history of innovation was forged inside this four-story TSMC building. Here, we celebrated milestones such as our first EBF, fully automated circuits, our first rocket to the moon, unlocking AE2 and more. To prepare for the next stage, the building is under renovation to overcome space limitations and integrate upgraded technology.  
+This four-story TSMC building is where most of our progress happened. Here we hit milestones like our first EBF, fully automated circuits, our first rocket to the moon, unlocking AE2 and more. To prepare for the next stage, the building is under renovation to make room for bigger machines.  
 ![[2025-08-10_22.41.03.png]]
 
 **Left:** Multiblock machines for benzene production  
 **Right:** Passive plastic circuit board automation, remnants of early AE2 setups  
 ![[2025-08-10_22.49.05.png]]
 
-The AE Controller—our automation backbone—handles hundreds of channels.  
+The AE Controller, our automation backbone, handles hundreds of channels.  
 ![[2025-08-10_22.56.52.png]]
 
 Single-block machines for AE2 automation:  
@@ -66,7 +66,7 @@ Large Chemical Reactors producing essential chemical ingredients:
 
 ## IV Tier
 
-From the IV tier onward, the difficulty ramps up sharply. This is the point where players must face the Platinum Processing Line—a notorious bottleneck where many quit. This tier also introduces numerous multiblock machines, requiring a fundamental overhaul of existing infrastructure.
+From the IV tier onward, the difficulty ramps up sharply. This is the point where players must face the Platinum Processing Line, a bottleneck where many quit. This tier also introduces many multiblock machines, so the whole base needed to be reworked.
 
 ---
 
@@ -124,7 +124,7 @@ After watching a video on architecture, I decided to rebuild the “04” (The F
 
 #### Concept
 
-I drew inspiration from the Seagram Building—the “mother of all modern buildings” and a hallmark of the _Less is More_ philosophy. It eliminates unnecessary decoration, highlighting the beauty of structure and materials.
+I drew inspiration from the Seagram Building, the “mother of all modern buildings” and a classic example of _Less is More_. No unnecessary decoration, just structure and materials.
 
 #### Original “04”
 
@@ -137,7 +137,7 @@ I drew inspiration from the Seagram Building—the “mother of all modern build
 #### Seagram Building
 
 ![[Pasted image 20250812201622.png]]
-_P.S._ The new “04” was built in Creative mode to push myself toward better design—otherwise, I’d remain a high-tech caveman.
+_P.S._ The new “04” was built in Creative mode to push myself toward better design, otherwise, I’d remain a high-tech caveman.
 
 
 Ref:
@@ -147,7 +147,7 @@ Ref:
 ## Hosting
 After migrating to [React2Shell](/notes/react2shell), reconfiguring my services became a major chore, especially GregTech: New Horizons (GTNH). Manually managing Java versions, server packs, world backups, and whitelist/permission settings quickly became exhausting, particularly given how frequently the community updates the modpack.
 
-To streamline this process, I decided to Dockerize the server. By using the `itzg/minecraft-server` image, I was able to consolidate the entire setup into a single `docker-compose.yml` file. Now, instead of going through a lengthy manual setup, I can deploy or update the server with a single command.
+I decided to Dockerize the server using the `itzg/minecraft-server` image, putting the entire setup into a single `docker-compose.yml` file. Now, instead of going through a lengthy manual setup, I can deploy or update the server with a single command.
 
 This Docker Compose configuration allows me to:
 
