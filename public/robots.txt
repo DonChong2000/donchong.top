@@ -1,0 +1,118 @@
+# robots.txt for donchong.top
+# Policy: allow search + runtime grounding (ai-input), disallow training.
+# Refs: RFC 9309, https://contentsignals.org/
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Disallow: /test/
+Disallow: /random-notes/test/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+# OpenAI
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+User-agent: Claude-User
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+# Google AI (separate from Googlebot search crawl)
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+# Common Crawl (training corpora)
+User-agent: CCBot
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+# Meta
+User-agent: Meta-ExternalAgent
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+User-agent: FacebookBot
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+# Apple
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+# Amazon
+User-agent: Amazonbot
+Allow: /
+Disallow: /api/
+Disallow: /webhooks/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+# Disallowed entirely
+User-agent: Bytespider
+Disallow: /
+
+User-agent: ImagesiftBot
+Disallow: /
+
+Sitemap: https://donchong.top/sitemap.xml

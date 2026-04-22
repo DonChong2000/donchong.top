@@ -20,6 +20,21 @@ const nextConfig = {
   outputFileTracingIncludes: {
     '/**/*': ['./src/app/**/*.mdx'],
   },
+  async headers() {
+    const linkValue = [
+      '<https://donchong.top/sitemap.xml>; rel="sitemap"; type="application/xml"',
+      '<https://donchong.top/.well-known/agent-skills/index.json>; rel="agent-skills"; type="application/json"',
+    ].join(', ')
+    return [
+      {
+        source: '/',
+        headers: [
+          { key: 'Link', value: linkValue },
+          { key: 'Vary', value: 'Accept' },
+        ],
+      },
+    ]
+  },
 }
 
 export default withSearch(withMDX(nextConfig))

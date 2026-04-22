@@ -1,0 +1,12 @@
+{
+  "$schema": "https://agentskills.io/schemas/v0.2.0/index.json",
+  "skills": [
+    {
+      "name": "markdown-negotiation",
+      "type": "web",
+      "description": "Fetch any page on donchong.top as markdown by sending an Accept: text/markdown request header.",
+      "url": "https://donchong.top/.well-known/agent-skills/markdown-negotiation.md",
+      "sha256": "c4506b0a333a11629f01770038bc0d08e9c60ab8f93a92280a44487cf413a7e9"
+    }
+  ]
+}
