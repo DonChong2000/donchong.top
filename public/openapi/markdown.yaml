@@ -1,0 +1,56 @@
+openapi: 3.1.0
+info:
+  title: donchong.top Markdown API
+  version: 1.0.0
+  description: |
+    Returns the MDX source for any content page on donchong.top.
+
+    Most agents should NOT call this endpoint directly. Send
+    `Accept: text/markdown` to the page URL itself
+    (e.g. `https://donchong.top/me`) — site middleware rewrites that
+    request to this endpoint internally. Direct calls are documented
+    here for completeness.
+  license:
+    name: MIT
+servers:
+  - url: https://donchong.top
+paths:
+  /api/markdown:
+    get:
+      summary: Get a page as markdown
+      operationId: getPageMarkdown
+      parameters:
+        - name: path
+          in: query
+          required: false
+          description: |
+            Page path (e.g. `/`, `/me`, `/projects/this-site`).
+            Defaults to `/` when omitted.
+          schema:
+            type: string
+            default: /
+        - name: x-md-path
+          in: header
+          required: false
+          description: |
+            Alternative way to pass the path. Takes precedence over
+            the `path` query parameter when both are present.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Markdown source of the requested page.
+          headers:
+            x-markdown-tokens:
+              schema: { type: integer }
+              description: Approximate whitespace-split token count.
+            Vary:
+              schema: { type: string }
+              description: Always `Accept`.
+            Cache-Control:
+              schema: { type: string }
+          content:
+            text/markdown:
+              schema: { type: string }
+        '404':
+          description: Path does not resolve to an MDX source file.

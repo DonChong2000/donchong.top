@@ -23,6 +23,7 @@ const nextConfig = {
   async headers() {
     const linkValue = [
       '<https://donchong.top/sitemap.xml>; rel="sitemap"; type="application/xml"',
+      '<https://donchong.top/.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"',
       '<https://donchong.top/.well-known/agent-skills/index.json>; rel="agent-skills"; type="application/json"',
     ].join(', ')
     return [
@@ -32,6 +33,14 @@ const nextConfig = {
           { key: 'Link', value: linkValue },
           { key: 'Vary', value: 'Accept' },
         ],
+      },
+    ]
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/.well-known/api-catalog',
+        destination: '/api/well-known/api-catalog',
       },
     ]
   },
