@@ -9,6 +9,7 @@ import { Header } from '@/components/Header';
 import { Logo } from '@/components/Logo';
 import { Navigation } from '@/components/Navigation';
 import { MessageTab } from '@/components/MessageTab';
+import { WebMcp } from '@/components/WebMcp';
 import {
   type Section,
   SectionProvider,
@@ -57,6 +58,7 @@ export function Layout({
           </div>
         </div>
         <MessageTab />
+        <WebMcp />
       </div>
     </SectionProvider>
   );
