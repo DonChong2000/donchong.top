@@ -25,6 +25,7 @@ const nextConfig = {
       '<https://donchong.top/sitemap.xml>; rel="sitemap"; type="application/xml"',
       '<https://donchong.top/.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"',
       '<https://donchong.top/.well-known/agent-skills/index.json>; rel="agent-skills"; type="application/json"',
+      '<https://donchong.top/.well-known/mcp/server-card.json>; rel="mcp-server-card"; type="application/json"',
     ].join(', ')
     return [
       {
@@ -41,6 +42,10 @@ const nextConfig = {
       {
         source: '/.well-known/api-catalog',
         destination: '/api/well-known/api-catalog',
+      },
+      {
+        source: '/.well-known/mcp/server-card.json',
+        destination: '/api/well-known/mcp/server-card',
       },
     ]
   },
