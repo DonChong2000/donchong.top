@@ -668,8 +668,27 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 <GoogleAnalytics gaId="G-XXXXXXXXX" />
 ```
 
-But my site has zero traffic, so... We will get back to this when there is more data to analyze.
-![[Pasted image 20260329211040.png]]
+~~But my site has zero traffic, so... We will get back to this when there is more data to analyze.~~
+A month later, now I get to see some useful information.
+![[Pasted image 20260422145411.png]]
+Users from Singapore are out of the blue, and assume they are VPN traffic. An interesting finding is that most of the hiring process happens in the US and China, not Canada and Hong Kong, where I applied for the job.
+![[Pasted image 20260422145535.png]]
+
+# Agent Ready
+Cloudflare just published a site about the agent readiness. And apparently, my site is not ready for that yet.
+![[Pasted image 20260422150155.png|461]]
+By following the site's instructions, and use the prompt provided. The site fulfills all agentic criteria for a content site, but what does this actually do, and how does it affect AI fetching?
+![[Pasted image 20260422225649.png]]
+And my server now provides 2 simple mcp methods (search and fetch markdown) for testing.
+![[Pasted image 20260424142701.png]]
+
+I tried asking the web versions of ChatGPT, Gemini, and Claude, but they all seem to strip away the HTTP headers and are unable to read the newly added functions. So, I tried to do the same thing in Claude Code. At first, it also ignored the header, but after I explicitly told Claude to read it, it was able to read the content and use it. I guess Claude Code does not have the latest protocol supported; maybe I need OpenClaw to actually use it.
+![[Pasted image 20260422231149.png]]
+
+Then I did the same thing on OpenCLAW, and again, the bot doesn't explore these out of the box, but it recognizes them if I tell it to look into the headers explicitly. Although it's easy to add this function by adding a prompt in memory, it is much less powerful if agents do not support it out of the box.
+
+![[Pasted image 20260424144322.png]]
+![[Pasted image 20260424144330.png]]
 # Bugs
 
 - Large Image are not supported
