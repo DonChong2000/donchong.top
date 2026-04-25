@@ -1,28 +1,14 @@
-const categories = [
-  {
-    name: 'ULV',
-    href: '#the-beginning',
-    imageSrc: '/2025-08-10_22.17.15.png',
-  },
-  {
-    name: 'LV - MV',
-    href: '#steam-age-and-lv-tier',
-    imageSrc: '/2025-08-10_22.29.38.png',
-  },
-  {
-    name: 'HV - EV',
-    href: '#mv-hv-ev',
-    imageSrc: '/2025-08-10_22.41.03.png',
-  },
-  {
-    name: 'IV',
-    href: '#iv-tier',
-    imageSrc: '/2025-08-10_23.56.43.png',
-  },
-  { name: 'ZPM?', href: '#', imageSrc: '/Pasted%20image%2020250630155824.png' },
-];
+export type ScrollingCardCategory = {
+  name: string;
+  href: string;
+  imageSrc: string;
+};
 
-export function ScrollingCards(props: React.ComponentPropsWithoutRef<'div'>) {
+type ScrollingCardsProps = React.ComponentPropsWithoutRef<'div'> & {
+  categories: ScrollingCardCategory[];
+};
+
+export function ScrollingCards({ categories, ...props }: ScrollingCardsProps) {
   return (
 
       <div {...props}>
