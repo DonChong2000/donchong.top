@@ -1,8 +1,17 @@
+import { ScrollingCards } from '@/components/ScrollingCards';
+import { tierCategories } from '../tierCategories';
+
 export const metadata = {
   title: 'GTNH ULV to MV Tier',
   description: 'Early stages of my GTNH (GregTech: New Horizons) playthrough — dirt house beginnings, Stone Age farming, and the Steam Age through MV tier base built in the Canyon biome.',
   thumbnail: '/2025-08-10_22.17.15.png',
 };
+
+<div className="not-prose">
+  <Button href="/hobbies/gtnh" variant="text" arrow="left">
+    <>GTNH Playthrough</>
+  </Button>
+</div>
 
 # ULV to MV Tier
 
@@ -25,3 +34,7 @@ In the Stone Age, our priority was farming food for survival. Below are our farm
 
 We chose the Canyon biome for our base because of its unique view, lack of rain, high blast resistance, and most importantly, no stone or cobblestone, which prevents the dreaded "drown creeper" (a creeper variant that spawns swarms of silverfish that hide in stone and multiply).  
 ![[2025-08-10_22.29.38.png]]
+
+---
+
+<ScrollingCards categories={tierCategories} className="hidden justify-center xl:flex" />
