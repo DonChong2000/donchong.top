@@ -112,8 +112,9 @@ export const remarkWikiLinkImages = () => async (tree, file) => {
         { type: 'mdxJsxAttribute', name: 'blurDataURL', value: blurDataURL },
         { type: 'mdxJsxAttribute', name: 'placeholder', value: 'blur' },
       );
-    } catch {
-      // Image not found or unprocessable — serve without dimensions/blur
+    } catch (err) {
+      console.warn(`[remark-wiki-link-images] failed to read ${absolutePath}:`, err.message);
+      node.name = 'img';
     }
   }));
 };

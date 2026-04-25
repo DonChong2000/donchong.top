@@ -107,18 +107,25 @@ describe('remarkWikiLinkImages', () => {
     expect(getAttr(node, 'placeholder')).toBe('blur');
   });
 
-  test('gracefully handles metadata failure — no width/height/blur', async () => {
+  test('falls back to plain <img> on metadata failure', async () => {
     mockMetadata.mockRejectedValue(new Error('file not found'));
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
     const tree = makeTree('![[missing.png]]');
     await remarkWikiLinkImages()(tree, fakeFile);
 
     const node = getImageNode(tree);
-    expect(node.name).toBe('Image');
+    expect(node.name).toBe('img');
     expect(getAttr(node, 'src')).toBe('/images/hobbies/factorio/missing.png');
     expect(getAttr(node, 'alt')).toBe('missing.png');
     expect(getAttr(node, 'width')).toBeUndefined();
     expect(getAttr(node, 'height')).toBeUndefined();
     expect(getAttr(node, 'blurDataURL')).toBeUndefined();
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('failed to read'),
+      'file not found',
+    );
+
+    warnSpy.mockRestore();
   });
 });
