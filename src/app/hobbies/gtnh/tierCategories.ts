@@ -21,4 +21,9 @@ export const tierCategories: ScrollingCardCategory[] = [
     href: '/hobbies/gtnh#luv-tier',
     imageSrc: '/Pasted%20image%2020250630155824.png',
   },
+  {
+    name: 'and more',
+    href: '#',
+    imageSrc: '/Pasted%20image%2020250630155825.png',
+  },
 ];
