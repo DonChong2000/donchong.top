@@ -28,7 +28,7 @@ pnpm run test -- src/__tests__/SomeComponent.test.tsx
 All pages (projects, notes, hobbies) are `.mdx` files under `src/app/`. The root layout (`src/app/layout.tsx`) uses `glob('**/*.mdx')` at build time to auto-discover sections and build navigation — adding a new MDX file automatically adds it to the nav.
 
 Custom MDX plugins in `src/mdx/` handle:
-- `remark-wiki-link-images.mjs` — Obsidian-style `![[image]]` syntax → Next.js `<Image>` with blur placeholders
+- `remark-wiki-link-images.mjs` — Obsidian-style `![[image]]` syntax → Next.js `<Image>` with blur placeholders. Images must be placed in `public/images/{page-path}/` where `{page-path}` mirrors the MDX file's location under `src/app/` (e.g. `src/app/notes/aws-saa-c03/page.mdx` → `public/images/notes/aws-saa-c03/`)
 - `remark-tags.mjs` — Tag function support in MDX frontmatter
 - `rehype.mjs` — Shiki syntax highlighting for code blocks
 - `search.mjs` — Builds the Flexsearch index for full-text search
