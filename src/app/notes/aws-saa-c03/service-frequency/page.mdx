@@ -1,0 +1,247 @@
+export const metadata = {
+  priority: 250,
+  title: 'AWS SAA-C03 Service Frequency',
+  description:
+    'A frequency breakdown of AWS services across SAA-C03 study material, visualized by category and ranked overall to highlight where to focus exam prep.',
+  descriptionMd:
+    'A frequency breakdown of **AWS services** across **SAA-C03** study material, visualized by category and ranked overall to highlight where to focus exam prep.',
+  summary: `This page visualizes AWS service mention counts across SAA-C03 study material, organized by AWS category. Each bar shows how often a service appears, normalized within its category so the most-mentioned service in every section reads as 100 percent. A Top 10 overall ranking surfaces the highest-leverage services to study first — EC2, S3, Lambda, RDS, and Auto Scaling dominate, while categories like IoT and Developer Tools are barely represented. The breakdown helps prioritize exam preparation by category importance and within-category service prominence.`,
+};
+
+export const Bar = ({ n, c, m }) => (
+  <div className="relative h-7 my-1 rounded overflow-hidden bg-timberwolf-300 dark:bg-charcoal-800">
+    <div
+      className="absolute inset-y-0 left-0 bg-charcoal-400/45 dark:bg-charcoal-200/40"
+      style={{ width: m ? `${(c / m) * 100}%` : 0 }}
+    />
+    <div className="relative h-full px-3 flex items-center justify-between text-sm">
+      <span className={c === 0 ? 'text-timberwolf-700 dark:text-charcoal-300' : 'font-medium text-charcoal-700 dark:text-timberwolf-200'}>{n}</span>
+      <span className="font-mono tabular-nums text-charcoal-500 dark:text-timberwolf-400">{c}</span>
+    </div>
+  </div>
+);
+
+export const Top = ({ rank, n, c, m }) => (
+  <div className="relative h-9 my-1.5 rounded-md overflow-hidden bg-timberwolf-300 dark:bg-charcoal-800">
+    <div
+      className="absolute inset-y-0 left-0 bg-gamboge-500/55 dark:bg-gamboge-500/45"
+      style={{ width: `${(c / m) * 100}%` }}
+    />
+    <div className="relative h-full px-3 flex items-center gap-3 text-sm">
+      <span className="font-mono tabular-nums text-gamboge-700 dark:text-gamboge-300 w-6">#{rank}</span>
+      <span className="font-semibold flex-1 text-charcoal-700 dark:text-timberwolf-100">{n}</span>
+      <span className="font-mono tabular-nums text-charcoal-500 dark:text-timberwolf-300">{c}</span>
+    </div>
+  </div>
+);
+
+# AWS SAA-C03 Service Frequency
+
+#aws
+
+A frequency breakdown of AWS service mentions across SAA-C03 study material. Bars are normalized to the most-mentioned service within each category, so the longest bar in every section reads as 100%. Use the Top 10 ranking to spot exam-critical services regardless of category.
+
+## Top 10 Overall
+
+EC2 and S3 alone dwarf everything else. The classic stack of compute, storage, networking, and IAM accounts for most of the surface area.
+
+<div className="not-prose my-6">
+  <Top rank={1} n="EC2" c={478} m={478} />
+  <Top rank={2} n="S3" c={401} m={478} />
+  <Top rank={3} n="Lambda" c={273} m={478} />
+  <Top rank={4} n="RDS" c={197} m={478} />
+  <Top rank={5} n="Auto Scaling" c={168} m={478} />
+  <Top rank={6} n="VPC" c={128} m={478} />
+  <Top rank={7} n="IAM" c={121} m={478} />
+  <Top rank={8} n="DynamoDB" c={112} m={478} />
+  <Top rank={9} n="CloudFront" c={96} m={478} />
+  <Top rank={10} n="EBS" c={85} m={478} />
+</div>
+
+## By Category
+
+### Compute — total 1,101
+
+<div className="not-prose my-4">
+  <Bar n="EC2" c={478} m={478} />
+  <Bar n="Lambda" c={273} m={478} />
+  <Bar n="Auto Scaling" c={168} m={478} />
+  <Bar n="ECS" c={65} m={478} />
+  <Bar n="EKS" c={41} m={478} />
+  <Bar n="Fargate" c={40} m={478} />
+  <Bar n="Elastic Beanstalk" c={15} m={478} />
+  <Bar n="Batch" c={12} m={478} />
+  <Bar n="Outposts" c={4} m={478} />
+  <Bar n="Lightsail" c={3} m={478} />
+  <Bar n="App Runner" c={2} m={478} />
+</div>
+
+### Storage — total 707
+
+<div className="not-prose my-4">
+  <Bar n="S3" c={401} m={401} />
+  <Bar n="EBS" c={85} m={401} />
+  <Bar n="EFS" c={66} m={401} />
+  <Bar n="Glacier" c={51} m={401} />
+  <Bar n="FSx" c={44} m={401} />
+  <Bar n="Storage Gateway" c={35} m={401} />
+  <Bar n="Backup" c={25} m={401} />
+</div>
+
+### Networking — total 546
+
+<div className="not-prose my-4">
+  <Bar n="VPC" c={128} m={128} />
+  <Bar n="CloudFront" c={96} m={128} />
+  <Bar n="ELB / ALB / NLB" c={82} m={128} />
+  <Bar n="API Gateway" c={76} m={128} />
+  <Bar n="Route 53" c={59} m={128} />
+  <Bar n="Direct Connect" c={43} m={128} />
+  <Bar n="Global Accelerator" c={27} m={128} />
+  <Bar n="Transit Gateway" c={23} m={128} />
+  <Bar n="PrivateLink" c={9} m={128} />
+  <Bar n="App Mesh" c={3} m={128} />
+  <Bar n="Cloud Map" c={0} m={128} />
+</div>
+
+### Databases — total 493
+
+<div className="not-prose my-4">
+  <Bar n="RDS" c={197} m={197} />
+  <Bar n="DynamoDB" c={112} m={197} />
+  <Bar n="Aurora" c={80} m={197} />
+  <Bar n="ElastiCache" c={53} m={197} />
+  <Bar n="Redshift" c={39} m={197} />
+  <Bar n="Neptune" c={4} m={197} />
+  <Bar n="DocumentDB" c={4} m={197} />
+  <Bar n="Timestream" c={2} m={197} />
+  <Bar n="QLDB" c={2} m={197} />
+  <Bar n="Keyspaces" c={0} m={197} />
+  <Bar n="MemoryDB" c={0} m={197} />
+</div>
+
+### Security & IAM — total 366
+
+<div className="not-prose my-4">
+  <Bar n="IAM" c={121} m={121} />
+  <Bar n="KMS" c={69} m={121} />
+  <Bar n="WAF" c={29} m={121} />
+  <Bar n="Secrets Manager" c={21} m={121} />
+  <Bar n="ACM" c={21} m={121} />
+  <Bar n="Inspector" c={20} m={121} />
+  <Bar n="GuardDuty" c={19} m={121} />
+  <Bar n="Cognito" c={17} m={121} />
+  <Bar n="Macie" c={15} m={121} />
+  <Bar n="Shield" c={15} m={121} />
+  <Bar n="Security Hub" c={6} m={121} />
+  <Bar n="Firewall Manager" c={5} m={121} />
+  <Bar n="Network Firewall" c={4} m={121} />
+  <Bar n="CloudHSM" c={3} m={121} />
+  <Bar n="Detective" c={1} m={121} />
+</div>
+
+### Management — total 316
+
+<div className="not-prose my-4">
+  <Bar n="CloudWatch" c={84} m={84} />
+  <Bar n="Organizations" c={50} m={84} />
+  <Bar n="Systems Manager" c={49} m={84} />
+  <Bar n="CloudTrail" c={34} m={84} />
+  <Bar n="Config" c={27} m={84} />
+  <Bar n="CloudFormation" c={23} m={84} />
+  <Bar n="Trusted Advisor" c={11} m={84} />
+  <Bar n="Cost Explorer" c={10} m={84} />
+  <Bar n="RAM" c={8} m={84} />
+  <Bar n="Control Tower" c={7} m={84} />
+  <Bar n="Service Catalog" c={7} m={84} />
+  <Bar n="Compute Optimizer" c={6} m={84} />
+  <Bar n="OpsWorks" c={0} m={84} />
+  <Bar n="License Manager" c={0} m={84} />
+</div>
+
+### Messaging — total 245
+
+<div className="not-prose my-4">
+  <Bar n="SQS" c={80} m={80} />
+  <Bar n="EventBridge" c={67} m={80} />
+  <Bar n="SNS" c={62} m={80} />
+  <Bar n="Step Functions" c={17} m={80} />
+  <Bar n="SES" c={8} m={80} />
+  <Bar n="AppFlow" c={5} m={80} />
+  <Bar n="MQ" c={3} m={80} />
+  <Bar n="AppSync" c={3} m={80} />
+</div>
+
+### Analytics — total 202
+
+<div className="not-prose my-4">
+  <Bar n="Kinesis" c={48} m={48} />
+  <Bar n="Athena" c={42} m={48} />
+  <Bar n="Glue" c={38} m={48} />
+  <Bar n="EMR" c={29} m={48} />
+  <Bar n="QuickSight" c={17} m={48} />
+  <Bar n="OpenSearch" c={14} m={48} />
+  <Bar n="Lake Formation" c={8} m={48} />
+  <Bar n="MSK" c={3} m={48} />
+  <Bar n="Data Pipeline" c={3} m={48} />
+</div>
+
+### Migration — total 113
+
+<div className="not-prose my-4">
+  <Bar n="DataSync" c={43} m={43} />
+  <Bar n="DMS" c={38} m={43} />
+  <Bar n="Snow Family" c={27} m={43} />
+  <Bar n="Migration Hub" c={2} m={43} />
+  <Bar n="SMS" c={2} m={43} />
+  <Bar n="MGN" c={1} m={43} />
+</div>
+
+### ML & AI — total 46
+
+<div className="not-prose my-4">
+  <Bar n="SageMaker" c={9} m={9} />
+  <Bar n="Comprehend" c={8} m={9} />
+  <Bar n="Forecast" c={8} m={9} />
+  <Bar n="Rekognition" c={6} m={9} />
+  <Bar n="Textract" c={5} m={9} />
+  <Bar n="Transcribe" c={4} m={9} />
+  <Bar n="Lex" c={2} m={9} />
+  <Bar n="Polly" c={2} m={9} />
+  <Bar n="Translate" c={2} m={9} />
+  <Bar n="Bedrock" c={0} m={9} />
+  <Bar n="Personalize" c={0} m={9} />
+</div>
+
+### Developer Tools — total 3
+
+<div className="not-prose my-4">
+  <Bar n="X-Ray" c={3} m={3} />
+  <Bar n="CodePipeline" c={0} m={3} />
+  <Bar n="CDK" c={0} m={3} />
+  <Bar n="CodeBuild" c={0} m={3} />
+  <Bar n="CodeCommit" c={0} m={3} />
+  <Bar n="CodeDeploy" c={0} m={3} />
+  <Bar n="CodeArtifact" c={0} m={3} />
+  <Bar n="Cloud9" c={0} m={3} />
+</div>
+
+### IoT — total 0
+
+<div className="not-prose my-4">
+  <Bar n="IoT Core" c={0} m={1} />
+  <Bar n="Greengrass" c={0} m={1} />
+  <Bar n="SiteWise" c={0} m={1} />
+  <Bar n="TwinMaker" c={0} m={1} />
+</div>
+
+## Takeaways
+
+- **Compute and Storage carry the exam.** EC2 (478) and S3 (401) together account for over a third of all service mentions; combined with Lambda, RDS, Auto Scaling, VPC, IAM, DynamoDB, CloudFront, and EBS, the Top 10 alone covers the majority.
+- **Categories worth a deeper read:** Networking and Databases are well-distributed — multiple services within each category appear frequently, so don't stop at the leader.
+- **Categories you can skim:** Developer Tools (only X-Ray shows up), IoT (zero), and most of ML & AI rarely appear. Spend minimal time here.
+- **Watch for zeros.** Bedrock, Personalize, Keyspaces, MemoryDB, OpsWorks, License Manager, and the entire CodeStar suite are essentially absent — recognize them by name but don't memorize their details.
+
+## Related
+
+- [AWS Cert Flashcards](/notes/flashcard) — the flashcard app I built to drill these services
