@@ -3,17 +3,17 @@ import type { ScrollingCardCategory } from '@/components/ScrollingCards';
 export const tierCategories: ScrollingCardCategory[] = [
   {
     name: 'ULV - MV',
-    href: '/hobbies/gtnh/ULV-MV',
+    href: '/hobbies/gtnh/ulv-mv',
     imageSrc: '/2025-08-10_22.17.15.png',
   },
   {
     name: 'HV - EV',
-    href: '/hobbies/gtnh/HV-EV',
+    href: '/hobbies/gtnh/hv-ev',
     imageSrc: '/2025-08-10_22.41.03.png',
   },
   {
     name: 'IV',
-    href: '/hobbies/gtnh/IV-tier',
+    href: '/hobbies/gtnh/iv',
     imageSrc: '/2025-08-10_23.56.43.png',
   },
   {
