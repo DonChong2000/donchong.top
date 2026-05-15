@@ -18,8 +18,8 @@ export const tierCategories: ScrollingCardCategory[] = [
   },
   {
     name: 'LUV',
-    href: '/hobbies/gtnh#luv-tier',
-    imageSrc: '/Pasted%20image%2020250630155824.png',
+    href: '/hobbies/gtnh/luv',
+    imageSrc: '/images/hobbies/gtnh/luv/Pasted%20image%2020250630155824.png',
   },
   {
     name: 'and more',
