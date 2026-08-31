@@ -3,62 +3,73 @@ export const metadata = {
   title: '6 Months with Claude',
   description: `Six months of using Claude Code on a personal Windows machine, rating the customizations, hooks, skills and workflows that survived daily use.`,
   descriptionMd: `Six months of using **Claude Code** on a personal Windows machine, rating the customizations, hooks, skills and workflows that survived daily use.`,
-  summary: `This page reviews six months of daily Claude Code use on a personal Windows 11 machine, grouped by how much each customization was worth rather than by what kind of thing it is. The top tier covers a Retail Pro Prism documentation skill built from the official guide plus distilled past conversations, delegating token heavy work to Gemini through a scoped handoff directory, and a job on a remote server that keeps the five hour usage window always running so a block is open before the working day starts. The daily drivers are a commit hook that reminds Claude to simplify and update documentation, a clipboard skill, a screen capture skill that lets Claude verify its own visual output, a video summarizer that cuts trip footage into highlights, an album organizer that sorts photos by real capture date, and a powerline statusline showing context usage and the remaining limit. Lower tiers cover an attention pipeline that flashes the taskbar and escalates to a phone push, a profile editing skill, and PowerShell shorthands for committing and for pinning a model. One skill did not stick.`,
+  summary: `Six months of daily Claude Code use on a personal Windows 11 machine, ranked by how much each customization was actually worth. The top tier: a cron job on a remote server that keeps the five hour usage window running, so a block is already open before the working day starts; ask-gemini, which hands token heavy work like reading images to Gemini; and prism-docs, a skill built from the official Retail Pro Prism guide plus distilled past conversations. Below that, a commit hook that stops Claude overdoing things and reminds it to update the docs, a clipboard skill, a screen capture skill that lets Claude check its own visual output, a statusline showing context usage and the limit left, a video summarizer for trip footage, an album organizer that sorts photos by real capture date, a notification pipeline that flashes the taskbar and escalates to a phone push, and PowerShell shorthands for committing and picking a model.`,
 };
-
-export const Stars = ({ n }) => (
-  <span className="whitespace-nowrap text-yellow-500 dark:text-yellow-400">
-    {'★'.repeat(n)}
-    <span className="text-zinc-300 dark:text-zinc-600">{'☆'.repeat(5 - n)}</span>
-  </span>
-);
 
 # 6 Months with Claude
 
 #ai #claude
 
-Six months of running Claude Code on my own Windows machine. This is what I actually kept, ordered by how much it was worth rather than by what kind of thing it is.
+I have been using Claude for the last 6 months, and I would like to write down what works for me and what doesn't. Some of them are effective right away, and some take time to reveal their value. Here I rank them from the best to meh:
+![[claudeusage.png]]
 
-> Needs review.
 
-## Essential
+## Must get
 
 Rating: <Stars n={5} />
 
 | What | Type | Notes |
 | --- | --- | --- |
-| `prism-docs` | Skill | All the docs, plus past conversations distilled into it. Saved me 100 hours. |
-| `ask-gemini` + `agy-handoff` | Skill | Saves tons of tokens, especially when dealing with images and video. |
-| The 5 hour window | Cron | A job on my remote server keeps a usage block running around the clock. |
+| 5 hour invoke | Cron | A cron job invokes Claude every 5 hrs. This basically gives you an average of 1.5x the 5-hour limit. Recommended to everyone. |
+| ask-gemini | Skill | Uses Gemini (`agy -p`) for all token-heavy jobs, especially reading images. Got my 18 months of Google AI Pro for 5 CAD. |
+| prism-docs | Skill | Distilled all work documentation and related sessions into a skill. Super useful when seeking a piece of info in a haystack, and for brainstorming possible reasons for a bug. |
 
-The usage limit runs in 5 hour blocks, and a block starts from the first message, not from the moment I hit a limit. By the time I sit down the window has usually been open for a while, so it resets sooner.
-
-## Usage
+## You should try
 
 Rating: <Stars n={4} />
 
 | What | Type | Notes |
 | --- | --- | --- |
-| Commit hook (ponytail + update documentation) | Hook | Claude sometimes overdoes things, and won't update the docs on its own. |
-| `clip` | Skill | Useful to copy out a command, table, or a useful sentence. |
-| `screen-capture` | Skill | Lets Claude see my screen and verify itself. It usually invokes this one on its own. |
-| `video-summarize` | Skill | Clips videos and builds highlights from my trips. I hope it gets better in future. |
-| `organize-album` | Skill | Sorts images by date across multiple sources. Very helpful. |
-| Statusline | Config | Shows context usage and how much of the 5 hour limit is left. Knowing the limit helps me plan token usage ahead. |
-| `opus` / `son` + one line | Profile | Fair. It gets more useful when things get token heavy. |
+| `opus` / `son` + question | Profile | PS shorthands, no more /model, just type `opus tell me a story`. |
+| Statusline | Config | Shows context usage and the 5-hour limit left. Helps me spot context rot and plan token usage ahead. |
+| `clip` | Skill | Useful for copying out a command or a table. (Especially before the update, copied text used to have line breaks in between.) |
+| `screen-capture` | Skill | Lets Claude screen-cap and verify itself. Claude invokes this one on its own a lot. |
+| Commit hook ([ponytail](https://github.com/dietrichgebert/ponytail) + update documentation) | Hook | Claude sometimes overdoes things and won't update the docs on its own. |
 
-## Optional
+
+<Figure caption="My statusline: model, context used, and 5-hour limit left">
+
+![[statusline.png]]
+
+</Figure>
+
+
+## Fits me
 
 Rating: <Stars n={3} />
 
 | What | Type | Notes |
 | --- | --- | --- |
-| Attention pipeline (Windows alert + ntfy) | Hook | I don't have to sit there and keep things going. Sometimes buggy. |
-| `ps-profile` | Skill | Helps me edit my terminal profile, which needs some context to change. Normally I should be able to just ask Claude to modify it. |
-| `cc` (`claude "commit"`) | Profile | Just a shorthand. Convenient, but not necessary. |
+| `tell-me` | Hook | When Claude needs my input (options, permissions), it alerts me on Windows and pushes a notification to my phone using ntfy. |
+| `video-summarize` | Skill | Clips videos and builds highlights from my trips. I hope it gets better in the future. |
+| `organize-album` | Skill | Sorts images by date across multiple sources. Very helpful. |
+| `ps-profile` | Skill | Edits my terminal profile and adds shorthands. |
+| `cc` (`claude "commit"`) | Profile | Shorthand. Convenient, not necessary. |
 
-## Rarely used
+<Figure caption="Fake neofetch, one of the shorthands ps-profile added">
+
+![[neofetch.png]]
+
+</Figure>
+
+
+## Not sure, or takes time
 
 Rating: <Stars n={2} />
 
-`claude-use-review` audits my prompt history and reports on how I've been using Claude Code.
+| What | Type | Notes |
+| --- | --- | --- |
+| `Lessons learned` | Rules | Append-only ledger; summarizes mistakes and distills them into rules after reaching 20. |
+| `claude-use-review` | Skill | Audits my prompt history and reports on how I've been using Claude Code. |
+
+## Using Claude in HK
