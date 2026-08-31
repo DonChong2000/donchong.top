@@ -25,7 +25,7 @@ pnpm run test -- src/__tests__/SomeComponent.test.tsx
 
 ### Content System
 
-All pages (projects, notes, hobbies) are `.mdx` files under `src/app/`. The root layout (`src/app/layout.tsx`) uses `glob('**/*.mdx')` at build time to auto-discover sections and build navigation — adding a new MDX file automatically adds it to the nav.
+All pages (projects, notes, hobbies) are `.mdx` files under `src/app/`. The root layout (`src/app/layout.tsx`) uses `glob('**/*.mdx')` at build time to collect each page's heading sections for the table of contents and search. The sidebar nav is a hardcoded `navigation` array in `src/components/Navigation.tsx` — a new MDX file does not show up there until you add an entry to it.
 
 Custom MDX plugins in `src/mdx/` (6 files):
 - `remark-wiki-link-images.mjs` — Obsidian-style `![[image]]` syntax → Next.js `<Image>` with blur placeholders. Images must be placed in `public/images/{page-path}/` where `{page-path}` mirrors the MDX file's location under `src/app/` (e.g. `src/app/notes/aws-saa-c03/page.mdx` → `public/images/notes/aws-saa-c03/`)

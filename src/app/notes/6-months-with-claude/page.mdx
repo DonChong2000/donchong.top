@@ -1,0 +1,64 @@
+export const metadata = {
+  priority: 400,
+  title: '6 Months with Claude',
+  description: `Six months of using Claude Code on a personal Windows machine, rating the customizations, hooks, skills and workflows that survived daily use.`,
+  descriptionMd: `Six months of using **Claude Code** on a personal Windows machine, rating the customizations, hooks, skills and workflows that survived daily use.`,
+  summary: `This page reviews six months of daily Claude Code use on a personal Windows 11 machine, grouped by how much each customization was worth rather than by what kind of thing it is. The top tier covers a Retail Pro Prism documentation skill built from the official guide plus distilled past conversations, delegating token heavy work to Gemini through a scoped handoff directory, and a job on a remote server that keeps the five hour usage window always running so a block is open before the working day starts. The daily drivers are a commit hook that reminds Claude to simplify and update documentation, a clipboard skill, a screen capture skill that lets Claude verify its own visual output, a video summarizer that cuts trip footage into highlights, an album organizer that sorts photos by real capture date, and a powerline statusline showing context usage and the remaining limit. Lower tiers cover an attention pipeline that flashes the taskbar and escalates to a phone push, a profile editing skill, and PowerShell shorthands for committing and for pinning a model. One skill did not stick.`,
+};
+
+export const Stars = ({ n }) => (
+  <span className="whitespace-nowrap text-yellow-500 dark:text-yellow-400">
+    {'★'.repeat(n)}
+    <span className="text-zinc-300 dark:text-zinc-600">{'☆'.repeat(5 - n)}</span>
+  </span>
+);
+
+# 6 Months with Claude
+
+#ai #claude
+
+Six months of running Claude Code on my own Windows machine. This is what I actually kept, ordered by how much it was worth rather than by what kind of thing it is.
+
+> Needs review.
+
+## Essential
+
+Rating: <Stars n={5} />
+
+| What | Type | Notes |
+| --- | --- | --- |
+| `prism-docs` | Skill | All the docs, plus past conversations distilled into it. Saved me 100 hours. |
+| `ask-gemini` + `agy-handoff` | Skill | Saves tons of tokens, especially when dealing with images and video. |
+| The 5 hour window | Cron | A job on my remote server keeps a usage block running around the clock. |
+
+The usage limit runs in 5 hour blocks, and a block starts from the first message, not from the moment I hit a limit. By the time I sit down the window has usually been open for a while, so it resets sooner.
+
+## Usage
+
+Rating: <Stars n={4} />
+
+| What | Type | Notes |
+| --- | --- | --- |
+| Commit hook (ponytail + update documentation) | Hook | Claude sometimes overdoes things, and won't update the docs on its own. |
+| `clip` | Skill | Useful to copy out a command, table, or a useful sentence. |
+| `screen-capture` | Skill | Lets Claude see my screen and verify itself. It usually invokes this one on its own. |
+| `video-summarize` | Skill | Clips videos and builds highlights from my trips. I hope it gets better in future. |
+| `organize-album` | Skill | Sorts images by date across multiple sources. Very helpful. |
+| Statusline | Config | Shows context usage and how much of the 5 hour limit is left. Knowing the limit helps me plan token usage ahead. |
+| `opus` / `son` + one line | Profile | Fair. It gets more useful when things get token heavy. |
+
+## Optional
+
+Rating: <Stars n={3} />
+
+| What | Type | Notes |
+| --- | --- | --- |
+| Attention pipeline (Windows alert + ntfy) | Hook | I don't have to sit there and keep things going. Sometimes buggy. |
+| `ps-profile` | Skill | Helps me edit my terminal profile, which needs some context to change. Normally I should be able to just ask Claude to modify it. |
+| `cc` (`claude "commit"`) | Profile | Just a shorthand. Convenient, but not necessary. |
+
+## Rarely used
+
+Rating: <Stars n={2} />
+
+`claude-use-review` audits my prompt history and reports on how I've been using Claude Code.

@@ -448,6 +448,7 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Notes',
     links: [
+      { title: '6 Months with Claude', href: '/notes/6-months-with-claude' },
       { title: 'The LeetCode Grind', href: '/notes/the-leetcode-grind' },
       { title: 'What is Git Really?', href: '/notes/what-is-git-really' },
       {
