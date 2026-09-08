@@ -73,3 +73,28 @@ Rating: <Stars n={2} />
 | `claude-use-review` | Skill | Audits my prompt history and reports on how I've been using Claude Code. |
 
 ## Using Claude in HK
+Claude and most other AI services block Hong Kong, so I run a WireGuard tunnel to my VPS in Canada. However, routing everything through WireGuard is inconvenient, so I added gluetun on top of it, which routes traffic per application.
+
+Since setting these up is quites easy with AI, I will keep things simple:
+
+First, set up the [gluetun](https://github.com/passteque/gluetun) with a docker-compose file. I am using my own WireGuard tunnel, but it also support many VPN services such as surfshark (which you can get it for free on topcashback). 
+
+
+**Claude Code**
+
+For Claude, add the proxy to the env config:
+```json
+//C:\Users\chong\.claude\settings.json
+"env": {
+  "HTTPS_PROXY": "http://127.0.0.1:8888",
+  "HTTP_PROXY": "http://127.0.0.1:8888",
+  "NO_PROXY": "localhost,127.0.0.1"
+},
+```
+
+**Chrome**
+
+For Chrome, add the `--proxy-server` flag in the property settings. Since other VPN plug-ins mess up proxy settings, I have to use a separate Chrome profile without VPN plug-ins.
+```powershell
+"C:\Program Files\Google\Chrome\Application\chrome.exe" --user-data-dir="C:\Users\chong\gluetun\chrome-vpn-profile" --proxy-server="http://127.0.0.1:8888" https://claude.ai
+```
