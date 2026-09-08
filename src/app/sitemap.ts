@@ -3,7 +3,7 @@ import glob from 'fast-glob';
 import { stat } from 'node:fs/promises';
 import path from 'node:path';
 
-const SITE_URL = 'https://donchong.top';
+const SITE_URL = 'https://donchong.com';
 
 const EXCLUDE = [/^\/test(\/|$)/, /^\/random-notes\/test(\/|$)/];
 

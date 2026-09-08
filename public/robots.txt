@@ -1,4 +1,4 @@
-# robots.txt for donchong.top
+# robots.txt for donchong.com
 # Policy: allow search + runtime grounding (ai-input), disallow training.
 # Refs: RFC 9309, https://contentsignals.org/
 
@@ -115,4 +115,4 @@ Disallow: /
 User-agent: ImagesiftBot
 Disallow: /
 
-Sitemap: https://donchong.top/sitemap.xml
+Sitemap: https://donchong.com/sitemap.xml

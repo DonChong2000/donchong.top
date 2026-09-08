@@ -1,14 +1,14 @@
 export const runtime = 'nodejs';
 
-const SITE = 'https://donchong.top';
+const SITE = 'https://donchong.com';
 
 const body = JSON.stringify({
   $schema:
     'https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json',
-  name: 'top.donchong/site',
-  title: 'donchong.top',
+  name: 'com.donchong/site',
+  title: 'donchong.com',
   description:
-    "MCP server for donchong.top — exposes the site's content as resources, full-text search and chat as tools.",
+    "MCP server for donchong.com — exposes the site's content as resources, full-text search and chat as tools.",
   version: '1.0.0',
   websiteUrl: SITE,
   repository: {
@@ -16,7 +16,7 @@ const body = JSON.stringify({
     source: 'github',
   },
   serverInfo: {
-    name: 'top.donchong/site',
+    name: 'com.donchong/site',
     version: '1.0.0',
   },
   supportedProtocolVersions: ['2025-03-26', '2025-06-18'],
@@ -37,12 +37,12 @@ const body = JSON.stringify({
     {
       name: 'search_site',
       description:
-        'Full-text search across donchong.top notes, projects and hobbies.',
+        'Full-text search across donchong.com notes, projects and hobbies.',
     },
     {
       name: 'fetch_page_markdown',
       description:
-        'Fetch any page on donchong.top rendered as markdown (proxies the Accept: text/markdown content negotiation skill).',
+        'Fetch any page on donchong.com rendered as markdown (proxies the Accept: text/markdown content negotiation skill).',
     },
   ],
 });

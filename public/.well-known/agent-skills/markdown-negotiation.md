@@ -1,15 +1,15 @@
 # Markdown for Agents
 
-donchong.top returns a markdown version of any page when an agent requests it.
+donchong.com returns a markdown version of any page when an agent requests it.
 
 ## Usage
 
 Send an `Accept: text/markdown` header on any page URL:
 
 ```
-curl -H "Accept: text/markdown" https://donchong.top/
-curl -H "Accept: text/markdown" https://donchong.top/me
-curl -H "Accept: text/markdown" https://donchong.top/projects/this-site
+curl -H "Accept: text/markdown" https://donchong.com/
+curl -H "Accept: text/markdown" https://donchong.com/me
+curl -H "Accept: text/markdown" https://donchong.com/projects/this-site
 ```
 
 The response uses `Content-Type: text/markdown; charset=utf-8` and
@@ -24,6 +24,6 @@ serve non-HTML content (`/sitemap.xml`, `/robots.txt`,
 
 ## Discovery
 
-- Sitemap: <https://donchong.top/sitemap.xml>
-- robots.txt: <https://donchong.top/robots.txt>
-- This skill index: <https://donchong.top/.well-known/agent-skills/index.json>
+- Sitemap: <https://donchong.com/sitemap.xml>
+- robots.txt: <https://donchong.com/robots.txt>
+- This skill index: <https://donchong.com/.well-known/agent-skills/index.json>

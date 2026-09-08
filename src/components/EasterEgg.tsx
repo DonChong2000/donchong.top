@@ -27,7 +27,7 @@ export default function EasterEgg() {
 
 
     //   Think -> try -> repeat.
-    //   donchong.top/aboutMe
+    //   donchong.com/aboutMe
 
     //   ---------------------------------------
     //   Hey there, fellow dev! o7
@@ -49,7 +49,7 @@ export default function EasterEgg() {
       ███████████████████████
 
       Think -> Try -> Repeat.
-      donchong.top/me
+      donchong.com/me
       _________________________
 
       Hey there, fellow dev! o7

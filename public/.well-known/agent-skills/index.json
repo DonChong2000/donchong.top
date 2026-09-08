@@ -4,9 +4,9 @@
     {
       "name": "markdown-negotiation",
       "type": "web",
-      "description": "Fetch any page on donchong.top as markdown by sending an Accept: text/markdown request header.",
-      "url": "https://donchong.top/.well-known/agent-skills/markdown-negotiation.md",
-      "sha256": "c4506b0a333a11629f01770038bc0d08e9c60ab8f93a92280a44487cf413a7e9"
+      "description": "Fetch any page on donchong.com as markdown by sending an Accept: text/markdown request header.",
+      "url": "https://donchong.com/.well-known/agent-skills/markdown-negotiation.md",
+      "sha256": "78f8848b8e1c6ce06431e9c5d9d5daa497b00d05b842df1f77f552af9c11e687"
     }
   ]
 }

@@ -1,6 +1,6 @@
 # Chat API
 
-`POST https://donchong.top/api/chat` — streaming chat used by the
+`POST https://donchong.com/api/chat` — streaming chat used by the
 on-site assistant. Returns plain-text token deltas with
 `Content-Type: text/plain; charset=utf-8` (not Server-Sent Events).
 
@@ -14,7 +14,7 @@ on-site assistant. Returns plain-text token deltas with
   "detailMode": false,
   "pageMeta": {
     "title": "Home",
-    "url": "https://donchong.top/"
+    "url": "https://donchong.com/"
   }
 }
 ```
@@ -46,5 +46,5 @@ tool calls per response.
 
 ## Discovery
 
-- API catalog: <https://donchong.top/.well-known/api-catalog>
-- OpenAPI spec: <https://donchong.top/openapi/chat.yaml>
+- API catalog: <https://donchong.com/.well-known/api-catalog>
+- OpenAPI spec: <https://donchong.com/openapi/chat.yaml>

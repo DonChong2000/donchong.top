@@ -1,6 +1,6 @@
 export const runtime = 'nodejs';
 
-const SITE = 'https://donchong.top';
+const SITE = 'https://donchong.com';
 
 const body = JSON.stringify({
   linkset: [

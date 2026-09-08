@@ -1,19 +1,19 @@
 openapi: 3.1.0
 info:
-  title: donchong.top Markdown API
+  title: donchong.com Markdown API
   version: 1.0.0
   description: |
-    Returns the MDX source for any content page on donchong.top.
+    Returns the MDX source for any content page on donchong.com.
 
     Most agents should NOT call this endpoint directly. Send
     `Accept: text/markdown` to the page URL itself
-    (e.g. `https://donchong.top/me`) — site middleware rewrites that
+    (e.g. `https://donchong.com/me`) — site middleware rewrites that
     request to this endpoint internally. Direct calls are documented
     here for completeness.
   license:
     name: MIT
 servers:
-  - url: https://donchong.top
+  - url: https://donchong.com
 paths:
   /api/markdown:
     get:

@@ -22,10 +22,10 @@ const nextConfig = {
   },
   async headers() {
     const linkValue = [
-      '<https://donchong.top/sitemap.xml>; rel="sitemap"; type="application/xml"',
-      '<https://donchong.top/.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"',
-      '<https://donchong.top/.well-known/agent-skills/index.json>; rel="agent-skills"; type="application/json"',
-      '<https://donchong.top/.well-known/mcp/server-card.json>; rel="mcp-server-card"; type="application/json"',
+      '<https://donchong.com/sitemap.xml>; rel="sitemap"; type="application/xml"',
+      '<https://donchong.com/.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"',
+      '<https://donchong.com/.well-known/agent-skills/index.json>; rel="agent-skills"; type="application/json"',
+      '<https://donchong.com/.well-known/mcp/server-card.json>; rel="mcp-server-card"; type="application/json"',
     ].join(', ')
     return [
       {

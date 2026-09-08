@@ -1,10 +1,10 @@
-# [donchong.top] - My Personal Portfolio & Blog
+# [donchong.com] - My Personal Portfolio & Blog
 
 ## 🚀 Overview
 
 This is a personal blog and portfolio site created to showcase my projects and technical writing. I built it to deepen my understanding of modern web technologies, transitioning from my earlier experience with jQuery and Ruby on Rails to today’s standards and best practices. It’s also a space where I can express "humanness" in a world full of AI-generated content.
 
-**[🌐 Visit the site](https://donchong.top/)**
+**[🌐 Visit the site](https://donchong.com/)**
 
 ---
 
@@ -53,7 +53,7 @@ To run this project locally:
 
 ## ☎️ Contact
 
-- [Portfolio Site](https://donchong.top)
+- [Portfolio Site](https://donchong.com)
 - [LinkedIn](https://www.linkedin.com/in/shing-tung-chong-bb5643225/)
 
 ---

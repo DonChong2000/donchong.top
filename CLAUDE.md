@@ -21,7 +21,7 @@ pnpm run test -- src/__tests__/SomeComponent.test.tsx
 
 ## Architecture Overview
 
-**donchong.top** is a personal portfolio/blog built with Next.js 15 App Router, TypeScript, and Tailwind CSS 4. All content pages are `.mdx` files. Besides the human-facing site it exposes several agent-facing endpoints (MCP, markdown negotiation — see below).
+**donchong.com** is a personal portfolio/blog built with Next.js 15 App Router, TypeScript, and Tailwind CSS 4. All content pages are `.mdx` files. Besides the human-facing site it exposes several agent-facing endpoints (MCP, markdown negotiation — see below).
 
 ### Content System
 

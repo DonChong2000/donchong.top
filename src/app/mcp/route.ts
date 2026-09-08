@@ -7,7 +7,7 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const PROTOCOL_VERSION = '2025-06-18';
-const SERVER_INFO = { name: 'top.donchong/site', version: '1.0.0' };
+const SERVER_INFO = { name: 'com.donchong/site', version: '1.0.0' };
 
 type JsonRpcId = string | number | null;
 
@@ -26,7 +26,7 @@ const TOOLS = [
   {
     name: 'search_site',
     description:
-      'Full-text search across donchong.top notes, projects, hobbies and recipes. Returns matching pages with url, section title and parent page title.',
+      'Full-text search across donchong.com notes, projects, hobbies and recipes. Returns matching pages with url, section title and parent page title.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -45,7 +45,7 @@ const TOOLS = [
   {
     name: 'fetch_page_markdown',
     description:
-      'Fetch any page on donchong.top rendered as markdown. Path should be site-relative (e.g. "/", "/me", "/projects/this-site").',
+      'Fetch any page on donchong.com rendered as markdown. Path should be site-relative (e.g. "/", "/me", "/projects/this-site").',
     inputSchema: {
       type: 'object',
       properties: {

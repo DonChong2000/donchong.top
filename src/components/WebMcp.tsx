@@ -41,9 +41,9 @@ export function WebMcp() {
     const tools: ModelContextTool[] = [
       {
         name: 'search_site',
-        title: 'Search donchong.top',
+        title: 'Search donchong.com',
         description:
-          'Full-text search across donchong.top notes, projects, hobbies and recipes. Returns a list of matching pages with their url, section title and parent page title.',
+          'Full-text search across donchong.com notes, projects, hobbies and recipes. Returns a list of matching pages with their url, section title and parent page title.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -78,14 +78,14 @@ export function WebMcp() {
         name: 'navigate',
         title: 'Navigate to a page',
         description:
-          'Navigate the user to a path on donchong.top (e.g. "/me", "/projects/this-site"). Use search_site first to discover valid paths.',
+          'Navigate the user to a path on donchong.com (e.g. "/me", "/projects/this-site"). Use search_site first to discover valid paths.',
         inputSchema: {
           type: 'object',
           properties: {
             path: {
               type: 'string',
               description:
-                'Site-relative path beginning with "/", or a full https://donchong.top URL.',
+                'Site-relative path beginning with "/", or a full https://donchong.com URL.',
             },
           },
           required: ['path'],
@@ -111,7 +111,7 @@ export function WebMcp() {
         name: 'fetch_page_markdown',
         title: 'Fetch page as markdown',
         description:
-          'Return the markdown source of any page on donchong.top. Useful for grounding answers in the page content.',
+          'Return the markdown source of any page on donchong.com. Useful for grounding answers in the page content.',
         inputSchema: {
           type: 'object',
           properties: {
