@@ -3,7 +3,7 @@ import Image from 'next/image';
 const posts = [
   {
     id: 1,
-    title: 'DonChong.Top',
+    title: 'DonChong.com',
     href: '/projects/this-site',
     description:
       'This site is my portfolio and a platform for sharing my work. It’s a full-stack project spanning front-end and back-end development, networking, cloud hosting, and CI/CD. Here, I document the technical details and design decisions behind its development.',
