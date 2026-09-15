@@ -422,6 +422,7 @@ export const navigation: Array<NavGroup> = [
         href: '/projects/drowning-detection-rescue-system',
       },
       { title: 'Bill-AI', href: '/projects/bill-ai' },
+      { title: 'Postcard', href: '/projects/postcard' },
       {
         title: 'And more...',
         href: '/projects/timelapse-machine',

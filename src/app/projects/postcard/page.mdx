@@ -1,0 +1,51 @@
+export const metadata = {
+  priority: 102,
+  title: 'Postcard',
+  description:
+    `Upload a photo, get 3 AI-generated postcard styles at once, write a message in real handwriting fonts, and download a print-ready A5 front and back for free. Buy sits next to Download for a printed copy via Stripe. Built with Next.js, the Vercel AI SDK, Gemini and GPT image models, and Cloudflare R2.`,
+  descriptionMd:
+    `Upload a photo, get **3 AI-generated postcard styles** at once, write a message in real handwriting fonts, and download a print-ready **A5** front and back for free. **Buy** sits next to Download for a printed copy via **Stripe**. Built with **Next.js**, the **Vercel AI SDK**, **Gemini** and **GPT image** models, and **Cloudflare R2**.`,
+  summary: `Postcard is a Next.js app that turns an uploaded photo into a printable postcard. It generates three illustration styles (paper illustration, watercolor, vintage) in parallel through two different image-model paths: Gemini 3.1 Flash Image called directly against Google's API, and OpenAI's gpt-image through the Vercel AI Gateway's images/edits endpoint, since the AI SDK's generateImage() cannot accept an input image. The front of the card comes from the model; the back is deliberately not generated, because image models cannot render legible lettering, so the address block, message, and a fold divider are drawn as real canvas text at download time, in one of three handwriting fonts picked live in the UI. The page covers the maker UI (photo picked by browsing or dropping anywhere on the window, a separate "generate" action since every generation costs money, Stop/Replace to undo it, a responsive layout that becomes a pinned card and bottom sheet under 700px), the message polish button that rewrites a draft with a small Gemini model, and the spend guardrails: a 10MB upload cap, magic-byte sniffing instead of trusting Content-Type, and a 10-per-IP-per-hour in-memory rate limit. It also explains a dry-run mode on the generate endpoint that returns resolved prompts and export size without spending money, useful for testing prompt changes for free. The second half covers turning the free download into a paid printed card: Buy sits beside Download rather than replacing it, uploads both faces to a private Cloudflare R2 bucket through a small object-store route signed with aws4fetch, and hands off to Stripe-hosted checkout, which is what collects the postal address. There is intentionally no webhook and no order database; fulfillment means reading the Stripe dashboard and posting the card by hand, which the project treats as fine until order volume outgrows it.`,
+  thumbnail: '/thumbnial/postcard.jpg',
+};
+
+# Postcard
+
+#ai #nextjs #stripe #imagegen
+
+I wanted to send an actual postcard instead of a text message for once, and mailing one made from your own photo isn't really something you can do quickly anywhere. So I built [postcard.donchong.com](https://postcard.donchong.com): upload a photo, get three AI-styled versions of it back at once, write your message on top, and download a print-ready A5 postcard for free. If you'd rather not print it yourself, there's a Buy button that has one made and mailed.
+
+<div className="flex flex-col gap-4 sm:flex-row">
+  <div className="w-full sm:w-1/2">![[sample-front.jpg]]</div>
+  <div className="w-full sm:w-1/2">![[sample-back.jpg]]</div>
+</div>
+
+## How it works
+
+1. Drop a photo anywhere on the page, or browse for one. This just loads it, nothing is spent yet.
+2. Hit "Generate the card". Three styles (paper illustration, watercolor, vintage) come back in parallel, and you pick your favorite.
+3. Type your message and address next to the card. It's drawn onto the preview live, in one of three handwriting fonts.
+4. Download the front and back as print-ready PNGs, free. Or hit Buy to have one printed on real cardstock and mailed for you.
+
+## The back is text, not generated
+
+Image models still can't render lettering you could actually read, so nothing that has to be legible is ever generated. The back is plain paper with the address lines, the message, and a fold guide for the middle drawn as real canvas text only when you download, in `src/lib/canvas.ts`. There's a dev-only toggle to generate a near-empty background image for the back too, at twice the cost, but the text on top is always drawn, never generated.
+
+## Two models, two very different paths
+
+Every generation fires both providers for all three styles in parallel:
+
+- **Gemini 3.1 Flash Image** goes straight to Google through `@ai-sdk/google`, not through the AI Gateway, because the gateway resolves `google/*` model strings to Vertex and this needs to bill against my own Google AI Studio key. It's called with `generateText` and an image-only response modality, with a retry built in because it occasionally answers in prose instead of an image.
+- **OpenAI's `gpt-image`** goes through the [Vercel AI Gateway](https://vercel.com/docs/ai-gateway)'s OpenAI-compatible `/v1/images/edits` endpoint, because the AI SDK's own `generateImage()` can't take an input image ([vercel/ai#14044](https://github.com/vercel/ai/issues/14044)) and editing the uploaded photo is the whole point.
+
+Gemini runs about $0.10 an image at 2K, OpenAI about $0.02, and one full generation makes 3 to 6 images, so I added `POST /api/generate?dryRun=1`, which returns the resolved prompts and export size without touching a model at all. That's what I use to iterate on prompts.
+
+## Selling without building a backend for it
+
+Buy sits next to Download rather than replacing it, the file stays free either way. Clicking it renders the same two canvases, uploads them to a private Cloudflare R2 bucket through a small object-store route (`/api/o/[[...key]]`, signed with the 64KB `aws4fetch` instead of pulling in the full AWS SDK), and hands off to Stripe-hosted checkout, which is also where the mailing address gets collected. No card details or postal address ever touch this app's own code.
+
+There's no webhook and no order database. An order is just a paid Stripe payment with the two image URLs sitting in its metadata, read off the dashboard and mailed by hand. It's an honest tradeoff at low volume, and the plan is to only add a webhook once doing that by hand actually gets annoying.
+
+## Keeping generation from getting expensive
+
+Because every request spends real money, uploads are capped at 10MB, checked by sniffing the actual PNG/JPEG magic bytes rather than trusting the browser's `Content-Type` header, and rate-limited to 10 generations per IP per hour. Photos are also downscaled to 1600px in the browser before upload, since the models resample to about 1024px anyway and there's no reason to ship a 5MB original.
