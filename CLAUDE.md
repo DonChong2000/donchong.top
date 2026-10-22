@@ -69,4 +69,4 @@ SKIP_GEMINI_TESTS=       # test-only escape hatch (src/__tests__/chatbot-gemini.
 
 ### Deployment
 
-GitHub Actions (`.github/workflows/deploy.yml`, `ubuntu-24.04-arm` runner): lint → build → Docker build (CI validation only) → SSH to the production server, which rebuilds via `docker compose up -d --build`. Multi-stage Docker build (Node 20 Alpine) with standalone Next.js output. **Pushing to `main` deploys to production — don't push unless asked.**
+GitHub Actions (`.github/workflows/deploy.yml`, `ubuntu-24.04-arm` runner): lint → build → Docker build (CI validation only) → SSH to the production server, which rebuilds via `docker compose up -d --build`. Multi-stage Docker build (Node 24 Alpine) with standalone Next.js output. **Pushing to `main` deploys to production — don't push unless asked.**
