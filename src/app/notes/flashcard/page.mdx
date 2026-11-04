@@ -2,56 +2,91 @@ export const metadata = {
     priority: 150,
     title: 'AWS Cert Flashcards',
     description:
-        'A static PWA flashcard app for studying AWS certification exams. Built with Next.js and deployed to GitHub Pages, featuring progress tracking, exam simulation, and offline support.',
+        'A static PWA flashcard app I use for AWS certification, JLPT past papers, Jyutping and kana. Built with Next.js on GitHub Pages, with cross-device sync through a Cloudflare Worker, custom quizzes and a study heatmap.',
     descriptionMd:
-        'A static **PWA flashcard app** for studying **AWS certification** exams. Built with **Next.js** and deployed to GitHub Pages, featuring progress tracking, exam simulation, and offline support.',
-    summary: `This page introduces a static web flashcard application built to help study for AWS certification exams. The app is built with Next.js as a fully static export and deployed to GitHub Pages. It supports multiple practice modes including studying by topic or attempting all questions at once. Progress is persisted in localStorage so performance carries over between sessions. Users can filter to review only incorrect or bookmarked questions. An exam simulation mode presents 65 randomly shuffled questions. Keyboard shortcuts cover option selection, submission, and bookmarking. Progress can be exported and imported as JSON for portability. The app works offline and is installable as a PWA. New question banks can be added by dropping JSON files into the data directory, which are picked up at build time.`,
+        'A static **PWA flashcard app** I use for **AWS certification**, **JLPT** past papers, **Jyutping** and **kana**. Built with **Next.js** on GitHub Pages, with cross-device sync through a **Cloudflare Worker**, custom quizzes and a study heatmap.',
+    summary: `This page describes a static flashcard web app. It started as a study tool for the AWS Solutions Architect Associate exam and now also holds an AWS services deck, JLPT N5 to N1 past papers with listening audio, a Jyutping deck and a kana deck with character origins. It is a Next.js static export on GitHub Pages and works offline as a PWA. Progress lives in localStorage and can sync between devices through a small Cloudflare Worker backed by KV, using a sync ID shared by link or typed in by hand. A custom quiz builder filters by tag, question range, answer status and random sample size, and the stats cards launch filtered quizzes directly. An activity page shows a daily heatmap and streak, merged across devices. Progress can also be exported and imported as a compact JSON file. New question banks are JSON files dropped into the data folder and picked up at build time.`,
     thumbnail: '/thumbnial/flashcard.png',
 
 };
 
 # AWS Cert Flashcards
 
-#nextjs #typescript #pwa #aws
+#nextjs #typescript #pwa #aws #cloudflare
 
-I was studying for the AWS Certified Solutions Architect Associate Exam, and I found that studying the question set is very inefficient. Therefore, I quickly built a flashcard web app to help me study while commuting and to revisit incorrect questions.
+I was studying for the AWS Certified Solutions Architect Associate exam and reading through the question set was slow going. So I built a quick flashcard web app to study on my commute and go back over the questions I got wrong.
+
+It has since turned into my general study app. I added JLPT past papers when I started on Japanese, then Jyutping and kana decks.
 Deployed at [donchong2000.github.io/flashcard](https://donchong2000.github.io/flashcard).
 
-![[Pasted image 20260322060801.png]]
+![[home.png]]
+
+## Decks
+
+| Deck | Questions | Notes |
+|------|-----------|-------|
+| AWS SAA-C03 | 1019 | Tagged by domain, community votes and discussion |
+| AWS Services | 97 | What each service is for |
+| JLPT N5–N1 | 495–625 each | Past papers, including 聴解 listening with audio and pictures |
+| Jyutping | 412 | 易 / 中 / 難, plus basics and an initials/finals drill |
+| Kana | 208 | Hiragana and katakana, with the kanji each one came from |
+
+Practice sets can have their own names (易, 中, 難 and so on) instead of "Practice Set N".
+
+![[jlpt-listening.png]]
+
+![[kana.png]]
 
 ## Features
 
 ### Practice Modes
 
+- **Practice sets**: work through one topic in order
 - **All questions**: cycle through the full bank
-- **Exam simulation**: 65 randomly shuffled questions, mimicking the real exam format
+- **Random exam**: 65 shuffled questions, like the real AWS exam
+- **Custom quiz**: pick tags, a question range, a status (unseen, incorrect, bookmarked...) and an optional sample size. Custom quizzes are always shuffled.
 
-- ~~**By topic**: focus on a specific domain (e.g. S3, IAM, EC2)~~ Not ready yet
+The stats cards on the home page (correct, incorrect, unseen, bookmarked) are clickable and start a quiz with that filter.
 
+![[custom-quiz.png]]
 
 ### Progress Tracking
 
-Answers are stored in `localStorage`, so correct/incorrect history persists across sessions. You can filter to show only questions you got wrong or ones you've bookmarked for review.
+Answers are stored in `localStorage`, so correct/incorrect history persists across sessions. If I misclick or think the answer key is wrong, I can mark the question as correct anyway.
+
+### Sync Across Devices
+
+Progress syncs through a small **Cloudflare Worker** with KV storage. Each browser gets a sync ID; I share it with a link (`?sync=...`) or type it in with "Enter Sync ID". The typed version exists because an iOS home-screen app has its own storage separate from Safari, so links never reach it. Sync runs automatically when the home page opens, and there is a manual Sync button too.
+
+### Activity Heatmap
+
+The green streak button on the home page opens an activity page with a heatmap of answers per day and the current streak. Each device keeps its own daily counts, and sync merges them by taking the higher count per device and day, so the merge gives the same result whatever order devices sync in.
+
+![[activity.png]]
 
 ### Keyboard Navigation
 
 | Key | Action |
 |-----|--------|
 | `1`–`6` | Select option |
-| `Enter` / `Space` | Submit answer |
+| `Enter` / `Space` | Submit answer, or go to the next question |
+| `→` | Next question |
 | `B` | Bookmark question |
+| `O` / `'` | Mark a wrong answer as correct |
 
 ### Data Portability
 
-Progress can be exported as JSON and re-imported, making it easy to back up. Answer history is stored as a **hex bitmap**, keeping the exported data compact and human-readable.
+Progress can be exported as JSON and imported again, which makes backups easy. Answer history is stored as a **hex bitmap** (one bit per question), so the file stays small. The export also carries the activity history, and import always merges it.
+
+Sync, Export, Import and Reset live in the home page's "More" menu to keep the header clean.
 
 ### Offline / PWA
 
-The app is installable and functions fully offline, useful for studying on the go without a connection.
+The app is installable and works fully offline, so I can study without a connection.
 
 ## Adding Question Banks
 
-New exam datasets can be contributed by placing a JSON file in the `data/` directory following the schema (questions, options, correct answers, community votes, discussions). The build process picks them up automatically.
+A new deck is a JSON file in the `data/` directory with a `questions` array (question, options, correct answers, and optionally tags, community votes, discussion, images or audio). The build splits it by topic and adds it to the deck list automatically.
 
 ## Source
 
