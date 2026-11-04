@@ -16,7 +16,7 @@ interface DetailOverlayProps {
 export function DetailOverlay({ callouts }: DetailOverlayProps) {
   return (
     <div>
-      <div className="mt-4 space-y-12 lg:grid lg:grid-cols-3 lg:space-y-0 lg:gap-x-6">
+      <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
         {callouts.map((callout) => (
           <div key={callout.name} className="group relative">
             <div className="GH not-prose relative aspect-4/3 w-full overflow-hidden rounded-lg group-hover:opacity-75 lg:aspect-square">
